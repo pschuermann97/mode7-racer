@@ -13,7 +13,10 @@ class App:
     def __init__(self):
         self.screen = pygame.display.set_mode(WIN_RES)
         self.clock = pygame.time.Clock()
-        self.mode7 = Mode7(self)
+
+        # Initializes the mode-7 renderer.
+        # Second parameter determines whether the rendered scene has a fog effect or not.
+        self.mode7 = Mode7(self, True) 
 
     def update(self):
         self.mode7.update()

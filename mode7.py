@@ -7,10 +7,12 @@ from numba import njit, prange
 from settings import *
 
 class Mode7:
-    # initialization method that loads the textures 
-    # and links this mode-7 renderer to the app
-    def __init__(self, app):
+    # initialization method that loads the textures, 
+    # links this mode-7 renderer to the app
+    # and sets some status variables.
+    def __init__(self, app, is_foggy):
         self.app = app
+        self.is_foggy = is_foggy
 
 
 
@@ -42,14 +44,14 @@ class Mode7:
         self.screen_array = pygame.surfarray.array3d(pygame.Surface(WIN_RES))
 
     def update(self):
-        self.screen_array = self.render_frame(self.floor_array, self.ceil_array, self.screen_array, self.floor_tex_size)
+        self.screen_array = self.render_frame(self.floor_array, self.ceil_array, self.screen_array, self.floor_tex_size, self.is_foggy)
 
     # Computes a single frame of the floor texture pixel by pixel.
     # Needs numba just-in-time compiler support (decorators) 
     # to achieve a reasonable framerate when executed every frame.
     @staticmethod
     @njit(fastmath=True, parallel=True)
-    def render_frame(floor_array, ceil_array, screen_array, tex_size):
+    def render_frame(floor_array, ceil_array, screen_array, tex_size, is_foggy):
         # Compute color value for every single pixel (i, j).
         # prange function (instead of range function) used for outer loop for performance reasons.
         for i in prange(WIDTH):
@@ -97,14 +99,18 @@ class Mode7:
 
                 # To prevent ugly artifacts at the horizon:
                 # compute some attenuation coefficient in the interval [0, 1] based on the "depth" value
-                # and apply it component wise to the color vector representing the computed floor color.
                 attenuation = min(max(1.5 * (abs(z) / HALF_HEIGHT), 0), 1)
-                floor_col = (floor_col[0] * attenuation,
-                    floor_col[1] * attenuation,
-                    floor_col[2] * attenuation)
-                ceil_col = (ceil_col[0] * attenuation,
-                    ceil_col[1] * attenuation,
-                    ceil_col[2] * attenuation)
+
+                # Compute a fog effect depending on whether the rendered scene is foggy.
+                fog = (1 - attenuation) * FOG_DENSITY if is_foggy else 0
+                
+                # apply attenuation and optional fog effect (component-wise, to color vector)
+                floor_col = (floor_col[0] * attenuation + fog,
+                    floor_col[1] * attenuation + fog,
+                    floor_col[2] * attenuation + fog)
+                ceil_col = (ceil_col[0] * attenuation + fog,
+                    ceil_col[1] * attenuation + fog,
+                    ceil_col[2] * attenuation + fog)
 
                 # fill the computed pixel into the screen array
                 screen_array[i, j] = floor_col
