@@ -7,31 +7,49 @@ from numba import njit, prange
 from settings import *
 
 class Mode7:
+    # initialization method that loads the textures 
+    # and links this mode-7 renderer to the app
     def __init__(self, app):
         self.app = app
+
+
 
         # load floor texture
         self.floor_tex = pygame.image.load('2018_track_combined.png').convert()
         
         # store texture size for later use
-        self.tex_size = self.floor_tex.get_size()
+        self.floor_tex_size = self.floor_tex.get_size()
 
         # Create 3D array representing the pixels representing the floor.
         # More precisely: copies the pixels from the surface representing the floor texture
         # into a new 3D array.
         self.floor_array = pygame.surfarray.array3d(self.floor_tex)
 
+
+
+        # load ceiling texture
+        self.ceil_tex = pygame.image.load('test_floor.png').convert()
+
+        # scale ceiling texture to floor texture size
+        self.ceil_tex = pygame.transform.scale(self.ceil_tex, self.floor_tex_size)
+
+        # represenent ceiling by 3D array analogous to floor
+        self.ceil_array = pygame.surfarray.array3d(self.ceil_tex)
+
+
+
         # create an array representing the screen pixels
         self.screen_array = pygame.surfarray.array3d(pygame.Surface(WIN_RES))
 
     def update(self):
-        self.screen_array = self.render_frame(self.floor_array, self.screen_array, self.tex_size)
+        self.screen_array = self.render_frame(self.floor_array, self.ceil_array, self.screen_array, self.floor_tex_size)
 
     # Computes a single frame of the floor texture pixel by pixel.
-    # Needs numba support (decorators) to achieve a reasonable framerate when executed every frame.
+    # Needs numba just-in-time compiler support (decorators) 
+    # to achieve a reasonable framerate when executed every frame.
     @staticmethod
     @njit(fastmath=True, parallel=True)
-    def render_frame(floor_array, screen_array, tex_size):
+    def render_frame(floor_array, ceil_array, screen_array, tex_size):
         # Compute color value for every single pixel (i, j).
         # prange function (instead of range function) used for outer loop for performance reasons.
         for i in prange(WIDTH):
@@ -62,14 +80,35 @@ class Mode7:
                 px = x / z * SCALE
                 py = y / z * SCALE
 
-                # Compute which pixel of the floor texture is over the 
+                # Compute which pixel of the floor texture is over the point (i, j)
                 floor_pos = int(px % tex_size[0]), int(py % tex_size[1])
 
                 # look up the respective color in the floor array
                 floor_col = floor_array[floor_pos]
 
+                # Pixel of the ceil texture that is over the counterpart (i, -j) of (i, j)
+                # has the same coordinates than the pixel of the floor texture
+                # that is over (i, j).
+                # By coordinates, we hereby mean coordinates in the texture coordinate system.
+                ceil_pos = floor_pos
+
+                # look up the respective color in the ceiling array
+                ceil_col = ceil_array[ceil_pos]
+
+                # To prevent ugly artifacts at the horizon:
+                # compute some attenuation coefficient in the interval [0, 1] based on the "depth" value
+                # and apply it component wise to the color vector representing the computed floor color.
+                attenuation = min(max(1.5 * (abs(z) / HALF_HEIGHT), 0), 1)
+                floor_col = (floor_col[0] * attenuation,
+                    floor_col[1] * attenuation,
+                    floor_col[2] * attenuation)
+                ceil_col = (ceil_col[0] * attenuation,
+                    ceil_col[1] * attenuation,
+                    ceil_col[2] * attenuation)
+
                 # fill the computed pixel into the screen array
                 screen_array[i, j] = floor_col
+                screen_array[i, -j] = ceil_col
 
         return screen_array
 
