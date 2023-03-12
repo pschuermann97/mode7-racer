@@ -11,7 +11,7 @@ class Mode7:
         self.app = app
 
         # load floor texture
-        self.floor_tex = pygame.image.load('test_floor.png').convert()
+        self.floor_tex = pygame.image.load('2018_track_combined.png').convert()
         
         # store texture size for later use
         self.tex_size = self.floor_tex.get_size()
@@ -51,7 +51,7 @@ class Mode7:
                 # without mode-7 style projection.
                 #
                 # We adjust the x coordinate so the texture is at the center of the screen.
-                # Furthermore, the depth coordinate (y) is always shifted by focal length.
+                # Furthermore, the depth coordinate (y) is always shifted by the focal length of the camera.
                 # Lastly, we need to add a small constant to the screen height coordinate (z)
                 # to prevent divide-by-0 errors in the next step.
                 x = HALF_WIDTH - i  
