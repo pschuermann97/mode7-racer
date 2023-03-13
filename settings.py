@@ -11,11 +11,11 @@ HALF_WIDTH, HALF_HEIGHT = WIDTH // 2, HEIGHT // 2
 # and the magnification.
 FOCAL_LEN = 250
 
-# scale factor for floor and ceiling textures
+# scale factor for height of the stage (z axis in virtual coordinate system of environment)
 SCALE = 100
 
 # whether the game currently is in "creator mode", where the camera can move around freely in the scene
-IN_CREATOR_MODE = True 
+IN_DEV_MODE = True
 
 
 
@@ -23,7 +23,7 @@ IN_CREATOR_MODE = True
 FOG_DENSITY = 100
 
 # how fast the player can move initially
-INITIAL_PLAYER_MOVE_SPEED = 1
+INITIAL_PLAYER_MOVE_SPEED = 0.1
 
 # how fast the player can rotate initially
-INITIAL_PLAYER_ROTATION_SPEED = 0.1
+INITIAL_PLAYER_ROTATION_SPEED = 0.05

@@ -56,7 +56,7 @@ class App:
         for i in pygame.event.get():
             # Terminate the process running the game 
             # if escape key is pressed or anything else caused the quit-game event
-            if i.type == pygame.QUIT or (i.type == pygame.KEYDOWN and i.key == pygame.K_ESCAPE):
+            if i.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 

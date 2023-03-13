@@ -1,11 +1,11 @@
 import numpy
 import pygame
 
-from settings import IN_CREATOR_MODE
+from settings import IN_DEV_MODE
 
 class Player:
     def __init__(self, move_speed, rotation_speed):
-        self.position = numpy.array([0, 0]) # player initially is at origin position
+        self.position = numpy.array([0.0, 0.0]) # player initially is at origin position
         self.angle = 0 # player initially looks forward
 
         self.move_speed = move_speed # how fast the player can move through the scene
@@ -16,13 +16,13 @@ class Player:
     # Parameters:
     # time: number of frames since the game started
     def update(self, time):
-        if IN_CREATOR_MODE:
-            self.creator_mode_movement()
+        if IN_DEV_MODE:
+            self.dev_mode_movement()
         else:
             self.racing_mode_movement()
 
     # Moves and rotates the camera freely based on player input. 
-    def creator_mode_movement(self):
+    def dev_mode_movement(self):
         # Compute sine and cosine of current angle 
         # to be able to update player position
         # based on their rotation.
@@ -45,11 +45,11 @@ class Player:
             dx += -speed_cos
             dy += - speed_sin
         if keys[pygame.K_a]:
-            dx += speed_sin
-            dy += -speed_cos
-        if keys[pygame.K_d]:
             dx += -speed_sin
             dy += speed_cos
+        if keys[pygame.K_d]:
+            dx += speed_sin
+            dy += -speed_cos
 
         # Change player position.
         self.position[0] += dx
@@ -61,6 +61,8 @@ class Player:
         if keys[pygame.K_RIGHT]:
             self.angle += self.rotation_speed
 
+        print("x: " + str(self.position[0]) + " y: " + str(self.position[1]) + " a: " + str(self.angle))
+
     # Moves the player's machine as in a race.
     def racing_mode_movement(self):
-        print("Racing mode movement not implemented yet!")
+        pass
