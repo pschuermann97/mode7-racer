@@ -19,7 +19,7 @@ class Mode7:
         # load floor texture
         self.floor_tex = pygame.image.load('2018_track_combined.png').convert()
         
-        # store texture size for later use
+        # store floor texture size for later use
         self.floor_tex_size = self.floor_tex.get_size()
 
         # Create 3D array representing the pixels representing the floor.
@@ -33,7 +33,7 @@ class Mode7:
         self.ceil_tex = pygame.image.load('test_floor.png').convert()
 
         # scale ceiling texture to floor texture size
-        self.ceil_tex = pygame.transform.scale(self.ceil_tex, self.floor_tex_size)
+        self.ceil_tex_size = self.ceil_tex.get_size()
 
         # represenent ceiling by 3D array analogous to floor
         self.ceil_array = pygame.surfarray.array3d(self.ceil_tex)
@@ -44,14 +44,27 @@ class Mode7:
         self.screen_array = pygame.surfarray.array3d(pygame.Surface(WIN_RES))
 
     def update(self):
-        self.screen_array = self.render_frame(self.floor_array, self.ceil_array, self.screen_array, self.floor_tex_size, self.is_foggy)
+        # moving forward
+        time = self.app.time
+        pos = numpy.array([time, 0]) # player position changes depending on time, they move forward
+
+        # rendering the frame
+        self.screen_array = self.render_frame(self.floor_array, self.ceil_array, self.screen_array, self.floor_tex_size, self.ceil_tex_size, self.is_foggy, pos)
 
     # Computes a single frame of the floor texture pixel by pixel.
     # Needs numba just-in-time compiler support (decorators) 
     # to achieve a reasonable framerate when executed every frame.
+    # 
+    # Parameters:
+    # floor_array: array containing the pixels of the floor texture
+    # ceil_array: array containing the pixels of the ceiling texture
+    # screen_array: array containing the rendered frame (updated pixel by pixel)
+    # tex_size: size of the floor texture
+    # is_foggy: whether the scene of which a frame is rendered has a fog effect in it
+    # pos: current position of the player
     @staticmethod
     @njit(fastmath=True, parallel=True)
-    def render_frame(floor_array, ceil_array, screen_array, tex_size, is_foggy):
+    def render_frame(floor_array, ceil_array, screen_array, floor_tex_size, ceil_tex_size, is_foggy, pos):
         # Compute color value for every single pixel (i, j).
         # prange function (instead of range function) used for outer loop for performance reasons.
         for i in prange(WIDTH):
@@ -78,12 +91,13 @@ class Mode7:
                 y = j + FOCAL_LEN 
                 z = j - HALF_HEIGHT + 0.01 
 
-                # apply mode-7 style projection
-                px = x / z * SCALE
-                py = y / z * SCALE
+                # Apply mode-7 style projection.
+                # Player position is used as offset here to allow movement
+                px = (x / z + pos[1]) * SCALE
+                py = (y / z + pos[0]) * SCALE
 
                 # Compute which pixel of the floor texture is over the point (i, j)
-                floor_pos = int(px % tex_size[0]), int(py % tex_size[1])
+                floor_pos = int(px % floor_tex_size[0]), int(py % floor_tex_size[1])
 
                 # look up the respective color in the floor array
                 floor_col = floor_array[floor_pos]
@@ -92,14 +106,14 @@ class Mode7:
                 # has the same coordinates than the pixel of the floor texture
                 # that is over (i, j).
                 # By coordinates, we hereby mean coordinates in the texture coordinate system.
-                ceil_pos = floor_pos
+                ceil_pos = int(px % ceil_tex_size[0]), int(py % ceil_tex_size[1])
 
                 # look up the respective color in the ceiling array
                 ceil_col = ceil_array[ceil_pos]
 
                 # To prevent ugly artifacts at the horizon:
                 # compute some attenuation coefficient in the interval [0, 1] based on the "depth" value
-                attenuation = min(max(1.5 * (abs(z) / HALF_HEIGHT), 0), 1)
+                attenuation = min(max(7.5 * (abs(z) / HALF_HEIGHT), 0), 1)
 
                 # Compute a fog effect depending on whether the rendered scene is foggy.
                 fog = (1 - attenuation) * FOG_DENSITY if is_foggy else 0
