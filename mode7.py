@@ -35,7 +35,7 @@ class Mode7:
         # scale ceiling texture to floor texture size
         self.ceil_tex_size = self.ceil_tex.get_size()
 
-        # represenent ceiling by 3D array analogous to floor
+        # represent ceiling by 3D array analogously to floor
         self.ceil_array = pygame.surfarray.array3d(self.ceil_tex)
 
 
@@ -43,6 +43,9 @@ class Mode7:
         # create an array representing the screen pixels
         self.screen_array = pygame.surfarray.array3d(pygame.Surface(WIN_RES))
 
+    # Updates the mode7-based environment.
+    # A player reference is passed to be able
+    # to render the frame based on the player's current position and rotation.
     def update(self, player):
         # rendering the frame
         self.screen_array = self.render_frame(
@@ -52,7 +55,8 @@ class Mode7:
             self.floor_tex_size, 
             self.ceil_tex_size, 
             self.is_foggy, 
-            player.position
+            player.position,
+            player.angle
         )
 
     # Computes a single frame of the floor texture pixel by pixel.
@@ -66,9 +70,15 @@ class Mode7:
     # tex_size: size of the floor texture
     # is_foggy: whether the scene of which a frame is rendered has a fog effect in it
     # pos: current position of the player
+    # angle: current angle by which the player is rotated
     @staticmethod
     @njit(fastmath=True, parallel=True)
-    def render_frame(floor_array, ceil_array, screen_array, floor_tex_size, ceil_tex_size, is_foggy, pos):
+    def render_frame(floor_array, ceil_array, screen_array, floor_tex_size, ceil_tex_size, 
+        is_foggy, pos, angle):
+        # Compute the sine and cosine values of the player angle
+        # to use them to render the environment based on the player's rotation.
+        sin, cos = numpy.sin(angle), numpy.cos(angle)
+
         # Compute color value for every single pixel (i, j).
         # prange function (instead of range function) used for outer loop for performance reasons.
         for i in prange(WIDTH):

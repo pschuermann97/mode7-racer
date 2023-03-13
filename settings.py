@@ -17,4 +17,4 @@ SCALE = 100
 FOG_DENSITY = 100
 
 # how fast the player can initially move
-INITIAL_PLAYER_MOVE_SPEED = 15
+INITIAL_PLAYER_MOVE_SPEED = 7
