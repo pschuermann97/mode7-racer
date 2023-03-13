@@ -3,6 +3,7 @@ import sys
 
 from settings import WIN_RES
 from mode7 import Mode7
+from player import Player
 
 # The class that handles/orchestrates all tasks involved in running the game.
 # This includes rendering the screen, 
@@ -16,10 +17,17 @@ class App:
 
         # Initializes the mode-7 renderer.
         # Second parameter determines whether the rendered scene has a fog effect or not.
-        self.mode7 = Mode7(self, True) 
+        self.mode7 = Mode7(self, True)
+
+        # Creates a player instance
+        self.player = Player()
 
     def update(self):
-        self.mode7.update()
+        # updates the player based on time elapsed since game start
+        self.player.update(self.time)
+
+        # causes the Mode7-rendered environment to update
+        self.mode7.update(self.player)
 
         # updates clock
         self.clock.tick()

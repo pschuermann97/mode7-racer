@@ -43,13 +43,9 @@ class Mode7:
         # create an array representing the screen pixels
         self.screen_array = pygame.surfarray.array3d(pygame.Surface(WIN_RES))
 
-    def update(self):
-        # moving forward
-        time = self.app.time
-        pos = numpy.array([time, 0]) # player position changes depending on time, they move forward
-
+    def update(self, player):
         # rendering the frame
-        self.screen_array = self.render_frame(self.floor_array, self.ceil_array, self.screen_array, self.floor_tex_size, self.ceil_tex_size, self.is_foggy, pos)
+        self.screen_array = self.render_frame(self.floor_array, self.ceil_array, self.screen_array, self.floor_tex_size, self.ceil_tex_size, self.is_foggy, player.position)
 
     # Computes a single frame of the floor texture pixel by pixel.
     # Needs numba just-in-time compiler support (decorators) 
