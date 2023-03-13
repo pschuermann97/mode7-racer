@@ -1,6 +1,8 @@
+# foreign module imports
 import pygame
 import sys
 
+# modules from this project
 from settings import *
 from mode7 import Mode7
 from player import Player
