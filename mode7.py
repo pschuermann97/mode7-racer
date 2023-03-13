@@ -45,7 +45,15 @@ class Mode7:
 
     def update(self, player):
         # rendering the frame
-        self.screen_array = self.render_frame(self.floor_array, self.ceil_array, self.screen_array, self.floor_tex_size, self.ceil_tex_size, self.is_foggy, player.position)
+        self.screen_array = self.render_frame(
+            self.floor_array, 
+            self.ceil_array, 
+            self.screen_array, 
+            self.floor_tex_size, 
+            self.ceil_tex_size, 
+            self.is_foggy, 
+            player.position
+        )
 
     # Computes a single frame of the floor texture pixel by pixel.
     # Needs numba just-in-time compiler support (decorators) 

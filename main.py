@@ -1,7 +1,7 @@
 import pygame
 import sys
 
-from settings import WIN_RES
+from settings import *
 from mode7 import Mode7
 from player import Player
 
@@ -20,7 +20,9 @@ class App:
         self.mode7 = Mode7(self, True)
 
         # Creates a player instance
-        self.player = Player()
+        self.player = Player(
+            move_speed = INITIAL_PLAYER_MOVE_SPEED
+        )
 
     def update(self):
         # updates the player based on time elapsed since game start

@@ -15,3 +15,6 @@ SCALE = 100
 
 # how dense the fog is in foggy scenes
 FOG_DENSITY = 100
+
+# how fast the player can initially move
+INITIAL_PLAYER_MOVE_SPEED = 15
