@@ -105,10 +105,15 @@ class Mode7:
                 y = j + FOCAL_LEN 
                 z = j - HALF_HEIGHT + 0.01 
 
+                # Apply player's rotation (which is computed from the angle they are rotated by),
+                # "standard formula for rotation in 2D space".
+                rx = x * cos - y * sin
+                ry = x * sin + y * cos
+
                 # Apply mode-7 style projection.
                 # Player position is used as offset here to allow movement
-                px = (x / z + pos[1]) * SCALE
-                py = (y / z + pos[0]) * SCALE
+                px = (rx / z + pos[1]) * SCALE
+                py = (ry / z + pos[0]) * SCALE
 
                 # Compute which pixel of the floor texture is over the point (i, j)
                 floor_pos = int(px % floor_tex_size[0]), int(py % floor_tex_size[1])

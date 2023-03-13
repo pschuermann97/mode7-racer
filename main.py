@@ -23,7 +23,8 @@ class App:
 
         # Creates a player instance
         self.player = Player(
-            move_speed = INITIAL_PLAYER_MOVE_SPEED
+            move_speed = INITIAL_PLAYER_MOVE_SPEED,
+            rotation_speed = INITIAL_PLAYER_ROTATION_SPEED
         )
 
     def update(self):

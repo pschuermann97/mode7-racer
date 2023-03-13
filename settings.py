@@ -11,10 +11,19 @@ HALF_WIDTH, HALF_HEIGHT = WIDTH // 2, HEIGHT // 2
 # and the magnification.
 FOCAL_LEN = 250
 
+# scale factor for floor and ceiling textures
 SCALE = 100
+
+# whether the game currently is in "creator mode", where the camera can move around freely in the scene
+IN_CREATOR_MODE = True 
+
+
 
 # how dense the fog is in foggy scenes
 FOG_DENSITY = 100
 
-# how fast the player can initially move
-INITIAL_PLAYER_MOVE_SPEED = 7
+# how fast the player can move initially
+INITIAL_PLAYER_MOVE_SPEED = 1
+
+# how fast the player can rotate initially
+INITIAL_PLAYER_ROTATION_SPEED = 0.1
