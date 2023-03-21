@@ -12,7 +12,7 @@ HALF_WIDTH, HALF_HEIGHT = WIDTH // 2, HEIGHT // 2
 FOCAL_LEN = 250
 
 # scale factor for height of the stage (z axis in virtual coordinate system of environment)
-SCALE = 100
+SCALE = 20
 
 # whether the game currently is in "creator mode", where the camera can move around freely in the scene
 IN_DEV_MODE = True

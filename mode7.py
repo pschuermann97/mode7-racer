@@ -17,7 +17,7 @@ class Mode7:
 
 
         # load floor texture
-        self.floor_tex = pygame.image.load('2018_track_combined.png').convert()
+        self.floor_tex = pygame.image.load('png/track_2023.png').convert()
         
         # store floor texture size for later use
         self.floor_tex_size = self.floor_tex.get_size()
