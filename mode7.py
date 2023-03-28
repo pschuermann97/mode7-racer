@@ -10,12 +10,17 @@ class Mode7:
     # Initialization method that loads the textures (specified via path passed to constructor), 
     # links this mode-7 renderer to the app
     # and sets some status variables.
-    def __init__(self, app, floor_tex_path, ceil_tex_path, is_foggy):
+    # 
+    # The horizon parameter describes the horizon height of the scenes rendered with this renderer
+    # i.e. the minimum height of floor texture pixels 
+    # (for this, note that the y coordinate decreases down the screen). 
+    def __init__(self, app, floor_tex_path, ceil_tex_path, is_foggy, horizon = STD_HORIZON):
         # linking renderer to the app
         self.app = app
 
         # intiailizing status variables
         self.is_foggy = is_foggy
+        self.horizon = horizon
 
         # load floor texture
         self.floor_tex = pygame.image.load(floor_tex_path).convert()
@@ -48,14 +53,15 @@ class Mode7:
     def update(self, player):
         # rendering the frame
         self.screen_array = self.render_frame(
-            self.floor_array, 
-            self.ceil_array, 
-            self.screen_array, 
-            self.floor_tex_size, 
-            self.ceil_tex_size, 
-            self.is_foggy, 
-            player.position,
-            player.angle
+            floor_array = self.floor_array, 
+            ceil_array = self.ceil_array, 
+            screen_array = self.screen_array, 
+            floor_tex_size = self.floor_tex_size, 
+            ceil_tex_size = self.ceil_tex_size, 
+            is_foggy = self.is_foggy, 
+            pos = player.position,
+            angle = player.angle,
+            horizon = self.horizon
         )
 
     # Computes a single frame of the floor texture pixel by pixel.
@@ -66,14 +72,16 @@ class Mode7:
     # floor_array: array containing the pixels of the floor texture
     # ceil_array: array containing the pixels of the ceiling texture
     # screen_array: array containing the rendered frame (updated pixel by pixel)
-    # tex_size: size of the floor texture
+    # floor_tex_size: size of the floor texture
+    # ceil_tex_size: size of the ceil texture
     # is_foggy: whether the scene of which a frame is rendered has a fog effect in it
     # pos: current position of the player
     # angle: current angle by which the player is rotated
+    # horizon: the min y coordinate of floor pixels (note: y increases down the screen)
     @staticmethod
     @njit(fastmath=True, parallel=True)
     def render_frame(floor_array, ceil_array, screen_array, floor_tex_size, ceil_tex_size, 
-        is_foggy, pos, angle):
+        is_foggy, pos, angle, horizon):
         # Compute the sine and cosine values of the player angle
         # to use them to render the environment based on the player's rotation.
         sin, cos = numpy.sin(angle), numpy.cos(angle)
@@ -81,7 +89,7 @@ class Mode7:
         # Compute color value for every single pixel (i, j).
         # prange function (instead of range function) used for outer loop for performance reasons.
         for i in prange(WIDTH):
-            for j in range(HALF_HEIGHT, HEIGHT):
+            for j in range(horizon, HEIGHT):
                 # Let us imagine that the floor texture is tiled infinitely 
                 # in both horizontal and vertical direction on a 2D plane.
                 # Let us assume that this plane's horizontal and vertical axes
@@ -102,7 +110,7 @@ class Mode7:
                 # to prevent divide-by-0 errors in the next step.
                 x = HALF_WIDTH - i  
                 y = j + FOCAL_LEN 
-                z = j - HALF_HEIGHT + 0.01 
+                z = j - horizon + 0.01 
 
                 # Apply player's rotation (which is computed from the angle they are rotated by),
                 # "standard formula for rotation in 2D space".
@@ -124,10 +132,10 @@ class Mode7:
                 # has the same coordinates than the pixel of the floor texture
                 # that is over (i, j).
                 # By coordinates, we hereby mean coordinates in the texture coordinate system.
-                ceil_pos = int(px % ceil_tex_size[0]), int(py % ceil_tex_size[1])
+                # ceil_pos = int(px % ceil_tex_size[0]), int(py % ceil_tex_size[1])
 
                 # look up the respective color in the ceiling array
-                ceil_col = ceil_array[ceil_pos]
+                # ceil_col = ceil_array[ceil_pos]
 
                 # To prevent ugly artifacts at the horizon:
                 # compute some attenuation coefficient in the interval [0, 1] based on the "depth" value
@@ -140,13 +148,13 @@ class Mode7:
                 floor_col = (floor_col[0] * attenuation + fog,
                     floor_col[1] * attenuation + fog,
                     floor_col[2] * attenuation + fog)
-                ceil_col = (ceil_col[0] * attenuation + fog,
-                    ceil_col[1] * attenuation + fog,
-                    ceil_col[2] * attenuation + fog)
+                # ceil_col = (ceil_col[0] * attenuation + fog,
+                #    ceil_col[1] * attenuation + fog,
+                #    ceil_col[2] * attenuation + fog)
 
                 # fill the computed pixel into the screen array
                 screen_array[i, j] = floor_col
-                screen_array[i, -j] = ceil_col
+                # screen_array[i, -j] = ceil_col
 
         return screen_array
 

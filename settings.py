@@ -11,6 +11,11 @@ HALF_WIDTH, HALF_HEIGHT = WIDTH // 2, HEIGHT // 2
 # and the magnification.
 FOCAL_LEN = 250
 
+# The default height of the horizon for mode-7 scenes if none else is specified.
+# Choosing a quarter of the height of the frame has proven to be good in terms of perspective
+# (consider the first F-Zero game on the Super Nintendo as an example).
+STD_HORIZON = HALF_HEIGHT // 2
+
 # scale factor for height of the stage (z axis in virtual coordinate system of environment)
 SCALE = 20
 
