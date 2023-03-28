@@ -7,17 +7,18 @@ from numba import njit, prange
 from settings import *
 
 class Mode7:
-    # initialization method that loads the textures, 
+    # Initialization method that loads the textures (specified via path passed to constructor), 
     # links this mode-7 renderer to the app
     # and sets some status variables.
-    def __init__(self, app, is_foggy):
+    def __init__(self, app, floor_tex_path, ceil_tex_path, is_foggy):
+        # linking renderer to the app
         self.app = app
+
+        # intiailizing status variables
         self.is_foggy = is_foggy
 
-
-
         # load floor texture
-        self.floor_tex = pygame.image.load('png/track_2023.png').convert()
+        self.floor_tex = pygame.image.load(floor_tex_path).convert()
         
         # store floor texture size for later use
         self.floor_tex_size = self.floor_tex.get_size()
@@ -27,10 +28,8 @@ class Mode7:
         # into a new 3D array.
         self.floor_array = pygame.surfarray.array3d(self.floor_tex)
 
-
-
         # load ceiling texture
-        self.ceil_tex = pygame.image.load('test_floor.png').convert()
+        self.ceil_tex = pygame.image.load(ceil_tex_path).convert()
 
         # scale ceiling texture to floor texture size
         self.ceil_tex_size = self.ceil_tex.get_size()

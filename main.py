@@ -18,8 +18,12 @@ class App:
         self.clock = pygame.time.Clock()
 
         # Initializes the mode-7 renderer.
-        # Second parameter determines whether the rendered scene has a fog effect or not.
-        self.mode7 = Mode7(self, True)
+        # Second parameter is path to the floor texture.
+        # Third parameter determines whether the rendered scene has a fog effect or not.
+        self.mode7 = Mode7(self, 
+            floor_tex_path = 'png/track_2023.png', 
+            ceil_tex_path = 'test_floor.png',
+            is_foggy = True)
 
         # Creates a player instance
         self.player = Player(
