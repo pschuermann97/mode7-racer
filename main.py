@@ -22,8 +22,9 @@ class App:
         # Third parameter determines whether the rendered scene has a fog effect or not.
         self.mode7 = Mode7(self, 
             floor_tex_path = 'png/track_2023.png', 
-            ceil_tex_path = 'test_floor.png',
-            is_foggy = True)
+            bg_tex_path = 'test_floor.png',
+            is_foggy = True
+        )
 
         # Creates a player instance
         self.player = Player(
