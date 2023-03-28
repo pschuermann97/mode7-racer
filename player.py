@@ -57,9 +57,9 @@ class Player:
 
         # Change player rotation
         if keys[pygame.K_LEFT]:
-            self.angle -= self.rotation_speed
-        if keys[pygame.K_RIGHT]:
             self.angle += self.rotation_speed
+        if keys[pygame.K_RIGHT]:
+            self.angle -= self.rotation_speed
 
         print("x: " + str(self.position[0]) + " y: " + str(self.position[1]) + " a: " + str(self.angle))
 

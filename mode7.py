@@ -117,8 +117,8 @@ class Mode7:
 
                 # Apply player's rotation (which is computed from the angle they are rotated by),
                 # "standard formula for rotation in 2D space".
-                rx = x * cos - y * sin
-                ry = x * sin + y * cos
+                rx = x * cos + y * sin
+                ry = x * -sin + y * cos
 
                 # Apply mode-7 style projection.
                 # Player position is used as offset here to allow movement

@@ -19,7 +19,7 @@ STD_HORIZON = HALF_HEIGHT // 2
 # scale factor for height of the stage (z axis in virtual coordinate system of environment)
 SCALE = 20
 
-# whether the game currently is in "creator mode", where the camera can move around freely in the scene
+# whether the game currently is in "developer mode", where the camera can move around freely in the scene
 IN_DEV_MODE = True
 
 
@@ -35,3 +35,5 @@ INITIAL_PLAYER_ROTATION_SPEED = 0.05
 
 # how fast the background moves when the player rotates
 BACKGROUND_ROTATION_SPEED = 50
+
+# standard key bindings for racing mode movement
