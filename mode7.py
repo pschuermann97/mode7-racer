@@ -62,7 +62,7 @@ class Mode7:
             horizon = self.horizon
         )
 
-    # Computes a single frame of the floor texture pixel by pixel.
+    # Computes a single frame of the mode-7 environment pixel by pixel.
     # Needs numba just-in-time compiler support (decorators) 
     # to achieve a reasonable framerate when executed every frame.
     # 
@@ -87,9 +87,10 @@ class Mode7:
         # Compute color value for every single pixel (i, j).
         # prange function (instead of range function) used for outer loop for performance reasons.
         for i in prange(WIDTH):
-            # compute rotating background image render
+            # compute background image render
             for j in range(0, horizon):
-                pass
+                # background image is shifted by angle the player is rotated by
+                screen_array[i][j] = bg_array[(i + int(angle * BACKGROUND_ROTATION_SPEED)) % bg_tex_size[0]][j % bg_tex_size[1]]
             # compute floor render
             for j in range(horizon, HEIGHT):
                 # Let us imagine that the floor texture is tiled infinitely 

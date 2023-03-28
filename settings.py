@@ -32,3 +32,6 @@ INITIAL_PLAYER_MOVE_SPEED = 0.1
 
 # how fast the player can rotate initially
 INITIAL_PLAYER_ROTATION_SPEED = 0.05
+
+# how fast the background moves when the player rotates
+BACKGROUND_ROTATION_SPEED = 50
