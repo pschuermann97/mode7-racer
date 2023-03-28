@@ -1,5 +1,7 @@
 # Defines some general settings variables, like the used window resolution
 
+import pygame
+
 # Window resolution.
 # For convenience, we also store the halved values in variables 
 # to make our code more readable.
@@ -20,7 +22,7 @@ STD_HORIZON = HALF_HEIGHT // 2
 SCALE = 20
 
 # whether the game currently is in "developer mode", where the camera can move around freely in the scene
-IN_DEV_MODE = True
+IN_DEV_MODE = False
 
 
 
@@ -31,9 +33,12 @@ FOG_DENSITY = 100
 INITIAL_PLAYER_MOVE_SPEED = 0.1
 
 # how fast the player can rotate initially
-INITIAL_PLAYER_ROTATION_SPEED = 0.05
+INITIAL_PLAYER_ROTATION_SPEED = 0.03
 
 # how fast the background moves when the player rotates
 BACKGROUND_ROTATION_SPEED = 50
 
 # standard key bindings for racing mode movement
+STD_ACCEL_KEY = pygame.K_SPACE # space = accelerate
+STD_LEFT_KEY = pygame.K_a # A = rotate left
+STD_RIGHT_KEY = pygame.K_d # D = rotate right

@@ -1,7 +1,7 @@
 import numpy
 import pygame
 
-from settings import IN_DEV_MODE
+from settings import IN_DEV_MODE, STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY
 
 class Player:
     def __init__(self, move_speed, rotation_speed):
@@ -36,14 +36,16 @@ class Player:
         # which are accumulated throughout the method.
         dx, dy = 0, 0
 
-        # Accumulate the change in player position based on the pressed keys.
+        # collect key events
         keys = pygame.key.get_pressed()
+
+        # accumulate the change in player position based on the pressed keys.
         if keys[pygame.K_w]:
             dx += speed_cos
             dy += speed_sin
         if keys[pygame.K_s]:
             dx += -speed_cos
-            dy += - speed_sin
+            dy += -speed_sin
         if keys[pygame.K_a]:
             dx += -speed_sin
             dy += speed_cos
@@ -65,4 +67,29 @@ class Player:
 
     # Moves the player's machine as in a race.
     def racing_mode_movement(self):
-        pass
+        # Compute sine and cosine of current angle 
+        # to be able to update player position
+        # based on their rotation.
+        sin_a = numpy.sin(self.angle)
+        cos_a = numpy.cos(self.angle)
+
+        # Store the scaled versions of those two values for convenience.
+        speed_sin, speed_cos = self.move_speed * sin_a, self.move_speed * cos_a
+
+        # Initialize the variables holding the change in player position
+        # which are accumulated throughout the method.
+        dx, dy = 0, 0
+
+        # collect key events
+        keys = pygame.key.get_pressed()
+
+        # Forward movement.
+        if keys[STD_ACCEL_KEY]:
+            self.position[0] += speed_cos
+            self.position[1] += speed_sin
+
+        # Change player rotation
+        if keys[STD_LEFT_KEY]:
+            self.angle += self.rotation_speed
+        if keys[STD_RIGHT_KEY]:
+            self.angle -= self.rotation_speed
