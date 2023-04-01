@@ -19,12 +19,12 @@ FOCAL_LEN = 250
 STD_HORIZON = HALF_HEIGHT // 2
 
 # the distance that the camera keeps from the player by default
-CAM_DISTANCE = 6
+CAM_DISTANCE = 4
 
 # the pixel position that the player sprite has on the screen 
 # when the player is driving on the track (i.e. not jumping/falling off)
 NORMAL_PLAYER_POSITION_X = 376
-NORMAL_PLAYER_POSITION_Y = 300
+NORMAL_PLAYER_POSITION_Y = 200
 
 # scale factor for height of the stage (z axis in virtual coordinate system of environment)
 SCALE = 20
