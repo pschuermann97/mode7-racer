@@ -1,15 +1,24 @@
 import numpy
 import pygame
 
-from settings import IN_DEV_MODE, STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY
+from settings import IN_DEV_MODE, STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, PLAYER_SPRITE_PATH, NORMAL_PLAYER_POSITION_X, NORMAL_PLAYER_POSITION_Y
 
-class Player:
+class Player(pygame.sprite.Sprite):
     def __init__(self, move_speed, rotation_speed):
+        # logical transformation variables
         self.position = numpy.array([0.0, 0.0]) # player initially is at origin position
         self.angle = 0 # player initially looks forward
 
+        # physics variables
         self.move_speed = move_speed # how fast the player can move through the scene
         self.rotation_speed = rotation_speed # how fast the player can rotate
+
+        # rendering variables
+        super().__init__() # calling constructor of pygame's Sprite class (responsible for rendering)
+        self.image = pygame.image.load(PLAYER_SPRITE_PATH)
+        self.rect = self.image.get_rect()
+        self.rect.topleft = [NORMAL_PLAYER_POSITION_X, NORMAL_PLAYER_POSITION_Y]
+
 
     # Updates player data and position.
     # 

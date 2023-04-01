@@ -21,6 +21,11 @@ STD_HORIZON = HALF_HEIGHT // 2
 # the distance that the camera keeps from the player by default
 CAM_DISTANCE = 6
 
+# the pixel position that the player sprite has on the screen 
+# when the player is driving on the track (i.e. not jumping/falling off)
+NORMAL_PLAYER_POSITION_X = 376
+NORMAL_PLAYER_POSITION_Y = 300
+
 # scale factor for height of the stage (z axis in virtual coordinate system of environment)
 SCALE = 20
 
@@ -45,3 +50,6 @@ BACKGROUND_ROTATION_SPEED = 50
 STD_ACCEL_KEY = pygame.K_SPACE # space = accelerate
 STD_LEFT_KEY = pygame.K_a # A = rotate left
 STD_RIGHT_KEY = pygame.K_d # D = rotate right
+
+# standard paths for the sprites used in the game
+PLAYER_SPRITE_PATH = 'png/violet_machine.png'
