@@ -1,7 +1,7 @@
 import pygame
 import numpy
 
-# JIT compiler and range function for performance speedup
+# JIT compiler and prange function for performance speedup
 from numba import njit, prange
 
 from settings import *
@@ -46,9 +46,9 @@ class Mode7:
         self.screen_array = pygame.surfarray.array3d(pygame.Surface(WIN_RES))
 
     # Updates the mode7-based environment.
-    # A player reference is passed to be able
-    # to render the frame based on the player's current position and rotation.
-    def update(self, player):
+    # A camera reference is passed to be able
+    # to render the frame based on the camera's (and thus player's) current position and rotation.
+    def update(self, camera):
         # rendering the frame
         self.screen_array = self.render_frame(
             floor_array = self.floor_array, 
@@ -57,8 +57,8 @@ class Mode7:
             floor_tex_size = self.floor_tex_size, 
             bg_tex_size = self.bg_tex_size, 
             is_foggy = self.is_foggy, 
-            pos = player.position,
-            angle = player.angle,
+            pos = camera.position,
+            angle = camera.angle,
             horizon = self.horizon
         )
 
@@ -73,8 +73,8 @@ class Mode7:
     # floor_tex_size: size of the floor texture
     # bg_tex_size: size of the background texture
     # is_foggy: whether the scene of which a frame is rendered has a fog effect in it
-    # pos: current position of the player
-    # angle: current angle by which the player is rotated
+    # pos: current position of the camera
+    # angle: current angle by which the camera is rotated
     # horizon: the min y coordinate of floor pixels (note: y increases down the screen)
     @staticmethod
     @njit(fastmath=True, parallel=True)

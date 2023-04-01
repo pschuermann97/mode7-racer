@@ -16,6 +16,7 @@ class Player:
     # Parameters:
     # time: number of frames since the game started
     def update(self, time):
+        # movement
         if IN_DEV_MODE:
             self.dev_mode_movement()
         else:

@@ -18,6 +18,9 @@ FOCAL_LEN = 250
 # (consider the first F-Zero game on the Super Nintendo as an example).
 STD_HORIZON = HALF_HEIGHT // 2
 
+# the distance that the camera keeps from the player by default
+CAM_DISTANCE = 6
+
 # scale factor for height of the stage (z axis in virtual coordinate system of environment)
 SCALE = 20
 

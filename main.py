@@ -6,6 +6,7 @@ import sys
 from settings import *
 from mode7 import Mode7
 from player import Player
+from camera import Camera
 
 # The class that handles/orchestrates all tasks involved in running the game.
 # This includes rendering the screen, 
@@ -32,12 +33,22 @@ class App:
             rotation_speed = INITIAL_PLAYER_ROTATION_SPEED
         )
 
+        # Creates a camera instance
+        # that tracks the player.
+        self.camera = Camera(
+            self.player,
+            CAM_DISTANCE
+        )
+
     def update(self):
         # updates the player based on time elapsed since game start
         self.player.update(self.time)
 
+        # updates camera position (which is done mainly based on player position)
+        self.camera.update()
+
         # causes the Mode7-rendered environment to update
-        self.mode7.update(self.player)
+        self.mode7.update(self.camera)
 
         # updates clock
         self.clock.tick()
@@ -45,6 +56,9 @@ class App:
         # caption of the window displays current frame rate
         # (f'...' is a more readable + faster way to write format strings than with "%")
         pygame.display.set_caption(f'{self.clock.get_fps(): 0.1f}')
+
+        # log output for debug
+        self.debug_logs()
 
     def draw(self):
         self.mode7.draw()
@@ -79,6 +93,16 @@ class App:
 
             # render frame
             self.draw()
+
+    def debug_logs(self):
+        # log of player's position for debug purposes
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_p]:
+            print("player position/angle: " + str(self.player.position[0]) + " " + str(self.player.position[1]) + ", " + str(self.player.angle))
+
+        # log camera position for debug purposes
+        if keys[pygame.K_p]:
+            print("cam position/angle: " + str(self.camera.position[0]) + " " + str(self.camera.position[1]) + ", " + str(self.camera.angle))
 
 if __name__ == '__main__':
     app = App()
