@@ -18,6 +18,10 @@ class App:
         self.screen = pygame.display.set_mode(WIN_RES)
         self.clock = pygame.time.Clock()
 
+        # Creates a group of sprites that contains all the sprites
+        # that move across the screen.
+        self.moving_sprites = pygame.sprite.Group()
+
         # Initializes the mode-7 renderer.
         # Second parameter is path to the floor texture.
         # Third parameter determines whether the rendered scene has a fog effect or not.
@@ -32,6 +36,9 @@ class App:
             move_speed = INITIAL_PLAYER_MOVE_SPEED,
             rotation_speed = INITIAL_PLAYER_ROTATION_SPEED
         )
+
+        # need to add the player instance to sprite group to be able to render it
+        self.moving_sprites.add(self.player)
 
         # Creates a camera instance
         # that tracks the player.
@@ -61,7 +68,11 @@ class App:
         self.debug_logs()
 
     def draw(self):
+        # draws the mode-7 environment
         self.mode7.draw()
+
+        # draws moving sprites (e.g. player) to screen
+        self.moving_sprites.draw(self.screen)
 
         # update the contents of the whole display
         pygame.display.flip()
