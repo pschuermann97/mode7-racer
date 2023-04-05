@@ -26,8 +26,8 @@ class App:
         # Second parameter is path to the floor texture.
         # Third parameter determines whether the rendered scene has a fog effect or not.
         self.mode7 = Mode7(self, 
-            floor_tex_path = 'png/track_2023.png', 
-            bg_tex_path = 'png/track_2023_bg.png',
+            floor_tex_path = 'gfx/track_2023.png', 
+            bg_tex_path = 'gfx/track_2023_bg_resized.png',
             is_foggy = True
         )
 

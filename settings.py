@@ -5,7 +5,7 @@ import pygame
 # Window resolution.
 # For convenience, we also store the halved values in variables 
 # to make our code more readable.
-WIN_RES = (WIDTH, HEIGHT) = 800, 450
+WIN_RES = (WIDTH, HEIGHT) = 400, 225
 HALF_WIDTH, HALF_HEIGHT = WIDTH // 2, HEIGHT // 2
 
 # Focal length.
@@ -23,8 +23,8 @@ CAM_DISTANCE = 4
 
 # the pixel position that the player sprite has on the screen 
 # when the player is driving on the track (i.e. not jumping/falling off)
-NORMAL_PLAYER_POSITION_X = 376
-NORMAL_PLAYER_POSITION_Y = 200
+NORMAL_PLAYER_POSITION_X = 176
+NORMAL_PLAYER_POSITION_Y = 120
 
 # scale factor for height of the stage (z axis in virtual coordinate system of environment)
 SCALE = 20
@@ -38,10 +38,10 @@ IN_DEV_MODE = False
 FOG_DENSITY = 100
 
 # how fast the player can move initially
-INITIAL_PLAYER_MOVE_SPEED = 0.1
+INITIAL_PLAYER_MOVE_SPEED = 0.05
 
 # how fast the player can rotate initially
-INITIAL_PLAYER_ROTATION_SPEED = 0.03
+INITIAL_PLAYER_ROTATION_SPEED = 0.01
 
 # how fast the background moves when the player rotates
 BACKGROUND_ROTATION_SPEED = 50
@@ -52,4 +52,4 @@ STD_LEFT_KEY = pygame.K_a # A = rotate left
 STD_RIGHT_KEY = pygame.K_d # D = rotate right
 
 # standard paths for the sprites used in the game
-PLAYER_SPRITE_PATH = 'png/violet_machine.png'
+PLAYER_SPRITE_PATH = 'gfx/violet_machine.png'
