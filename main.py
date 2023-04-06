@@ -2,11 +2,15 @@
 import pygame
 import sys
 
-# modules from this project
+# imports from this project
 from settings import *
 from mode7 import Mode7
 from player import Player
 from camera import Camera
+from track import Track, TrackCreator
+
+# debug only imports
+from collision import CollisionRect
 
 # The class that handles/orchestrates all tasks involved in running the game.
 # This includes rendering the screen, 
@@ -53,6 +57,9 @@ class App:
             self.player,
             CAM_DISTANCE
         )
+
+        # Creates the race track collision map.
+        self.race_track = TrackCreator.create_track_1()
 
     def update(self):
         # updates the player based on time elapsed since game start
@@ -115,12 +122,16 @@ class App:
     def debug_logs(self):
         # log of player's position for debug purposes
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_p]:
-            print("player position/angle: " + str(self.player.position[0]) + " " + str(self.player.position[1]) + ", " + str(self.player.angle))
+        # if keys[pygame.K_p]:
+        #     print("player position/angle: " + str(self.player.position[0]) + " " + str(self.player.position[1]) + ", " + str(self.player.angle))
 
         # log camera position for debug purposes
+        # if keys[pygame.K_p]:
+        #     print("cam position/angle: " + str(self.camera.position[0]) + " " + str(self.camera.position[1]) + ", " + str(self.camera.angle))
+
         if keys[pygame.K_p]:
-            print("cam position/angle: " + str(self.camera.position[0]) + " " + str(self.camera.position[1]) + ", " + str(self.camera.angle))
+            if self.race_track.is_on_track( CollisionRect(self.player.position, 1, 1) ):
+                print("player on track!")
 
 if __name__ == '__main__':
     app = App()
