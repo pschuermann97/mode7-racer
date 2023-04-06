@@ -3,14 +3,14 @@ import pygame
 
 from settings import IN_DEV_MODE
 from settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY # button mapping config
-from settings import PLAYER_SPRITE_PATH, NORMAL_PLAYER_POSITION_X, NORMAL_PLAYER_POSITION_Y # rendering config
+from settings import PLAYER_SPRITE_PATH, NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, max_speed, acceleration, brake_force, speed_loss, rotation_speed):
+    def __init__(self, max_speed, acceleration, brake_force, speed_loss, rotation_speed,
+        init_pos_x, init_pos_y, init_angle):
         # logical transformation variables
-        self.position = numpy.array([0.0, 0.0]) # player initially is at origin position
-
-        self.angle = 0 # player initially looks forward
+        self.position = numpy.array([init_pos_x, init_pos_y])
+        self.angle = init_angle
 
         # physics variables
         self.current_speed = 0 # how fast the player moves in the current frame
@@ -24,7 +24,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__() # calling constructor of pygame's Sprite class (responsible for rendering)
         self.image = pygame.image.load(PLAYER_SPRITE_PATH)
         self.rect = self.image.get_rect()
-        self.rect.topleft = [NORMAL_PLAYER_POSITION_X, NORMAL_PLAYER_POSITION_Y]
+        self.rect.topleft = [NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y]
 
 
     # Updates player data and position.

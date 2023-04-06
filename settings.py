@@ -21,16 +21,14 @@ CAM_DISTANCE = 4
 
 # the pixel position that the player sprite has on the screen 
 # when the player is driving on the track (i.e. not jumping/falling off)
-NORMAL_PLAYER_POSITION_X = 176
-NORMAL_PLAYER_POSITION_Y = 120
+NORMAL_ON_SCREEN_PLAYER_POSITION_X = 176
+NORMAL_ON_SCREEN_PLAYER_POSITION_Y = 120
 
 # scale factor for height of the stage (z axis in virtual coordinate system of environment)
 SCALE = 20
 
 # whether the game currently is in "developer mode", where the camera can move around freely in the scene
 IN_DEV_MODE = False
-
-
 
 # how dense the fog is in foggy scenes
 FOG_DENSITY = 100
@@ -43,6 +41,11 @@ PLAYER_SPEED_LOSS = PLAYER_ACCELERATION / 2 # how much speed the player loses wh
 
 # how fast the player can rotate initially
 INITIAL_PLAYER_ROTATION_SPEED = 0.01
+
+# initial position/roation of the player in the logical world space
+INITIAL_PLAYER_POSITION_X = 25.55
+INITIAL_PLAYER_POSITION_Y = -119.78
+INITIAL_PLAYER_ANGLE = -111.56
 
 # how fast the background moves when the player rotates
 BACKGROUND_ROTATION_SPEED = 50

@@ -37,7 +37,10 @@ class App:
             acceleration = PLAYER_ACCELERATION,
             brake_force = PLAYER_BRAKE,
             speed_loss = PLAYER_SPEED_LOSS,
-            rotation_speed = INITIAL_PLAYER_ROTATION_SPEED
+            rotation_speed = INITIAL_PLAYER_ROTATION_SPEED,
+            init_pos_x = INITIAL_PLAYER_POSITION_X,
+            init_pos_y = INITIAL_PLAYER_POSITION_Y,
+            init_angle = INITIAL_PLAYER_ANGLE
         )
 
         # need to add the player instance to sprite group to be able to render it
