@@ -1,5 +1,3 @@
-# Defines some general settings variables, like the used window resolution
-
 import pygame
 
 # Window resolution.
@@ -37,8 +35,10 @@ IN_DEV_MODE = False
 # how dense the fog is in foggy scenes
 FOG_DENSITY = 100
 
-# how fast the player can move initially
-INITIAL_PLAYER_MOVE_SPEED = 0.05
+# physics variables of the player machine
+PLAYER_MAX_SPEED = 0.05
+PLAYER_ACCELERATION = 0.0001 # how fast the player can accelerate
+PLAYER_BRAKE = 0.0002 # how strong the players brakes are
 
 # how fast the player can rotate initially
 INITIAL_PLAYER_ROTATION_SPEED = 0.01
@@ -48,6 +48,7 @@ BACKGROUND_ROTATION_SPEED = 50
 
 # standard key bindings for racing mode movement
 STD_ACCEL_KEY = pygame.K_SPACE # space = accelerate
+STD_BRAKE_KEY = pygame.K_s # S = brake 
 STD_LEFT_KEY = pygame.K_a # A = rotate left
 STD_RIGHT_KEY = pygame.K_d # D = rotate right
 

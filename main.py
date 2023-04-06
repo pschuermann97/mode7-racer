@@ -33,7 +33,9 @@ class App:
 
         # Creates a player instance
         self.player = Player(
-            move_speed = INITIAL_PLAYER_MOVE_SPEED,
+            max_speed = PLAYER_MAX_SPEED,
+            acceleration = PLAYER_ACCELERATION,
+            brake_force = PLAYER_BRAKE,
             rotation_speed = INITIAL_PLAYER_ROTATION_SPEED
         )
 

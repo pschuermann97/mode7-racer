@@ -1,16 +1,22 @@
 import numpy
 import pygame
 
-from settings import IN_DEV_MODE, STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, PLAYER_SPRITE_PATH, NORMAL_PLAYER_POSITION_X, NORMAL_PLAYER_POSITION_Y
+from settings import IN_DEV_MODE
+from settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY # button mapping config
+from settings import PLAYER_SPRITE_PATH, NORMAL_PLAYER_POSITION_X, NORMAL_PLAYER_POSITION_Y # rendering config
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, move_speed, rotation_speed):
+    def __init__(self, max_speed, acceleration, brake_force, rotation_speed):
         # logical transformation variables
         self.position = numpy.array([0.0, 0.0]) # player initially is at origin position
+
         self.angle = 0 # player initially looks forward
 
         # physics variables
-        self.move_speed = move_speed # how fast the player can move through the scene
+        self.current_speed = 0 # how fast the player moves in the current frame
+        self.max_speed = max_speed # how fast the player can move through the scene at max
+        self.acceleration = acceleration # acceleration force applied to the player car per frame that the brake is pressed
+        self.brake_force = brake_force # brake force applied to the player car per frame that the brake is pressed
         self.rotation_speed = rotation_speed # how fast the player can rotate
 
         # rendering variables
@@ -25,7 +31,7 @@ class Player(pygame.sprite.Sprite):
     # Parameters:
     # time: number of frames since the game started
     def update(self, time):
-        # movement
+        # move player according to steering inputs and current speed
         if IN_DEV_MODE:
             self.dev_mode_movement()
         else:
@@ -40,7 +46,8 @@ class Player(pygame.sprite.Sprite):
         cos_a = numpy.cos(self.angle)
 
         # Store the scaled versions of those two values for convenience.
-        speed_sin, speed_cos = self.move_speed * sin_a, self.move_speed * cos_a
+        # Player always moves at maximum speed when in dev mode.
+        speed_sin, speed_cos = self.max_speed * sin_a, self.max_speed * cos_a
 
         # Initialize the variables holding the change in player position
         # which are accumulated throughout the method.
@@ -77,6 +84,19 @@ class Player(pygame.sprite.Sprite):
 
     # Moves the player's machine as in a race.
     def racing_mode_movement(self):
+        # collect key events
+        keys = pygame.key.get_pressed()
+        
+        # Update player speed according to acceleration/brake inputs.
+        if keys[STD_ACCEL_KEY]:
+            self.current_speed += self.acceleration
+            if self.current_speed > self.max_speed:
+                self.current_speed = self.max_speed
+        if keys[STD_BRAKE_KEY]:
+            self.current_speed -= self.brake_force
+            if self.current_speed < 0:
+                self.current_speed = 0     
+
         # Compute sine and cosine of current angle 
         # to be able to update player position
         # based on their rotation.
@@ -84,19 +104,11 @@ class Player(pygame.sprite.Sprite):
         cos_a = numpy.cos(self.angle)
 
         # Store the scaled versions of those two values for convenience.
-        speed_sin, speed_cos = self.move_speed * sin_a, self.move_speed * cos_a
-
-        # Initialize the variables holding the change in player position
-        # which are accumulated throughout the method.
-        dx, dy = 0, 0
-
-        # collect key events
-        keys = pygame.key.get_pressed()
+        speed_sin, speed_cos = self.current_speed * sin_a, self.current_speed * cos_a
 
         # Forward movement.
-        if keys[STD_ACCEL_KEY]:
-            self.position[0] += speed_cos
-            self.position[1] += speed_sin
+        self.position[0] += speed_cos
+        self.position[1] += speed_sin
 
         # Change player rotation
         if keys[STD_LEFT_KEY]:
