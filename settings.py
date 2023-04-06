@@ -39,6 +39,8 @@ PLAYER_ACCELERATION = PLAYER_MAX_SPEED / 500 # how fast the player can accelerat
 PLAYER_BRAKE = PLAYER_ACCELERATION * 2 # how strong the players brakes are
 PLAYER_SPEED_LOSS = PLAYER_ACCELERATION / 3 # how much speed the player loses when neither accelerating nor braking
 PLAYER_CENTRIFUGAL_FORCE = 0.5 # centrifugal force applied in corners
+PLAYER_COLLISION_RECT_WIDTH = 1 # width of the player collider
+PLAYER_COLLISION_RECT_HEIGHT = 1 # height of the player collider
 
 # how fast the player can rotate initially
 INITIAL_PLAYER_ROTATION_SPEED = 0.01

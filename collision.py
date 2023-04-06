@@ -27,10 +27,10 @@ class CollisionRect:
         else:
             # check whether the horizontal coordinates allow for an overlap
             if self.position[0] + self.width / 2 >= other.position[0] - other.width / 2:
-                # case 1.1: located to the lower left of this rectangle
+                # case 2.1: located to the lower right of this rectangle
                 if other.position[1] <= self.position[1]:
                     return self.position[1] - self.height / 2 <= other.position[1] + other.height / 2
-                # case 1.2: located to the upper left of this rectangle
+                # case 2.2: located to the upper right of this rectangle
                 else:
                     return self.position[1] + self.height / 2 >= other.position[1] - other.height / 2
 

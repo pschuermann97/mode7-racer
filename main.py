@@ -35,7 +35,13 @@ class App:
             is_foggy = True
         )
 
-        # Creates a player instance
+        # Creates the race track collision map.
+        self.race_track = TrackCreator.create_track_1()
+
+        # Creates a player instance and
+        # assigns the race track to the player.
+        # The player needs to know which race track they are driving on
+        # so they can check whether they would leave the track with their movement in the current frame.
         self.player = Player(
             max_speed = PLAYER_MAX_SPEED,
             acceleration = PLAYER_ACCELERATION,
@@ -45,7 +51,8 @@ class App:
             centri = PLAYER_CENTRIFUGAL_FORCE,
             init_pos_x = INITIAL_PLAYER_POSITION_X,
             init_pos_y = INITIAL_PLAYER_POSITION_Y,
-            init_angle = INITIAL_PLAYER_ANGLE
+            init_angle = INITIAL_PLAYER_ANGLE,
+            current_race_track = self.race_track
         )
 
         # need to add the player instance to sprite group to be able to render it
@@ -58,8 +65,6 @@ class App:
             CAM_DISTANCE
         )
 
-        # Creates the race track collision map.
-        self.race_track = TrackCreator.create_track_1()
 
     def update(self):
         # updates the player based on time elapsed since game start

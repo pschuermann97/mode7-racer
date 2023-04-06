@@ -4,10 +4,13 @@ import pygame
 from settings import IN_DEV_MODE
 from settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY # button mapping config
 from settings import PLAYER_SPRITE_PATH, NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
+from settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT
+
+from collision import CollisionRect
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, max_speed, acceleration, brake_force, speed_loss, rotation_speed, centri,
-        init_pos_x, init_pos_y, init_angle):
+        init_pos_x, init_pos_y, init_angle, current_race_track):
         # logical transformation variables
         self.position = numpy.array([init_pos_x, init_pos_y])
         self.angle = init_angle
@@ -27,6 +30,8 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = [NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y]
 
+        # race track collision map reference
+        self.current_race_track = current_race_track
 
     # Updates player data and position.
     # 
@@ -72,7 +77,7 @@ class Player(pygame.sprite.Sprite):
             dx += speed_sin
             dy += -speed_cos
 
-        # Change player position.
+        # Change player position
         self.position[0] += dx
         self.position[1] += dy
 
@@ -116,9 +121,20 @@ class Player(pygame.sprite.Sprite):
         speed_sin, speed_cos = self.current_speed * sin_a, self.current_speed * cos_a # speed
         cf_sin, cf_cos = self.centri * speed_sin * -1, self.centri * speed_cos * -1 # centrifugal forces
 
-        # Forward movement.
-        self.position[0] += speed_cos
-        self.position[1] += speed_sin
+        # Compute player's position in the next frame including the moved collision rect.
+        next_frame_position_x = self.position[0] + speed_cos
+        next_frame_position_y = self.position[1] + speed_sin
+        next_frame_collision_rect = CollisionRect(
+            pos = numpy.array([next_frame_position_x, next_frame_position_y]), 
+            w = PLAYER_COLLISION_RECT_WIDTH,
+            h = PLAYER_COLLISION_RECT_HEIGHT
+        )
+
+        # Check if player would stay on track when moved as computed above.
+        # If yes, move them.
+        if self.current_race_track.is_on_track(next_frame_collision_rect):
+            self.position[0] = next_frame_position_x
+            self.position[1] = next_frame_position_y
 
         # Steering.
         if keys[STD_LEFT_KEY]:
