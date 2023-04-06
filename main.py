@@ -38,6 +38,7 @@ class App:
             brake_force = PLAYER_BRAKE,
             speed_loss = PLAYER_SPEED_LOSS,
             rotation_speed = INITIAL_PLAYER_ROTATION_SPEED,
+            centri = PLAYER_CENTRIFUGAL_FORCE,
             init_pos_x = INITIAL_PLAYER_POSITION_X,
             init_pos_y = INITIAL_PLAYER_POSITION_Y,
             init_angle = INITIAL_PLAYER_ANGLE

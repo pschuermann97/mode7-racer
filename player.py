@@ -6,7 +6,7 @@ from settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY #
 from settings import PLAYER_SPRITE_PATH, NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, max_speed, acceleration, brake_force, speed_loss, rotation_speed,
+    def __init__(self, max_speed, acceleration, brake_force, speed_loss, rotation_speed, centri,
         init_pos_x, init_pos_y, init_angle):
         # logical transformation variables
         self.position = numpy.array([init_pos_x, init_pos_y])
@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.brake_force = brake_force # brake force applied to the player car per frame that the brake is pressed
         self.speed_loss = speed_loss # how much speed player loses when neither accelerating nor braking
         self.rotation_speed = rotation_speed # how fast the player can rotate
+        self.centri = centri # how hard the player is pushed to the outside in corners
 
         # rendering variables
         super().__init__() # calling constructor of pygame's Sprite class (responsible for rendering)
@@ -112,14 +113,23 @@ class Player(pygame.sprite.Sprite):
         cos_a = numpy.cos(self.angle)
 
         # Store the scaled versions of those two values for convenience.
-        speed_sin, speed_cos = self.current_speed * sin_a, self.current_speed * cos_a
+        speed_sin, speed_cos = self.current_speed * sin_a, self.current_speed * cos_a # speed
+        cf_sin, cf_cos = self.centri * speed_sin * -1, self.centri * speed_cos * -1 # centrifugal forces
 
         # Forward movement.
         self.position[0] += speed_cos
         self.position[1] += speed_sin
 
-        # Change player rotation
+        # Steering.
         if keys[STD_LEFT_KEY]:
+            # rotate player
             self.angle += self.rotation_speed
+
+            # apply centrifugal force
+            self.position[0] += -cf_sin
+            self.position[1] += cf_cos
         if keys[STD_RIGHT_KEY]:
             self.angle -= self.rotation_speed
+
+            self.position[0] += cf_sin
+            self.position[1] += -cf_cos
