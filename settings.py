@@ -37,8 +37,8 @@ FOG_DENSITY = 100
 PLAYER_MAX_SPEED = 0.05
 PLAYER_ACCELERATION = PLAYER_MAX_SPEED / 500 # how fast the player can accelerate
 PLAYER_BRAKE = PLAYER_ACCELERATION * 2 # how strong the players brakes are
-PLAYER_SPEED_LOSS = PLAYER_ACCELERATION / 2 # how much speed the player loses when neither accelerating nor braking
-PLAYER_CENTRIFUGAL_FORCE = 0.75 # centrifugal force applied in corners
+PLAYER_SPEED_LOSS = PLAYER_ACCELERATION / 3 # how much speed the player loses when neither accelerating nor braking
+PLAYER_CENTRIFUGAL_FORCE = 0.5 # centrifugal force applied in corners
 
 # how fast the player can rotate initially
 INITIAL_PLAYER_ROTATION_SPEED = 0.01
