@@ -31,7 +31,7 @@ SCALE = 20
 IN_DEV_MODE = False
 
 # whether collisions with the track borders and obstacles are being detected
-COLLISION_DETECTION_ON = False
+COLLISION_DETECTION_OFF = True
 
 # how dense the fog is in foggy scenes
 FOG_DENSITY = 100
@@ -41,7 +41,7 @@ PLAYER_MAX_SPEED = 0.05
 PLAYER_ACCELERATION = PLAYER_MAX_SPEED / 500 # how fast the player can accelerate
 PLAYER_BRAKE = PLAYER_ACCELERATION * 2 # how strong the players brakes are
 PLAYER_SPEED_LOSS = PLAYER_ACCELERATION / 3 # how much speed the player loses when neither accelerating nor braking
-PLAYER_CENTRIFUGAL_FORCE = 0.5 # centrifugal force applied in corners
+PLAYER_CENTRIFUGAL_FORCE = 0.5 # centrifugal force applied in corners (more precisely, percentage of max speed that is applied as centrifugal force)
 PLAYER_COLLISION_RECT_WIDTH = 1 # width of the player collider
 PLAYER_COLLISION_RECT_HEIGHT = 1 # height of the player collider
 

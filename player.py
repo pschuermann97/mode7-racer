@@ -1,10 +1,10 @@
 import numpy
 import pygame
 
-from settings import IN_DEV_MODE, COLLISION_DETECTION_ON # debug config
+from settings import IN_DEV_MODE, COLLISION_DETECTION_OFF # debug config
 from settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY # button mapping config
 from settings import PLAYER_SPRITE_PATH, NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
-from settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT
+from settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT # player collider config
 
 from collision import CollisionRect
 
@@ -132,11 +132,16 @@ class Player(pygame.sprite.Sprite):
 
         # Check if player would stay on track when moved as computed above.
         # If yes, move them.
+        # If no, make them bounce back.
         #
-        # Debug-only feature: if collision detection is turned off, the player is always moved
-        if self.current_race_track.is_on_track(next_frame_collision_rect) or not COLLISION_DETECTION_ON:
+        # Debug-only feature: if collision detection is turned off, the player is always moved, never bounced back
+        if self.current_race_track.is_on_track(next_frame_collision_rect) or COLLISION_DETECTION_OFF:
             self.position[0] = next_frame_position_x
             self.position[1] = next_frame_position_y
+        else:
+            if not COLLISION_DETECTION_OFF:
+                # player bounces back since their move speed is flipped
+                self.current_speed = -self.current_speed
 
         # Steering.
         if keys[STD_LEFT_KEY]:
