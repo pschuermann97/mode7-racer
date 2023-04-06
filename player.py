@@ -1,7 +1,7 @@
 import numpy
 import pygame
 
-from settings import IN_DEV_MODE
+from settings import IN_DEV_MODE, COLLISION_DETECTION_ON # debug config
 from settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY # button mapping config
 from settings import PLAYER_SPRITE_PATH, NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
 from settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT
@@ -132,7 +132,9 @@ class Player(pygame.sprite.Sprite):
 
         # Check if player would stay on track when moved as computed above.
         # If yes, move them.
-        if self.current_race_track.is_on_track(next_frame_collision_rect):
+        #
+        # Debug-only feature: if collision detection is turned off, the player is always moved
+        if self.current_race_track.is_on_track(next_frame_collision_rect) or not COLLISION_DETECTION_ON:
             self.position[0] = next_frame_position_x
             self.position[1] = next_frame_position_y
 

@@ -30,6 +30,9 @@ SCALE = 20
 # whether the game currently is in "developer mode", where the camera can move around freely in the scene
 IN_DEV_MODE = False
 
+# whether collisions with the track borders and obstacles are being detected
+COLLISION_DETECTION_ON = False
+
 # how dense the fog is in foggy scenes
 FOG_DENSITY = 100
 
