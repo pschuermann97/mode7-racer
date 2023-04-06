@@ -6,7 +6,7 @@ from settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY #
 from settings import PLAYER_SPRITE_PATH, NORMAL_PLAYER_POSITION_X, NORMAL_PLAYER_POSITION_Y # rendering config
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, max_speed, acceleration, brake_force, rotation_speed):
+    def __init__(self, max_speed, acceleration, brake_force, speed_loss, rotation_speed):
         # logical transformation variables
         self.position = numpy.array([0.0, 0.0]) # player initially is at origin position
 
@@ -17,6 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.max_speed = max_speed # how fast the player can move through the scene at max
         self.acceleration = acceleration # acceleration force applied to the player car per frame that the brake is pressed
         self.brake_force = brake_force # brake force applied to the player car per frame that the brake is pressed
+        self.speed_loss = speed_loss # how much speed player loses when neither accelerating nor braking
         self.rotation_speed = rotation_speed # how fast the player can rotate
 
         # rendering variables
@@ -88,14 +89,21 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         
         # Update player speed according to acceleration/brake inputs.
+        # Increase speed when acceleration button pressed.
         if keys[STD_ACCEL_KEY]:
             self.current_speed += self.acceleration
-            if self.current_speed > self.max_speed:
-                self.current_speed = self.max_speed
-        if keys[STD_BRAKE_KEY]:
-            self.current_speed -= self.brake_force
-            if self.current_speed < 0:
-                self.current_speed = 0     
+        # Decrease speed heavily when brake button pressed.
+        elif keys[STD_BRAKE_KEY]:
+            self.current_speed -= self.brake_force   
+        # decrease speed slightly when neither acceleration nor brake button pressed 
+        else:
+            self.current_speed -= self.speed_loss
+
+        # clamp speed between 0 and maximum speed
+        if self.current_speed < 0:
+            self.current_speed = 0 
+        if self.current_speed > self.max_speed:
+            self.current_speed = self.max_speed
 
         # Compute sine and cosine of current angle 
         # to be able to update player position

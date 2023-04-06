@@ -37,8 +37,9 @@ FOG_DENSITY = 100
 
 # physics variables of the player machine
 PLAYER_MAX_SPEED = 0.05
-PLAYER_ACCELERATION = 0.0001 # how fast the player can accelerate
-PLAYER_BRAKE = 0.0002 # how strong the players brakes are
+PLAYER_ACCELERATION = PLAYER_MAX_SPEED / 500 # how fast the player can accelerate
+PLAYER_BRAKE = PLAYER_ACCELERATION * 2 # how strong the players brakes are
+PLAYER_SPEED_LOSS = PLAYER_ACCELERATION / 2 # how much speed the player loses when neither accelerating nor braking
 
 # how fast the player can rotate initially
 INITIAL_PLAYER_ROTATION_SPEED = 0.01

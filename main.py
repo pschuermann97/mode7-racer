@@ -36,6 +36,7 @@ class App:
             max_speed = PLAYER_MAX_SPEED,
             acceleration = PLAYER_ACCELERATION,
             brake_force = PLAYER_BRAKE,
+            speed_loss = PLAYER_SPEED_LOSS,
             rotation_speed = INITIAL_PLAYER_ROTATION_SPEED
         )
 
