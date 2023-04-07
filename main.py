@@ -123,12 +123,14 @@ class App:
             # render frame
             self.draw()
 
+
+    # Logs various game state information to the console when key P is pressed. 
     def debug_logs(self):
         keys = pygame.key.get_pressed()
 
         # log of player's position for debug purposes
-        # if keys[pygame.K_p]:
-        #     print("player position/angle: " + str(self.player.position[0]) + " " + str(self.player.position[1]) + ", " + str(self.player.angle))
+        if keys[pygame.K_p]:
+            print("player position/angle: " + str(self.player.position[0]) + " " + str(self.player.position[1]) + ", " + str(self.player.angle))
 
         # log camera position for debug purposes
         # if keys[pygame.K_p]:
@@ -140,8 +142,8 @@ class App:
         #         print("player on track!")
 
         # log player speed
-        if keys[pygame.K_p]:
-            print("player speed:" + str(self.player.current_speed))
+        # if keys[pygame.K_p]:
+        #     print("player speed:" + str(self.player.current_speed))
 
 if __name__ == '__main__':
     app = App()

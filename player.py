@@ -101,7 +101,20 @@ class Player(pygame.sprite.Sprite):
             self.current_speed += self.acceleration
         # Decrease speed heavily when brake button pressed.
         elif keys[STD_BRAKE_KEY]:
-            self.current_speed -= self.brake_force   
+            # case 1: player currently moves forwards
+            if self.current_speed > 0:
+                self.current_speed -= self.brake_force  
+                # Clamp speed to zero since the player
+                # should not be able to drive backwards.
+                if self.current_speed < 0:
+                    self.current_speed = 0
+            # case 2: player currently moves backwards (e.g. because of bouncing back)
+            elif self.current_speed < 0:
+                self.current_speed += self.brake_force
+                # Clamp speed to zero since the player 
+                # should not go forward again
+                if self.current_speed > 0:
+                    self.current_speed = 0
         # Decrease speed slightly when neither acceleration nor brake button pressed.
         # Decreasing hereby means approaching zero
         # (otherwise the player would move backwards at increasing speed
