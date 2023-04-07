@@ -5,6 +5,7 @@ from settings import IN_DEV_MODE, COLLISION_DETECTION_OFF # debug config
 from settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY # button mapping config
 from settings import PLAYER_SPRITE_PATH, NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
 from settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT # player collider config
+from settings import PLAYER_LOOKAHEAD_RECT_WIDTH, PLAYER_LOOKAHEAD_RECT_HEIGHT # lookahead for keeping player on track
 
 from collision import CollisionRect
 
@@ -101,13 +102,25 @@ class Player(pygame.sprite.Sprite):
         # Decrease speed heavily when brake button pressed.
         elif keys[STD_BRAKE_KEY]:
             self.current_speed -= self.brake_force   
-        # decrease speed slightly when neither acceleration nor brake button pressed 
+        # Decrease speed slightly when neither acceleration nor brake button pressed.
+        # Decreasing hereby means approaching zero
+        # (otherwise the player would move backwards at increasing speed
+        # if no button is pressed).
         else:
-            self.current_speed -= self.speed_loss
+            if self.current_speed > 0:
+                self.current_speed -= self.speed_loss
+                # Clamp speed to zero (from below) to prevent jitter.
+                if self.current_speed < 0:
+                    self.current_speed = 0
+            elif self.current_speed < 0:
+                self.current_speed += self.speed_loss 
+                # Clamp speed to zero (from above) to prevent jitter.
+                if self.current_speed > 0:
+                    self.current_speed = 0
 
-        # clamp speed between 0 and maximum speed
-        if self.current_speed < 0:
-            self.current_speed = 0 
+        # clamp speed between negative maximum speed and maximum speed
+        if self.current_speed < -self.max_speed:
+            self.current_speed = -self.max_speed
         if self.current_speed > self.max_speed:
             self.current_speed = self.max_speed
 
@@ -124,10 +137,10 @@ class Player(pygame.sprite.Sprite):
         # Compute player's position in the next frame including the moved collision rect.
         next_frame_position_x = self.position[0] + speed_cos
         next_frame_position_y = self.position[1] + speed_sin
-        next_frame_collision_rect = CollisionRect(
+        frame_lookahead_collision_rect = CollisionRect(
             pos = numpy.array([next_frame_position_x, next_frame_position_y]), 
-            w = PLAYER_COLLISION_RECT_WIDTH,
-            h = PLAYER_COLLISION_RECT_HEIGHT
+            w = PLAYER_LOOKAHEAD_RECT_WIDTH,
+            h = PLAYER_LOOKAHEAD_RECT_HEIGHT
         )
 
         # Check if player would stay on track when moved as computed above.
@@ -135,7 +148,7 @@ class Player(pygame.sprite.Sprite):
         # If no, make them bounce back.
         #
         # Debug-only feature: if collision detection is turned off, the player is always moved, never bounced back
-        if self.current_race_track.is_on_track(next_frame_collision_rect) or COLLISION_DETECTION_OFF:
+        if self.current_race_track.is_on_track(frame_lookahead_collision_rect) or COLLISION_DETECTION_OFF:
             self.position[0] = next_frame_position_x
             self.position[1] = next_frame_position_y
         else:

@@ -31,7 +31,7 @@ SCALE = 20
 IN_DEV_MODE = False
 
 # whether collisions with the track borders and obstacles are being detected
-COLLISION_DETECTION_OFF = True
+COLLISION_DETECTION_OFF = False
 
 # how dense the fog is in foggy scenes
 FOG_DENSITY = 100
@@ -44,6 +44,8 @@ PLAYER_SPEED_LOSS = PLAYER_ACCELERATION / 3 # how much speed the player loses wh
 PLAYER_CENTRIFUGAL_FORCE = 0.5 # centrifugal force applied in corners (more precisely, percentage of max speed that is applied as centrifugal force)
 PLAYER_COLLISION_RECT_WIDTH = 1 # width of the player collider
 PLAYER_COLLISION_RECT_HEIGHT = 1 # height of the player collider
+PLAYER_LOOKAHEAD_RECT_WIDTH = 1 # width of the collider that is used to "look ahead" to check whether the player will leave the track in the next frame
+PLAYER_LOOKAHEAD_RECT_HEIGHT = 2 # height of the collider that is used to "look ahead"
 
 # how fast the player can rotate initially
 INITIAL_PLAYER_ROTATION_SPEED = 0.01

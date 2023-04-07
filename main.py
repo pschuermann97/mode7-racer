@@ -27,11 +27,10 @@ class App:
         self.moving_sprites = pygame.sprite.Group()
 
         # Initializes the mode-7 renderer.
-        # Second parameter is path to the floor texture.
         # Third parameter determines whether the rendered scene has a fog effect or not.
         self.mode7 = Mode7(self, 
-            floor_tex_path = 'gfx/monochrome_track.png', 
-            bg_tex_path = 'gfx/monochrome_track_bg.png',
+            floor_tex_path = 'gfx/track_2023.png', 
+            bg_tex_path = 'gfx/track_2023_bg_resized.png',
             is_foggy = True
         )
 
@@ -125,8 +124,9 @@ class App:
             self.draw()
 
     def debug_logs(self):
-        # log of player's position for debug purposes
         keys = pygame.key.get_pressed()
+
+        # log of player's position for debug purposes
         # if keys[pygame.K_p]:
         #     print("player position/angle: " + str(self.player.position[0]) + " " + str(self.player.position[1]) + ", " + str(self.player.angle))
 
@@ -134,9 +134,14 @@ class App:
         # if keys[pygame.K_p]:
         #     print("cam position/angle: " + str(self.camera.position[0]) + " " + str(self.camera.position[1]) + ", " + str(self.camera.angle))
 
+        # log whether player is on track
+        # if keys[pygame.K_p]:
+        #     if self.race_track.is_on_track( CollisionRect(self.player.position, PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT) ):
+        #         print("player on track!")
+
+        # log player speed
         if keys[pygame.K_p]:
-            if self.race_track.is_on_track( CollisionRect(self.player.position, 1, 1) ):
-                print("player on track!")
+            print("player speed:" + str(self.player.current_speed))
 
 if __name__ == '__main__':
     app = App()
