@@ -44,12 +44,40 @@ class TrackCreator:
 
         # lowest horizontal rect
         rect3 = CollisionRect(
-            pos = numpy.array([47.815, 157.725]),
+            pos = numpy.array([47.815, -157.725]),
             w = 26.97,
             h = 8.91
         )
 
+        # second vertical rect from the right
+        rect4 = CollisionRect(
+            pos = numpy.array([56.925, -142.14]),
+            w = 8.69,
+            h = 40.08
+        )
+
+        # middle horizontal rect
+        rect5 = CollisionRect(
+            pos = numpy.array([62.385, -125.59]),
+            w = 19.55,
+            h = 8.98
+        )
+
+        # right-most vertical rect
+        rect6 = CollisionRect(
+            pos = numpy.array([67.95, -86.495]),
+            w = 8.42,
+            h = 118.53
+        )
+
+        # top horizontal rect
+        rect7 = CollisionRect(
+            pos = numpy.array([46.08, -33.24]),
+            w = 52.16,
+            h = 11.86
+        )
+
         return Track(
             name = "track 2023",
-            track_surface_rects = [rect1, rect2, rect3]
+            track_surface_rects = [rect1, rect2, rect3, rect4, rect5, rect6, rect7]
         )
