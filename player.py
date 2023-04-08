@@ -45,9 +45,9 @@ class Player(pygame.sprite.Sprite):
         else:
             self.racing_mode_movement()
 
-        # Update key checkpoint passed flags 
-        # by checking whether the player has passed one in the current frame.
-        self.current_race_track.update_key_checkpoints(
+        # Update the lap count.
+        # To do so, the track object needs the current position of the player.
+        self.current_race_track.update_lap_count(
             CollisionRect(
                 pos = self.position,
                 w = PLAYER_COLLISION_RECT_WIDTH,

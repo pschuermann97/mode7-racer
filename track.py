@@ -6,11 +6,13 @@ import numpy # numpy arrays used for positions of rectangle colliders
 # Objects of the class hold a name and several lists of collision rects
 # modelling the track surface, ramps, different types of gimmicks and obstacles, ...
 class Track:
-    def __init__(self, name, track_surface_rects, key_checkpoint_rects):
+    def __init__(self, name, track_surface_rects, key_checkpoint_rects, finish_line_collider):
         self.name = name
         self.track_surface_rects = track_surface_rects
         
         self.key_checkpoints = [KeyCheckpoint(kc_rect) for kc_rect in key_checkpoint_rects]
+
+        self.finish_line_collider = finish_line_collider
 
     # Determines whether the passed rectangular collider is on the track surface or not.
     # 
@@ -28,7 +30,32 @@ class Track:
         for key_checkpoint in self.key_checkpoints:
             if key_checkpoint.collider.overlap(player_coll):
                 key_checkpoint.passed = True
-                print("key checkpoint passed!")
+
+    # First updates the passed flags of the key checkpoints.
+    # Then checks whether the player has crossed the finish line.
+    # If so all key checkpoints are reset after checking whether player has passed all of them
+    # (if so, the player is credited a completed lap).
+    def update_lap_count(self, player_coll):
+        self.update_key_checkpoints(player_coll)
+
+        # if player has crossed the finish line
+        if self.finish_line_collider.overlap(player_coll):
+            if self.all_key_checkpoints_passed():
+                print("lap completed!")
+            self.reset_key_checkpoints()
+
+    # Returns true if and only if 
+    # the player has passed all key checkpoints on the track.
+    def all_key_checkpoints_passed(self):
+        for key_checkpoint in self.key_checkpoints:
+            if not key_checkpoint.passed:
+                return False
+        return True
+
+    # Sets the passed-flags of all key checkpoints to false.
+    def reset_key_checkpoints(self):
+        for key_checkpoint in self.key_checkpoints:
+            key_checkpoint.passed = False
 
 # A class that capsulates the creation of the objects representing the race tracks in memory
 # to avoid crowding the main module.
@@ -37,6 +64,8 @@ class Track:
 class TrackCreator:
     # Creates the collision shape for the track whose sprite is named "track_2023.png"
     def create_track_1():
+        # creating colliders for track
+
         # left-most rect
         rect1 = CollisionRect(
             pos = numpy.array([27.165, -99.615]),
@@ -86,10 +115,20 @@ class TrackCreator:
             h = 11.86
         )
 
+        # end of track collider creation
+
+        # finish line collider
+        finish_line_coll = CollisionRect(
+            pos = numpy.array([27.165, -116.6325]),
+            w = 14.33,
+            h = 1.145
+        )
+
         return Track(
             name = "track 2023",
             track_surface_rects = [rect1, rect2, rect3, rect4, rect5, rect6, rect7],
-            key_checkpoint_rects = [rect7]
+            key_checkpoint_rects = [rect7, rect5],
+            finish_line_collider = finish_line_coll
         )
 
 # A key checkpoint for the lap counting system.
