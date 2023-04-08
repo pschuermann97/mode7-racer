@@ -45,6 +45,16 @@ class Player(pygame.sprite.Sprite):
         else:
             self.racing_mode_movement()
 
+        # Update key checkpoint passed flags 
+        # by checking whether the player has passed one in the current frame.
+        self.current_race_track.update_key_checkpoints(
+            CollisionRect(
+                pos = self.position,
+                w = PLAYER_COLLISION_RECT_WIDTH,
+                h = PLAYER_COLLISION_RECT_HEIGHT
+            )
+        )
+
     # Moves and rotates the camera freely based on player input. 
     def dev_mode_movement(self):
         # Compute sine and cosine of current angle 
