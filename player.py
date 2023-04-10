@@ -35,8 +35,8 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = [NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y]
 
-        # race track collision map reference
-        self.current_race_track = current_race_track
+        # collision
+        self.current_race_track = current_race_track # race track collision map reference
 
         # player status flags
         self.jumping = False
@@ -184,11 +184,11 @@ class Player(pygame.sprite.Sprite):
         )
 
         # Check if player would stay on track when moved as computed above.
-        # If yes, move them.
+        # If yes or if the player is jumping, move them.
         # If no, make them bounce back.
         #
-        # Debug-only feature: if collision detection is turned off, the player is always moved, never bounced back
-        if self.current_race_track.is_on_track(frame_lookahead_collision_rect) or COLLISION_DETECTION_OFF:
+        # Debug-only feature: if collision detection is turned off, the player is always moved, never bounced back.
+        if self.current_race_track.is_on_track(frame_lookahead_collision_rect) or self.jumping or COLLISION_DETECTION_OFF:
             self.position[0] = next_frame_position_x
             self.position[1] = next_frame_position_y
         else:
@@ -231,3 +231,12 @@ class Player(pygame.sprite.Sprite):
             self.rect.topleft = [
                 NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y
             ]
+
+            # if the player lands out of the track bounds, they have failed the run
+            current_collision_rect = CollisionRect(
+                self.position,
+                PLAYER_COLLISION_RECT_WIDTH,
+                PLAYER_COLLISION_RECT_HEIGHT
+            )
+            if not self.current_race_track.is_on_track(current_collision_rect):
+                print("player out of bounds!")
