@@ -137,11 +137,18 @@ class TrackCreator:
             h = 1.145
         )
 
+        # (the only) jump ramp
+        ramp1 = CollisionRect(
+            pos = numpy.array([67.95, -145.82]),
+            w = 8.42,
+            h = 0.12
+        )
+
         return Track(
             name = "track 2023",
             track_surface_rects = [rect1, rect2, rect3, rect4, rect5, rect6, rect7],
             key_checkpoint_rects = [rect7, rect5],
-            ramp_rects = [rect7],
+            ramp_rects = [ramp1],
             finish_line_collider = finish_line_coll
         )
 
