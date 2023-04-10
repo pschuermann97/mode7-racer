@@ -46,14 +46,17 @@ PLAYER_COLLISION_RECT_WIDTH = 1 # width of the player collider
 PLAYER_COLLISION_RECT_HEIGHT = 1 # height of the player collider
 PLAYER_LOOKAHEAD_RECT_WIDTH = 1 # width of the collider that is used to "look ahead" to check whether the player will leave the track in the next frame
 PLAYER_LOOKAHEAD_RECT_HEIGHT = 2 # height of the collider that is used to "look ahead"
-JUMP_DURATION = 2 # duration of a jump in seconds
+JUMP_DURATION_MULTIPLIER = 2 / PLAYER_MAX_SPEED # in seconds, multiplied with speed to determine duration of a jump
 JUMP_HEIGHT = 100 # maximum height the player gains throughout a jump (compared to its standard y coordinate)
 
 # Quadratic function that computes the height of the player during a jump
 # based on the time since the player jumped off the track.
-# Uses configuration variables for jumping from the physics section.
-def HEIGHT_DURING_JUMP(time):
-    return - ( time * ( time - JUMP_DURATION ) ) * JUMP_HEIGHT
+# 
+# Parameters:
+# time: time since the player lift off (in seconds)
+# jump_duration: the duration of the entire jump from start to landing
+def HEIGHT_DURING_JUMP(time, jump_duration):
+    return - ( time * ( time - jump_duration ) ) * JUMP_HEIGHT
 
 # how fast the player can rotate initially
 INITIAL_PLAYER_ROTATION_SPEED = 0.01
