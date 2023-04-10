@@ -114,7 +114,7 @@ class App:
             # handle events
             self.check_event()
 
-            # update field counting the frames since game start
+            # update field counting the milliseconds since game start
             self.get_time()
 
             # update game state

@@ -6,11 +6,13 @@ import numpy # numpy arrays used for positions of rectangle colliders
 # Objects of the class hold a name and several lists of collision rects
 # modelling the track surface, ramps, different types of gimmicks and obstacles, ...
 class Track:
-    def __init__(self, name, track_surface_rects, key_checkpoint_rects, finish_line_collider):
+    def __init__(self, name, track_surface_rects, key_checkpoint_rects, ramp_rects, finish_line_collider):
         self.name = name
         self.track_surface_rects = track_surface_rects
         
         self.key_checkpoints = [KeyCheckpoint(kc_rect) for kc_rect in key_checkpoint_rects]
+
+        self.ramp_rects = ramp_rects
 
         self.finish_line_collider = finish_line_collider
 
@@ -22,6 +24,17 @@ class Track:
         for rect_coll in self.track_surface_rects:
             if rect_coll.overlap(other):
                 return True
+        return False
+
+    # Determines whether the passed rectangular collider is on a ramp or not.
+    #
+    # Parameters:
+    # other (CollisionRect)
+    def is_on_ramp(self, other):
+        for rect_coll in self.ramp_rects:
+            if rect_coll.overlap(other):
+                return True
+        return False
 
     # Checks for each key checkpoint if the passed player collider
     # is over one (or more) key checkpoint.
@@ -128,6 +141,7 @@ class TrackCreator:
             name = "track 2023",
             track_surface_rects = [rect1, rect2, rect3, rect4, rect5, rect6, rect7],
             key_checkpoint_rects = [rect7, rect5],
+            ramp_rects = [rect7],
             finish_line_collider = finish_line_coll
         )
 

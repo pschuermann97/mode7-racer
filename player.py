@@ -6,6 +6,7 @@ from settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY #
 from settings import PLAYER_SPRITE_PATH, NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
 from settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT # player collider config
 from settings import PLAYER_LOOKAHEAD_RECT_WIDTH, PLAYER_LOOKAHEAD_RECT_HEIGHT # lookahead for keeping player on track
+from settings import HEIGHT_DURING_JUMP
 
 from collision import CollisionRect
 
@@ -25,7 +26,10 @@ class Player(pygame.sprite.Sprite):
         self.rotation_speed = rotation_speed # how fast the player can rotate
         self.centri = centri # how hard the player is pushed to the outside in corners
 
-        # rendering variables
+        # Rendering variables.
+        # The x coordinate of the player is always fixed,
+        # the y coordinate usually fixed as well 
+        # changed according to some configured quadratic function during a jump. 
         super().__init__() # calling constructor of pygame's Sprite class (responsible for rendering)
         self.image = pygame.image.load(PLAYER_SPRITE_PATH)
         self.rect = self.image.get_rect()
@@ -33,6 +37,10 @@ class Player(pygame.sprite.Sprite):
 
         # race track collision map reference
         self.current_race_track = current_race_track
+
+        # player status flags
+        self.jumping = False
+        self.jumped_off_timestamp = None # timestamp of when the player last jumped off a ramp
 
     # Updates player data and position.
     # 
@@ -45,15 +53,24 @@ class Player(pygame.sprite.Sprite):
         else:
             self.racing_mode_movement()
 
+        # Store the current rectangular collider of the player
+        # for use in several environment checks and updates.
+        current_collision_rect = CollisionRect(
+            pos = self.position,
+            w = PLAYER_COLLISION_RECT_WIDTH,
+            h = PLAYER_COLLISION_RECT_HEIGHT
+        )
+
         # Update the lap count.
         # To do so, the track object needs the current position of the player.
-        self.current_race_track.update_lap_count(
-            CollisionRect(
-                pos = self.position,
-                w = PLAYER_COLLISION_RECT_WIDTH,
-                h = PLAYER_COLLISION_RECT_HEIGHT
-            )
-        )
+        self.current_race_track.update_lap_count(current_collision_rect)
+
+        # Make player jump if on ramp.
+        if self.current_race_track.is_on_ramp(current_collision_rect):
+            self.jumping = True
+            self.jumped_off_timestamp = time # timestamp for computing height in later frames
+        if self.jumping:
+            self.continue_jump(time)
 
     # Moves and rotates the camera freely based on player input. 
     def dev_mode_movement(self):
@@ -100,7 +117,7 @@ class Player(pygame.sprite.Sprite):
 
         print("x: " + str(self.position[0]) + " y: " + str(self.position[1]) + " a: " + str(self.angle))
 
-    # Moves the player's machine as in a race.
+    # Moves the player's machine as in a race (accelerating, braking and steering).
     def racing_mode_movement(self):
         # collect key events
         keys = pygame.key.get_pressed()
@@ -192,3 +209,17 @@ class Player(pygame.sprite.Sprite):
 
             self.position[0] += cf_sin
             self.position[1] += -cf_cos
+    
+    # Updates player status flags and moves the player
+    # to its current screen Y position
+    # depending on the time since the player jumped off the track.
+    def continue_jump(self, time):
+        self.jumping = True
+
+        print(time - self.jumped_off_timestamp)
+
+        # moving up on screen = decreasing the y coordinate
+        self.rect.topleft = [
+            NORMAL_ON_SCREEN_PLAYER_POSITION_X, 
+            NORMAL_ON_SCREEN_PLAYER_POSITION_Y - HEIGHT_DURING_JUMP(time - self.jumped_off_timestamp)
+        ]

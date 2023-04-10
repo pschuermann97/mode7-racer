@@ -30,7 +30,7 @@ SCALE = 20
 # whether the game currently is in "developer mode", where the camera can move around freely in the scene
 IN_DEV_MODE = False
 
-# whether collisions with the track borders and obstacles are being detected
+# whether collisions with the track borders and obstacles are being detected (i.e. solid)
 COLLISION_DETECTION_OFF = False
 
 # how dense the fog is in foggy scenes
@@ -46,6 +46,14 @@ PLAYER_COLLISION_RECT_WIDTH = 1 # width of the player collider
 PLAYER_COLLISION_RECT_HEIGHT = 1 # height of the player collider
 PLAYER_LOOKAHEAD_RECT_WIDTH = 1 # width of the collider that is used to "look ahead" to check whether the player will leave the track in the next frame
 PLAYER_LOOKAHEAD_RECT_HEIGHT = 2 # height of the collider that is used to "look ahead"
+JUMP_DURATION = 2 # duration of a jump in seconds
+JUMP_HEIGHT = 100 # maximum height the player gains throughout a jump (compared to its standard y coordinate)
+
+# Quadratic function that computes the height of the player during a jump
+# based on the time since the player jumped off the track.
+# Uses configuration variables for jumping from the physics section.
+def HEIGHT_DURING_JUMP(time):
+    return - ( ( time - ( JUMP_DURATION / 2 ) ) * ( time - ( JUMP_DURATION / 2 ) ) ) + JUMP_HEIGHT
 
 # how fast the player can rotate initially
 INITIAL_PLAYER_ROTATION_SPEED = 0.01
