@@ -8,6 +8,7 @@ from mode7 import Mode7
 from player import Player
 from camera import Camera
 from track import Track, TrackCreator
+from ui import UI
 
 # debug only imports
 from collision import CollisionRect
@@ -25,6 +26,12 @@ class App:
         # Creates a group of sprites that contains all the sprites
         # that move across the screen.
         self.moving_sprites = pygame.sprite.Group()
+
+        # Creates a group of sprites for all that do not move
+        self.static_sprites = pygame.sprite.Group()
+
+        # Creates a group of sprites for all sprites in the UI.
+        self.ui_sprites = pygame.sprite.Group()
 
         # Initializes the mode-7 renderer.
         # Third parameter determines whether the rendered scene has a fog effect or not.
@@ -56,7 +63,7 @@ class App:
 
         # need to add the player instance and the player shadow sprite to sprite group to be able to render it
         # order matters since player needs to be "in front of" the shadow
-        self.moving_sprites.add(self.player.shadow_sprite)
+        self.static_sprites.add(self.player.shadow_sprite)
         self.moving_sprites.add(self.player)
 
         # Creates a camera instance
@@ -64,6 +71,26 @@ class App:
         self.camera = Camera(
             self.player,
             CAM_DISTANCE
+        )
+
+        # Creates sprites for UI (speed meter).
+        self.speed_meter_sprites = [None, None, None, None]
+        for i in range(0, 4):
+            self.speed_meter_sprites[i] = pygame.sprite.Sprite()
+            self.speed_meter_sprites[i].image = pygame.image.load(NUMBER_SPRITE_PATHS[0]) # initially, all digits are 0
+            self.speed_meter_sprites[i].rect = self.speed_meter_sprites[i].image.get_rect()
+            self.speed_meter_sprites[i].rect.topleft = [
+                LEFT_MOST_SPEEDMETER_DIGIT_SCREEN_X_COORD + SPEED_METER_DIGIT_SPRITE_WIDTH * i, # offset sprites individually based on left-most one's x coord. 24px is sprite width
+                SPEED_METER_DIGIT_SCREEN_Y_COORD
+            ]
+
+            # add to sprite group for UI sprites (for rendering, done in App class)
+            self.ui_sprites.add(self.speed_meter_sprites[i])
+
+        # Create instance of UI manager class
+        self.ui = UI(
+            player = self.player,
+            speed_meter_sprites = self.speed_meter_sprites
         )
 
 
@@ -76,6 +103,9 @@ class App:
 
         # causes the Mode7-rendered environment to update
         self.mode7.update(self.camera)
+
+        # updates UI
+        self.ui.update()
 
         # updates clock
         self.clock.tick()
@@ -91,8 +121,14 @@ class App:
         # draws the mode-7 environment
         self.mode7.draw()
 
+        # draws static sprites (e.g. player shadow) to screen
+        self.static_sprites.draw(self.screen)
+
         # draws moving sprites (e.g. player) to screen
         self.moving_sprites.draw(self.screen)
+
+        # draws UI sprites to screen
+        self.ui_sprites.draw(self.screen)
 
         # update the contents of the whole display
         pygame.display.flip()

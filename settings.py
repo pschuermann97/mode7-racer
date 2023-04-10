@@ -69,6 +69,12 @@ INITIAL_PLAYER_ANGLE = -111.56
 # how fast the background moves when the player rotates
 BACKGROUND_ROTATION_SPEED = 50
 
+# UI screen coordinates
+SPEED_METER_DIGIT_SPRITE_WIDTH = 24
+SPEED_METER_DIGIT_SPRITE_HEIGHT = 24
+LEFT_MOST_SPEEDMETER_DIGIT_SCREEN_X_COORD = WIDTH - 4 * SPEED_METER_DIGIT_SPRITE_WIDTH # there are 4 digits on the speed meter
+SPEED_METER_DIGIT_SCREEN_Y_COORD = HEIGHT - SPEED_METER_DIGIT_SPRITE_HEIGHT - 12 # no padding in sprite so we add one of 12px in code
+
 # standard key bindings for racing mode movement
 STD_ACCEL_KEY = pygame.K_SPACE # space = accelerate
 STD_BRAKE_KEY = pygame.K_s # S = brake 
@@ -78,3 +84,6 @@ STD_RIGHT_KEY = pygame.K_d # D = rotate right
 # standard paths for the sprites used in the game
 PLAYER_SPRITE_PATH = 'gfx/violet_machine.png'
 PLAYER_SHADOW_SPRITE_PATH = 'gfx/violet_machine_shadow.png'
+NUMBER_SPRITE_PATHS = [
+    'gfx/numbers.png'
+]
