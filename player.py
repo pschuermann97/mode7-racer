@@ -3,7 +3,7 @@ import pygame
 
 from settings import IN_DEV_MODE, COLLISION_DETECTION_OFF # debug config
 from settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY # button mapping config
-from settings import PLAYER_SPRITE_PATH, NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
+from settings import PLAYER_SPRITE_PATH, PLAYER_SHADOW_SPRITE_PATH, NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
 from settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT # player collider config
 from settings import PLAYER_LOOKAHEAD_RECT_WIDTH, PLAYER_LOOKAHEAD_RECT_HEIGHT # lookahead for keeping player on track
 from settings import HEIGHT_DURING_JUMP, JUMP_DURATION_MULTIPLIER # jumping
@@ -26,7 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.rotation_speed = rotation_speed # how fast the player can rotate
         self.centri = centri # how hard the player is pushed to the outside in corners
 
-        # Rendering variables.
+        # Rendering variables (for machine without shadow).
         # The x coordinate of the player is always fixed,
         # the y coordinate usually fixed as well 
         # changed according to some configured quadratic function during a jump. 
@@ -34,6 +34,14 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load(PLAYER_SPRITE_PATH)
         self.rect = self.image.get_rect()
         self.rect.topleft = [NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y]
+
+        # Create a new sprite object for the machine shadow
+        # which remains fixed all the time.
+        self.shadow_sprite = pygame.sprite.Sprite()
+        self.shadow_sprite.image = pygame.image.load(PLAYER_SHADOW_SPRITE_PATH)
+        self.shadow_sprite.rect = self.shadow_sprite.image.get_rect()
+        # shadow sprite is created in a way that it is fine if player + shadow are at same screen coordinates
+        self.shadow_sprite.rect.topleft = [NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y]
 
         # collision
         self.current_race_track = current_race_track # race track collision map reference

@@ -54,7 +54,9 @@ class App:
             current_race_track = self.race_track
         )
 
-        # need to add the player instance to sprite group to be able to render it
+        # need to add the player instance and the player shadow sprite to sprite group to be able to render it
+        # order matters since player needs to be "in front of" the shadow
+        self.moving_sprites.add(self.player.shadow_sprite)
         self.moving_sprites.add(self.player)
 
         # Creates a camera instance

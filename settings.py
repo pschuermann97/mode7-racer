@@ -77,3 +77,4 @@ STD_RIGHT_KEY = pygame.K_d # D = rotate right
 
 # standard paths for the sprites used in the game
 PLAYER_SPRITE_PATH = 'gfx/violet_machine.png'
+PLAYER_SHADOW_SPRITE_PATH = 'gfx/violet_machine_shadow.png'
