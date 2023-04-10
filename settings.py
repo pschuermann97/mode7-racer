@@ -53,7 +53,7 @@ JUMP_HEIGHT = 100 # maximum height the player gains throughout a jump (compared 
 # based on the time since the player jumped off the track.
 # Uses configuration variables for jumping from the physics section.
 def HEIGHT_DURING_JUMP(time):
-    return - ( ( time - ( JUMP_DURATION / 2 ) ) * ( time - ( JUMP_DURATION / 2 ) ) ) + JUMP_HEIGHT
+    return - ( time * ( time - JUMP_DURATION ) ) * JUMP_HEIGHT
 
 # how fast the player can rotate initially
 INITIAL_PLAYER_ROTATION_SPEED = 0.01

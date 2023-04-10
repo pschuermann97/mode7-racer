@@ -6,7 +6,7 @@ from settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY #
 from settings import PLAYER_SPRITE_PATH, NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
 from settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT # player collider config
 from settings import PLAYER_LOOKAHEAD_RECT_WIDTH, PLAYER_LOOKAHEAD_RECT_HEIGHT # lookahead for keeping player on track
-from settings import HEIGHT_DURING_JUMP
+from settings import HEIGHT_DURING_JUMP, JUMP_DURATION # jumping
 
 from collision import CollisionRect
 
@@ -66,7 +66,7 @@ class Player(pygame.sprite.Sprite):
         self.current_race_track.update_lap_count(current_collision_rect)
 
         # Make player jump if on ramp.
-        if self.current_race_track.is_on_ramp(current_collision_rect):
+        if self.current_race_track.is_on_ramp(current_collision_rect) and not self.jumping:
             self.jumping = True
             self.jumped_off_timestamp = time # timestamp for computing height in later frames
         if self.jumping:
@@ -214,12 +214,20 @@ class Player(pygame.sprite.Sprite):
     # to its current screen Y position
     # depending on the time since the player jumped off the track.
     def continue_jump(self, time):
-        self.jumping = True
-
-        print(time - self.jumped_off_timestamp)
+        # compute time since jump started
+        elapsed_time = time - self.jumped_off_timestamp
 
         # moving up on screen = decreasing the y coordinate
         self.rect.topleft = [
             NORMAL_ON_SCREEN_PLAYER_POSITION_X, 
-            NORMAL_ON_SCREEN_PLAYER_POSITION_Y - HEIGHT_DURING_JUMP(time - self.jumped_off_timestamp)
+            NORMAL_ON_SCREEN_PLAYER_POSITION_Y - HEIGHT_DURING_JUMP(elapsed_time)
         ]
+
+        # End jump (reset status flap) if jump duration reached
+        # To prevent any visual artifacts, the player rect is reset to its normal y position on screen.
+        if elapsed_time >= JUMP_DURATION:
+            self.jumping = False
+
+            self.rect.topleft = [
+                NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y
+            ]
