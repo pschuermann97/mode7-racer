@@ -1,3 +1,5 @@
+from settings import SPEED_DISPLAY_MULTIPLIER, NUMBER_IMAGES
+
 # Handles updates to the UI in every frame.
 # Drawing of the UI is done in the main module (App class).
 class UI:
@@ -10,4 +12,12 @@ class UI:
 
     # Updates (image components of the) UI sprites.
     def update(self):
-        pass
+        # Update speed meter sprite images.
+        # Least significant digit is at index 0,
+        # most significant digit is at maximum index.
+        for i in range(0, 4):
+            self.speed_meter_sprites[i].image = NUMBER_IMAGES[
+                (int(self.player.current_speed * SPEED_DISPLAY_MULTIPLIER) // (10 ** i)) % 10
+            ]
+
+        

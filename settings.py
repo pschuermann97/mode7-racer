@@ -72,8 +72,11 @@ BACKGROUND_ROTATION_SPEED = 50
 # UI screen coordinates
 SPEED_METER_DIGIT_SPRITE_WIDTH = 24
 SPEED_METER_DIGIT_SPRITE_HEIGHT = 24
-LEFT_MOST_SPEEDMETER_DIGIT_SCREEN_X_COORD = WIDTH - 4 * SPEED_METER_DIGIT_SPRITE_WIDTH # there are 4 digits on the speed meter
+RIGHT_MOST_SPEEDMETER_DIGIT_SCREEN_X_COORD = WIDTH - SPEED_METER_DIGIT_SPRITE_WIDTH
 SPEED_METER_DIGIT_SCREEN_Y_COORD = HEIGHT - SPEED_METER_DIGIT_SPRITE_HEIGHT - 12 # no padding in sprite so we add one of 12px in code
+
+# other UI configuration
+SPEED_DISPLAY_MULTIPLIER = 1426 / PLAYER_MAX_SPEED # so max speed will be shown as 1426 km/h
 
 # standard key bindings for racing mode movement
 STD_ACCEL_KEY = pygame.K_SPACE # space = accelerate
@@ -84,6 +87,15 @@ STD_RIGHT_KEY = pygame.K_d # D = rotate right
 # standard paths for the sprites used in the game
 PLAYER_SPRITE_PATH = 'gfx/violet_machine.png'
 PLAYER_SHADOW_SPRITE_PATH = 'gfx/violet_machine_shadow.png'
-NUMBER_SPRITE_PATHS = [
-    'gfx/numbers.png'
+NUMBER_IMAGES = [ # index = pictured number
+    pygame.image.load('gfx/numbers/numbers0.png'),
+    pygame.image.load('gfx/numbers/numbers1.png'),
+    pygame.image.load('gfx/numbers/numbers2.png'),
+    pygame.image.load('gfx/numbers/numbers3.png'),
+    pygame.image.load('gfx/numbers/numbers4.png'),
+    pygame.image.load('gfx/numbers/numbers5.png'),
+    pygame.image.load('gfx/numbers/numbers6.png'),
+    pygame.image.load('gfx/numbers/numbers7.png'),
+    pygame.image.load('gfx/numbers/numbers8.png'),
+    pygame.image.load('gfx/numbers/numbers9.png'),
 ]

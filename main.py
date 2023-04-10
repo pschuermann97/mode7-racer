@@ -76,11 +76,11 @@ class App:
         # Creates sprites for UI (speed meter).
         self.speed_meter_sprites = [None, None, None, None]
         for i in range(0, 4):
-            self.speed_meter_sprites[i] = pygame.sprite.Sprite()
-            self.speed_meter_sprites[i].image = pygame.image.load(NUMBER_SPRITE_PATHS[0]) # initially, all digits are 0
+            self.speed_meter_sprites[i] = pygame.sprite.Sprite() # digits are numbered from right to left
+            self.speed_meter_sprites[i].image = NUMBER_IMAGES[0] # initially, all digits are 0
             self.speed_meter_sprites[i].rect = self.speed_meter_sprites[i].image.get_rect()
             self.speed_meter_sprites[i].rect.topleft = [
-                LEFT_MOST_SPEEDMETER_DIGIT_SCREEN_X_COORD + SPEED_METER_DIGIT_SPRITE_WIDTH * i, # offset sprites individually based on left-most one's x coord. 24px is sprite width
+                RIGHT_MOST_SPEEDMETER_DIGIT_SCREEN_X_COORD - SPEED_METER_DIGIT_SPRITE_WIDTH * i, # offset sprites individually based on left-most one's x coord. 24px is sprite width
                 SPEED_METER_DIGIT_SCREEN_Y_COORD
             ]
 
