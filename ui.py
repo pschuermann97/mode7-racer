@@ -19,5 +19,3 @@ class UI:
             self.speed_meter_sprites[i].image = NUMBER_IMAGES[
                 (int(self.player.current_speed * SPEED_DISPLAY_MULTIPLIER) // (10 ** i)) % 10
             ]
-
-        

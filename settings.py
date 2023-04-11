@@ -70,10 +70,10 @@ INITIAL_PLAYER_ANGLE = -111.56
 BACKGROUND_ROTATION_SPEED = 50
 
 # UI screen coordinates
-SPEED_METER_DIGIT_SPRITE_WIDTH = 24
-SPEED_METER_DIGIT_SPRITE_HEIGHT = 24
+SPEED_METER_DIGIT_SPRITE_WIDTH = 16
+SPEED_METER_DIGIT_SPRITE_HEIGHT = 16
 RIGHT_MOST_SPEEDMETER_DIGIT_SCREEN_X_COORD = WIDTH - SPEED_METER_DIGIT_SPRITE_WIDTH
-SPEED_METER_DIGIT_SCREEN_Y_COORD = HEIGHT - SPEED_METER_DIGIT_SPRITE_HEIGHT - 12 # no padding in sprite so we add one of 12px in code
+SPEED_METER_DIGIT_SCREEN_Y_COORD = HEIGHT - 1.5 * SPEED_METER_DIGIT_SPRITE_HEIGHT # no padding in sprite so we add one of 12px in code
 
 # other UI configuration
 SPEED_DISPLAY_MULTIPLIER = 1426 / PLAYER_MAX_SPEED # so max speed will be shown as 1426 km/h
@@ -88,16 +88,16 @@ STD_RIGHT_KEY = pygame.K_d # D = rotate right
 PLAYER_SPRITE_PATH = 'gfx/violet_machine.png'
 PLAYER_SHADOW_SPRITE_PATH = 'gfx/violet_machine_shadow.png'
 NUMBER_IMAGES = [ # index = pictured number
-    pygame.image.load('gfx/numbers/numbers0.png'),
-    pygame.image.load('gfx/numbers/numbers1.png'),
-    pygame.image.load('gfx/numbers/numbers2.png'),
-    pygame.image.load('gfx/numbers/numbers3.png'),
-    pygame.image.load('gfx/numbers/numbers4.png'),
-    pygame.image.load('gfx/numbers/numbers5.png'),
-    pygame.image.load('gfx/numbers/numbers6.png'),
-    pygame.image.load('gfx/numbers/numbers7.png'),
-    pygame.image.load('gfx/numbers/numbers8.png'),
-    pygame.image.load('gfx/numbers/numbers9.png'),
+    pygame.image.load('gfx/numbers/small_numbers0.png'),
+    pygame.image.load('gfx/numbers/small_numbers1.png'),
+    pygame.image.load('gfx/numbers/small_numbers2.png'),
+    pygame.image.load('gfx/numbers/small_numbers3.png'),
+    pygame.image.load('gfx/numbers/small_numbers4.png'),
+    pygame.image.load('gfx/numbers/small_numbers5.png'),
+    pygame.image.load('gfx/numbers/small_numbers6.png'),
+    pygame.image.load('gfx/numbers/small_numbers7.png'),
+    pygame.image.load('gfx/numbers/small_numbers8.png'),
+    pygame.image.load('gfx/numbers/small_numbers9.png'),
 ]
 
 # race configuration
