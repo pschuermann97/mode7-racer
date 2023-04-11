@@ -99,3 +99,6 @@ NUMBER_IMAGES = [ # index = pictured number
     pygame.image.load('gfx/numbers/numbers8.png'),
     pygame.image.load('gfx/numbers/numbers9.png'),
 ]
+
+# race configuration
+STD_REQUIRED_LAPS = 3 # number of laps normally required to finish a race

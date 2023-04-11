@@ -1,5 +1,7 @@
 from collision import CollisionRect
 
+from settings import STD_REQUIRED_LAPS
+
 import numpy # numpy arrays used for positions of rectangle colliders
 
 # A class modelling (the collision map for) a race track.
@@ -15,6 +17,9 @@ class Track:
         self.ramp_rects = ramp_rects
 
         self.finish_line_collider = finish_line_collider
+
+        self.player_completed_laps = 0 # race track counts laps the player has completed
+        self.required_laps = STD_REQUIRED_LAPS
 
     # Determines whether the passed rectangular collider is on the track surface or not.
     # 
@@ -53,8 +58,14 @@ class Track:
 
         # if player has crossed the finish line
         if self.finish_line_collider.overlap(player_coll):
+            # if player has honestly finished a lap
             if self.all_key_checkpoints_passed():
-                print("lap completed!")
+                # Increment completed laps.
+                # If player has completed enough laps, initialize the finish sequence.
+                self.player_completed_laps += 1
+                print(str(self.player_completed_laps) + " laps completed!")
+                if self.player_completed_laps >= self.required_laps:
+                    print("race finished!")
             self.reset_key_checkpoints()
 
     # Returns true if and only if 
