@@ -73,7 +73,7 @@ class App:
             CAM_DISTANCE
         )
 
-        # Creates sprites for UI (speed meter).
+        # Creates sprites for the speed meter of the UI.
         self.speed_meter_sprites = [None, None, None, None]
         for i in range(0, 4):
             self.speed_meter_sprites[i] = pygame.sprite.Sprite() # digits are numbered from right to left
@@ -87,12 +87,31 @@ class App:
             # add to sprite group for UI sprites (for rendering, done in App class)
             self.ui_sprites.add(self.speed_meter_sprites[i])
 
+        # Creates sprites for the timer of the UI (analogously as those for speed meter).
+        self.timer_sprites = [None, None, None, None, None, None, None]
+        for i in range(0, 7):
+            self.timer_sprites[i] = pygame.sprite.Sprite()
+            self.timer_sprites[i].image = NUMBER_IMAGES[0]
+            self.timer_sprites[i].rect = self.timer_sprites[i].image.get_rect()
+            self.timer_sprites[i].rect.topleft = [
+                TIMER_DIGIT_X_OFFSET(i),
+                TIMER_DIGIT_SCREEN_Y_COORD
+            ]
+
+            self.ui_sprites.add(self.timer_sprites[i])
+
         # Create instance of UI manager class
         self.ui = UI(
             player = self.player,
-            speed_meter_sprites = self.speed_meter_sprites
+            speed_meter_sprites = self.speed_meter_sprites,
+            timer_sprites = self.timer_sprites
         )
 
+        # Take initial timestamp that is 
+        # used for the timer that tracks the time since game start. 
+        # Need to used method get_time since self.time field is not initialized at this point.
+        self.get_time() # need to update current timestamp first
+        self.game_start_timestamp = self.time
 
     def update(self):
         # updates the player based on time elapsed since game start
@@ -104,8 +123,12 @@ class App:
         # causes the Mode7-rendered environment to update
         self.mode7.update(self.camera)
 
-        # updates UI
-        self.ui.update()
+        # Computes the elapsed time since game start 
+        # and updates UI.
+        seconds_since_game_start = self.time - self.game_start_timestamp
+        self.ui.update(
+            elapsed_milliseconds = seconds_since_game_start * 1000
+        )
 
         # updates clock
         self.clock.tick()
@@ -183,6 +206,7 @@ class App:
         # if keys[pygame.K_p]:
         #     print("player speed:" + str(self.player.current_speed))
 
+# Execution of game loop if executed as a script.
 if __name__ == '__main__':
     app = App()
     app.run()

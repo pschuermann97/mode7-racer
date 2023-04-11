@@ -70,10 +70,33 @@ INITIAL_PLAYER_ANGLE = -111.56
 BACKGROUND_ROTATION_SPEED = 50
 
 # UI screen coordinates
+
+# shield meter
+SHIELD_METER_HEIGHT = 16
+
+# speed meter
 SPEED_METER_DIGIT_SPRITE_WIDTH = 16
 SPEED_METER_DIGIT_SPRITE_HEIGHT = 16
 RIGHT_MOST_SPEEDMETER_DIGIT_SCREEN_X_COORD = WIDTH - SPEED_METER_DIGIT_SPRITE_WIDTH
 SPEED_METER_DIGIT_SCREEN_Y_COORD = HEIGHT - 1.5 * SPEED_METER_DIGIT_SPRITE_HEIGHT # no padding in sprite so we add one of 12px in code
+
+# timer
+TIMER_DIGIT_SPRITE_WIDTH = SPEED_METER_DIGIT_SPRITE_WIDTH
+TIMER_DIGIT_SPRITE_HEIGHT = SPEED_METER_DIGIT_SPRITE_HEIGHT
+RIGHT_MOST_TIMER_DIGIT_SCREEN_X_COORD = WIDTH - TIMER_DIGIT_SPRITE_WIDTH
+TIMER_DIGIT_SCREEN_Y_COORD = SHIELD_METER_HEIGHT # timer should be right below the shield meter
+TIMER_PADDING = TIMER_DIGIT_SPRITE_WIDTH / 2 # padding between minutes and seconds, seconds and milliseconds
+# Computes the individual x offset for the timer digits
+# (note that there are gaps 
+# between the digits for the minutes and seconds + seconds and milliseconds)
+def TIMER_DIGIT_X_OFFSET(i):
+    if i <= 2: # milliseconds digits
+        return RIGHT_MOST_TIMER_DIGIT_SCREEN_X_COORD - TIMER_DIGIT_SPRITE_WIDTH * i
+    if i > 2 and i <= 4: # seconds digits
+        return RIGHT_MOST_TIMER_DIGIT_SCREEN_X_COORD - TIMER_DIGIT_SPRITE_WIDTH * i - TIMER_PADDING
+    return RIGHT_MOST_TIMER_DIGIT_SCREEN_X_COORD - TIMER_DIGIT_SPRITE_WIDTH * i - TIMER_PADDING * 2 # minute digits
+
+# end of UI screen coordinates
 
 # other UI configuration
 SPEED_DISPLAY_MULTIPLIER = 1426 / PLAYER_MAX_SPEED # so max speed will be shown as 1426 km/h
