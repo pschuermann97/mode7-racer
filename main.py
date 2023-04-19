@@ -55,7 +55,7 @@ class App:
         # The player needs to know which race track they are driving on
         # so they can check whether they would leave the track with their movement in the current frame.
         self.player = Player(
-            machine = PURPLE_COMET,
+            machine = FASTER_PURPLE_COMET,
             init_pos_x = INITIAL_PLAYER_POSITION_X,
             init_pos_y = INITIAL_PLAYER_POSITION_Y,
             init_angle = INITIAL_PLAYER_ANGLE,

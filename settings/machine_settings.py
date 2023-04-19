@@ -30,3 +30,27 @@ PURPLE_COMET = Machine(
     idle_image_path = 'gfx/violet_machine.png',
     shadow_image_path = 'gfx/violet_machine_shadow.png'
 )
+
+FASTER_PURPLE_COMET = Machine(
+    max_speed = PURPLE_COMET.max_speed * 1.1,
+    acceleration = PURPLE_COMET.acceleration / 2,
+    brake = PURPLE_COMET.brake,
+    speed_loss = PURPLE_COMET.speed_loss,
+    centri = PURPLE_COMET.centri,
+    jump_duration_multiplier = PURPLE_COMET.jump_duration_multiplier,
+    rotation_speed = PURPLE_COMET.rotation_speed * 0.75,
+    idle_image_path = 'gfx/violet_machine.png',
+    shadow_image_path = 'gfx/violet_machine_shadow.png'
+)
+
+SLOWER_PURPLE_COMET = Machine(
+    max_speed = PURPLE_COMET.max_speed * 0.8,
+    acceleration = PURPLE_COMET.acceleration * 2,
+    brake = PURPLE_COMET.brake,
+    speed_loss = PURPLE_COMET.speed_loss,
+    centri = PURPLE_COMET.centri,
+    jump_duration_multiplier = PURPLE_COMET.jump_duration_multiplier,
+    rotation_speed = PURPLE_COMET.rotation_speed,
+    idle_image_path = 'gfx/violet_machine.png',
+    shadow_image_path = 'gfx/violet_machine_shadow.png'
+)
