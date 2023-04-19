@@ -1,6 +1,6 @@
 from collision import CollisionRect
 
-from settings import STD_REQUIRED_LAPS
+from settings.track_settings import STD_REQUIRED_LAPS
 
 import numpy # numpy arrays used for positions of rectangle colliders
 

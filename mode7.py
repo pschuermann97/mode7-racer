@@ -4,7 +4,7 @@ import numpy
 # JIT compiler and prange function for performance speedup
 from numba import njit, prange
 
-from settings import *
+from settings.renderer_settings import *
 
 class Mode7:
     # Initialization method that loads the textures (specified via path passed to constructor), 

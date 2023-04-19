@@ -1,4 +1,4 @@
-from settings import SPEED_DISPLAY_MULTIPLIER, NUMBER_IMAGES
+from settings.ui_settings import SPEED_DISPLAY_MULTIPLIER, NUMBER_IMAGES
 
 # Handles updates to the UI in every frame.
 # Drawing of the UI is done in the main module (App class).

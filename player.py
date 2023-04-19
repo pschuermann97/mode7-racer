@@ -1,11 +1,11 @@
 import numpy
 import pygame
 
-from settings import IN_DEV_MODE, COLLISION_DETECTION_OFF # debug config
-from settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY # button mapping config
-from settings import PLAYER_SPRITE_PATH, PLAYER_SHADOW_SPRITE_PATH, NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
-from settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT # player collider config
-from settings import HEIGHT_DURING_JUMP, JUMP_DURATION_MULTIPLIER # jumping
+from settings.debug_settings import IN_DEV_MODE, COLLISION_DETECTION_OFF # debug config
+from settings.key_settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY # button mapping config
+from settings.renderer_settings import NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
+from settings.machine_settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT # player collider config
+from settings.machine_settings import HEIGHT_DURING_JUMP
 
 from collision import CollisionRect
 
@@ -75,7 +75,7 @@ class Player(pygame.sprite.Sprite):
         # Make player jump if on ramp.
         if self.current_race_track.is_on_ramp(current_collision_rect) and not self.jumping:
             self.jumping = True # set status flag
-            self.current_jump_duration = JUMP_DURATION_MULTIPLIER * self.current_speed # compute duration of jump based on speed
+            self.current_jump_duration = self.machine.jump_duration_multiplier * self.current_speed # compute duration of jump based on speed
             self.jumped_off_timestamp = time # timestamp for computing height in later frames
         if self.jumping:
             self.continue_jump(time)

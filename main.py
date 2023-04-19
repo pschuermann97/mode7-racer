@@ -2,8 +2,14 @@
 import pygame
 import sys
 
-# imports from this project
-from settings import *
+# import of the game settings
+from settings.debug_settings import *
+from settings.machine_settings import *
+from settings.renderer_settings import *
+from settings.track_settings import *
+from settings.ui_settings import *
+
+# other imports from this project
 from mode7 import Mode7
 from player import Player
 from camera import Camera
