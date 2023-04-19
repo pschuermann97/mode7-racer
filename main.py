@@ -49,12 +49,7 @@ class App:
         # The player needs to know which race track they are driving on
         # so they can check whether they would leave the track with their movement in the current frame.
         self.player = Player(
-            max_speed = PLAYER_MAX_SPEED,
-            acceleration = PLAYER_ACCELERATION,
-            brake_force = PLAYER_BRAKE,
-            speed_loss = PLAYER_SPEED_LOSS,
-            rotation_speed = INITIAL_PLAYER_ROTATION_SPEED,
-            centri = PLAYER_CENTRIFUGAL_FORCE,
+            machine = PURPLE_COMET,
             init_pos_x = INITIAL_PLAYER_POSITION_X,
             init_pos_y = INITIAL_PLAYER_POSITION_Y,
             init_angle = INITIAL_PLAYER_ANGLE,

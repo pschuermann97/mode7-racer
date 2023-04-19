@@ -59,8 +59,9 @@ PURPLE_COMET = Machine(
     speed_loss = (0.05 / 750) / 3, # speed loss is a third the strength of the accelerator
     centri = 0.5, # 50% of current speed applied as centrifugal force
     jump_duration_multiplier = 2 / 0.05, # jump should last 2 seconds if machine at max speed
-    idle_image = 'gfx/violet_machine.png',
-    shadow_image = 'gfx/violet_machine_shadow.png'
+    rotation_speed = 0.01,
+    idle_image_path = 'gfx/violet_machine.png',
+    shadow_image_path = 'gfx/violet_machine_shadow.png'
 )
 
 

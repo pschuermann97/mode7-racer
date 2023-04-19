@@ -2,7 +2,7 @@
 # including all physics engine related data (acceleration force, max speed, ...)
 # and graphics
 class Machine:
-    def __init__(self, max_speed, acceleration, brake, speed_loss, centri, jump_duration_multiplier, idle_image, shadow_image):
+    def __init__(self, max_speed, acceleration, brake, speed_loss, centri, jump_duration_multiplier, rotation_speed, idle_image_path, shadow_image_path):
         # ----------- physics variables initialization ----------------------
 
 
@@ -35,6 +35,9 @@ class Machine:
         # multiplied with the current speed in order to determine duration of a jump
         self.jump_duration_multiplier = jump_duration_multiplier
 
+        # how fast the player can rotate when steering
+        self.rotation_speed = rotation_speed
+
 
 
         # ----------- end of physics variables initialization ----------------------
@@ -46,11 +49,11 @@ class Machine:
 
 
         # image that is drawn when the machine is idle
-        self.idle_image = idle_image
+        self.idle_image_path = idle_image_path
 
         # image of the shadow that the machine casts on the track
         # (should be drawn under the machine)
-        self.shadow_image = shadow_image
+        self.shadow_image_path = shadow_image_path
 
 
 
