@@ -40,16 +40,18 @@ class App:
         # Creates a group of sprites for all sprites in the UI.
         self.ui_sprites = pygame.sprite.Group()
 
-        # Creates the race track collision map.
+        # Initializes race track management.
+        self.current_race_track_index = 0
         self.race_tracks = [
-            TrackCreator.create_track_1(),
-            TrackCreator.create_track_2()
+            TrackCreator.create_track_1,
+            TrackCreator.create_track_2
         ]
-        self.current_race_track = self.race_tracks[0]
+        self.current_race_track = self.race_tracks[self.current_race_track_index]()
 
         # Initializes the mode-7 renderer.
         # Third parameter determines whether the rendered scene has a fog effect or not.
-        self.mode7 = Mode7(self, 
+        self.mode7 = Mode7(
+            app = self, 
             floor_tex_path = self.current_race_track.floor_texture_path, 
             bg_tex_path = self.current_race_track.bg_texture_path,
             is_foggy = True
@@ -152,6 +154,11 @@ class App:
         if self.current_race_track.player_finished_race() and not self.player.finished:
             self.player.finished = True
 
+        # load next race if player finished the current one
+        if self.player.finished:
+            self.player.finished = False
+            self.next_race()
+
         # updates clock
         self.clock.tick()
 
@@ -161,6 +168,31 @@ class App:
 
         # log output for debug
         self.debug_logs()
+
+    # Starts the next race 
+    # according to the race track list created in the constructor.
+    def next_race(self):
+        # increase counter
+        self.current_race_track_index += 1
+        
+        # Create track and store it as the current track.
+        # The field race_tracks contains some imported static methods
+        # that create RaceTrack objects.
+        self.current_race_track = self.race_tracks[self.current_race_track_index]()
+
+        # assign player the new race track
+        self.player.current_race_track = self.current_race_track
+        
+        # reset player to starting position of (new) race track
+        self.player.to_initial_position()
+
+        # replace renderer field with Mode-7 renderer for the new race track 
+        self.mode7 = Mode7(
+            app = self,
+            floor_tex_path = self.current_race_track.floor_texture_path,
+            bg_tex_path = self.current_race_track.bg_texture_path,
+            is_foggy = True
+        )
 
     def draw(self):
         # draws the mode-7 environment

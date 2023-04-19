@@ -251,3 +251,14 @@ class Player(pygame.sprite.Sprite):
             )
             if not self.current_race_track.is_on_track(current_collision_rect):
                 print("player out of bounds!")
+
+    # (Re-)sets the player object to the initial position
+    # for the current race track.
+    # Example usage: get the player to the start position at the start of a race
+    def to_initial_position(self):
+        self.position = numpy.array([
+            self.current_race_track.init_player_pos_x,
+            self.current_race_track.init_player_pos_y
+        ])
+
+        self.angle = self.current_race_track.init_player_angle
