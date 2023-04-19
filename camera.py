@@ -1,6 +1,6 @@
 import numpy # for numpy array type for cam position and sin, cos
 
-from settings import CAM_DISTANCE
+from settings.renderer_settings import CAM_DISTANCE
 
 class Camera:
     def __init__(self, player, cam_dist = CAM_DISTANCE):
