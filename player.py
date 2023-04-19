@@ -6,6 +6,7 @@ from settings.key_settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, ST
 from settings.renderer_settings import NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
 from settings.machine_settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT # player collider config
 from settings.machine_settings import HEIGHT_DURING_JUMP
+from settings.machine_settings import OBSTACLE_HIT_SPEED_RETENTION 
 
 from collision import CollisionRect
 
@@ -201,8 +202,9 @@ class Player(pygame.sprite.Sprite):
             self.position[1] = next_frame_position_y
         else:
             if not COLLISION_DETECTION_OFF:
-                # player bounces back since their move speed is flipped
-                self.current_speed = -self.current_speed
+                # Player bounces back since their move speed is flipped.
+                # Player does not retain all of its speed.
+                self.current_speed = -self.current_speed * OBSTACLE_HIT_SPEED_RETENTION
 
         # Steering.
         if keys[STD_LEFT_KEY]:

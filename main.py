@@ -40,6 +40,9 @@ class App:
         # Creates a group of sprites for all sprites in the UI.
         self.ui_sprites = pygame.sprite.Group()
 
+        # Creates the race track collision map.
+        self.race_track = TrackCreator.create_track_1()
+
         # Initializes the mode-7 renderer.
         # Third parameter determines whether the rendered scene has a fog effect or not.
         self.mode7 = Mode7(self, 
@@ -47,9 +50,6 @@ class App:
             bg_tex_path = 'gfx/track_2023_bg_resized.png',
             is_foggy = True
         )
-
-        # Creates the race track collision map.
-        self.race_track = TrackCreator.create_track_1()
 
         # debug only: player chooses a machine
         # outside debug mode, the player is using Purple Comet

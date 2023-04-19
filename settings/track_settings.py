@@ -83,6 +83,8 @@ class TrackCreator:
 
         return Track(
             name = "track 2023",
+            floor_texture_path = "gfx/track_2023.png",
+            bg_texture_path = "gfx/track_2023_bg_resized.png",
             track_surface_rects = [rect1, rect2, rect3, rect4, rect5, rect6, rect7],
             key_checkpoint_rects = [rect7, rect5],
             ramp_rects = [ramp1],

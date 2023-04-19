@@ -1,10 +1,18 @@
 # A class modelling (the collision map for) a race track.
 # Objects of the class hold a name and several lists of collision rects
 # modelling the track surface, ramps, different types of gimmicks and obstacles, ...
+#
+# Parameters floor_texture_path and bg_texture_path are the paths to the textures for the track and planet 
+# as well as for the skybox-like background.
 class Track:
-    def __init__(self, name, track_surface_rects, key_checkpoint_rects, ramp_rects, finish_line_collider, 
+    def __init__(self, name, floor_texture_path, bg_texture_path, track_surface_rects, key_checkpoint_rects, ramp_rects, finish_line_collider, 
             required_laps, init_player_pos_x, init_player_pos_y, init_player_angle):
         self.name = name
+
+        # texture variables
+        self.floor_texture_path = floor_texture_path
+        self.bg_texture_path = bg_texture_path
+
         self.track_surface_rects = track_surface_rects
         
         self.key_checkpoints = [KeyCheckpoint(kc_rect) for kc_rect in key_checkpoint_rects]

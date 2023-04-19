@@ -6,6 +6,7 @@ from machine import Machine
 PLAYER_COLLISION_RECT_WIDTH = 1 # width of the player collider (the same for all machines)
 PLAYER_COLLISION_RECT_HEIGHT = 1 # height of the player collider
 JUMP_HEIGHT = 100 # maximum height the player gains throughout a jump (compared to its standard y coordinate)
+OBSTACLE_HIT_SPEED_RETENTION = 0.5 # percentage of its speed the player machine retains when hitting an obstacle
 
 # Quadratic function that computes the height of the player during a jump
 # based on the time since the player jumped off the track.
