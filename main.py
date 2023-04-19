@@ -184,7 +184,7 @@ class App:
         self.player.current_race_track = self.current_race_track
         
         # reset player to starting position of (new) race track
-        self.player.to_initial_position()
+        self.player.reinitialize()
 
         # replace renderer field with Mode-7 renderer for the new race track 
         self.mode7 = Mode7(

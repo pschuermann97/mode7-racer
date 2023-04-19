@@ -254,11 +254,27 @@ class Player(pygame.sprite.Sprite):
 
     # (Re-)sets the player object to the initial position
     # for the current race track.
+    # Also resets all forces that are currently applied to the player.
     # Example usage: get the player to the start position at the start of a race
-    def to_initial_position(self):
+    def reinitialize(self):
+        # reset position
         self.position = numpy.array([
             self.current_race_track.init_player_pos_x,
             self.current_race_track.init_player_pos_y
         ])
 
+        # reset rotation
         self.angle = self.current_race_track.init_player_angle
+
+        # reset forces
+        self.current_speed = 0
+
+        # reset status flags
+        self.jumping = False
+        self.finished = False
+
+        # reset screen position
+        self.rect.topleft = [
+            NORMAL_ON_SCREEN_PLAYER_POSITION_X,
+            NORMAL_ON_SCREEN_PLAYER_POSITION_Y
+        ]
