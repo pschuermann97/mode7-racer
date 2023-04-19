@@ -17,9 +17,10 @@ class UI:
         # Update speed meter sprite images.
         # Least significant digit is at index 0,
         # most significant digit is at maximum index.
+        display_speed = int(abs(self.player.current_speed * SPEED_DISPLAY_MULTIPLIER))
         for i in range(0, 4):
             self.speed_meter_sprites[i].image = NUMBER_IMAGES[
-                (int(self.player.current_speed * SPEED_DISPLAY_MULTIPLIER) // (10 ** i)) % 10
+                (display_speed // (10 ** i)) % 10
             ]
 
         # update timer UI
