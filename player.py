@@ -5,7 +5,6 @@ from settings import IN_DEV_MODE, COLLISION_DETECTION_OFF # debug config
 from settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY # button mapping config
 from settings import PLAYER_SPRITE_PATH, PLAYER_SHADOW_SPRITE_PATH, NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
 from settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT # player collider config
-from settings import PLAYER_LOOKAHEAD_RECT_WIDTH, PLAYER_LOOKAHEAD_RECT_HEIGHT # lookahead for keeping player on track
 from settings import HEIGHT_DURING_JUMP, JUMP_DURATION_MULTIPLIER # jumping
 
 from collision import CollisionRect
@@ -191,8 +190,8 @@ class Player(pygame.sprite.Sprite):
         next_frame_position_y = self.position[1] + speed_sin
         frame_lookahead_collision_rect = CollisionRect(
             pos = numpy.array([next_frame_position_x, next_frame_position_y]), 
-            w = PLAYER_LOOKAHEAD_RECT_WIDTH,
-            h = PLAYER_LOOKAHEAD_RECT_HEIGHT
+            w = PLAYER_COLLISION_RECT_WIDTH,
+            h = PLAYER_COLLISION_RECT_HEIGHT
         )
 
         # Check if player would stay on track when moved as computed above.

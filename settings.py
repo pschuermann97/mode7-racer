@@ -38,16 +38,16 @@ FOG_DENSITY = 100
 
 # physics variables of the player machine
 PLAYER_MAX_SPEED = 0.05
-PLAYER_ACCELERATION = PLAYER_MAX_SPEED / 500 # how fast the player can accelerate
+PLAYER_ACCELERATION = PLAYER_MAX_SPEED / 750 # how fast the player can accelerate
 PLAYER_BRAKE = PLAYER_ACCELERATION * 2 # how strong the players brakes are
 PLAYER_SPEED_LOSS = PLAYER_ACCELERATION / 3 # how much speed the player loses when neither accelerating nor braking
 PLAYER_CENTRIFUGAL_FORCE = 0.5 # centrifugal force applied in corners (more precisely, percentage of max speed that is applied as centrifugal force)
-PLAYER_COLLISION_RECT_WIDTH = 1 # width of the player collider
-PLAYER_COLLISION_RECT_HEIGHT = 1 # height of the player collider
-PLAYER_LOOKAHEAD_RECT_WIDTH = 1 # width of the collider that is used to "look ahead" to check whether the player will leave the track in the next frame
-PLAYER_LOOKAHEAD_RECT_HEIGHT = 2 # height of the collider that is used to "look ahead"
+PLAYER_COLLISION_RECT_WIDTH = 1 # width of the player collider (the same for all machines)
+PLAYER_COLLISION_RECT_HEIGHT = 2 # height of the player collider
 JUMP_DURATION_MULTIPLIER = 2 / PLAYER_MAX_SPEED # in seconds, multiplied with speed to determine duration of a jump
+INITIAL_PLAYER_ROTATION_SPEED = 0.01 # how fast the player can rotate
 JUMP_HEIGHT = 100 # maximum height the player gains throughout a jump (compared to its standard y coordinate)
+
 
 # Quadratic function that computes the height of the player during a jump
 # based on the time since the player jumped off the track.
@@ -58,8 +58,6 @@ JUMP_HEIGHT = 100 # maximum height the player gains throughout a jump (compared 
 def HEIGHT_DURING_JUMP(time, jump_duration):
     return - ( time * ( time - jump_duration ) ) * JUMP_HEIGHT
 
-# how fast the player can rotate initially
-INITIAL_PLAYER_ROTATION_SPEED = 0.01
 
 # initial position/roation of the player in the logical world space
 INITIAL_PLAYER_POSITION_X = 25.55
