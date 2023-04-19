@@ -4,11 +4,6 @@ import numpy # numpy arrays used for positions of rectangle colliders
 from collision import CollisionRect
 from track import Track, KeyCheckpoint 
 
-# initial position/roation of the player in the logical world space
-INITIAL_PLAYER_POSITION_X = 25.55
-INITIAL_PLAYER_POSITION_Y = -119.78
-INITIAL_PLAYER_ANGLE = -111.56
-
 # race configuration
 STD_REQUIRED_LAPS = 3 # number of laps normally required to finish a race
 
@@ -92,5 +87,8 @@ class TrackCreator:
             key_checkpoint_rects = [rect7, rect5],
             ramp_rects = [ramp1],
             finish_line_collider = finish_line_coll,
-            required_laps = STD_REQUIRED_LAPS
+            required_laps = STD_REQUIRED_LAPS,
+            init_player_pos_x = 25.55,
+            init_player_pos_y = -119.78,
+            init_player_angle = -111.56
         )

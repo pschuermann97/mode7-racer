@@ -1,5 +1,7 @@
 # Debug mode settings
 
+from settings.machine_settings import MACHINES
+
 # whether the game currently is in "developer mode", where the camera can move around freely in the scene
 IN_DEV_MODE = False
 
@@ -7,4 +9,6 @@ IN_DEV_MODE = False
 COLLISION_DETECTION_OFF = False
 
 # whether the debug menu for choosing a machine appears before starting the game
-DEBUG_CHOOSE_MACHINE = True
+DEBUG_CHOOSE_MACHINE = False
+DEFAULT_MACHINE = MACHINES[1]
+

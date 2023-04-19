@@ -2,7 +2,8 @@
 # Objects of the class hold a name and several lists of collision rects
 # modelling the track surface, ramps, different types of gimmicks and obstacles, ...
 class Track:
-    def __init__(self, name, track_surface_rects, key_checkpoint_rects, ramp_rects, finish_line_collider, required_laps):
+    def __init__(self, name, track_surface_rects, key_checkpoint_rects, ramp_rects, finish_line_collider, 
+            required_laps, init_player_pos_x, init_player_pos_y, init_player_angle):
         self.name = name
         self.track_surface_rects = track_surface_rects
         
@@ -14,6 +15,11 @@ class Track:
 
         self.player_completed_laps = 0 # race track counts laps the player has completed
         self.required_laps = required_laps
+
+        # initial player position and rotation
+        self.init_player_pos_x = init_player_pos_x
+        self.init_player_pos_y = init_player_pos_y
+        self.init_player_angle = init_player_angle
 
     # Determines whether the passed rectangular collider is on the track surface or not.
     # 

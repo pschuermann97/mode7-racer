@@ -60,7 +60,7 @@ class App:
             choice = int(input("Choose a machine: "))
             player_machine = MACHINES[choice]
         else:
-            player_machine = PURPLE_COMET
+            player_machine = DEFAULT_MACHINE # default machine can be changed in settings.machine_settings
 
         # Creates a player instance and
         # assigns the race track to the player.
@@ -68,9 +68,9 @@ class App:
         # so they can check whether they would leave the track with their movement in the current frame.
         self.player = Player(
             machine = player_machine,
-            init_pos_x = INITIAL_PLAYER_POSITION_X,
-            init_pos_y = INITIAL_PLAYER_POSITION_Y,
-            init_angle = INITIAL_PLAYER_ANGLE,
+            init_pos_x = self.race_track.init_player_pos_x,
+            init_pos_y = self.race_track.init_player_pos_y,
+            init_angle = self.race_track.init_player_angle,
             current_race_track = self.race_track
         )
 
