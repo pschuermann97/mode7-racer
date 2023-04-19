@@ -49,6 +49,7 @@ class Player(pygame.sprite.Sprite):
         # When jumping: this is the duration of the jump from start to landing.
         # Needed to compute the player y coordinate on screen while jumping.
         self.current_jump_duration = 0
+        self.finished = False # whether the player has finished the current race
 
     # Updates player data and position.
     # 
@@ -133,10 +134,10 @@ class Player(pygame.sprite.Sprite):
         
         # Update player speed according to acceleration/brake inputs.
         # Increase speed when acceleration button pressed.
-        if keys[STD_ACCEL_KEY]:
+        if keys[STD_ACCEL_KEY] and not self.finished:
             self.current_speed += self.machine.acceleration
         # Decrease speed heavily when brake button pressed.
-        elif keys[STD_BRAKE_KEY]:
+        elif keys[STD_BRAKE_KEY] and not self.finished:
             # case 1: player currently moves forwards
             if self.current_speed > 0:
                 self.current_speed -= self.machine.brake  
@@ -207,14 +208,14 @@ class Player(pygame.sprite.Sprite):
                 self.current_speed = -self.current_speed * OBSTACLE_HIT_SPEED_RETENTION
 
         # Steering.
-        if keys[STD_LEFT_KEY]:
+        if keys[STD_LEFT_KEY] and not self.finished:
             # rotate player
             self.angle += self.machine.rotation_speed
 
             # apply centrifugal force
             self.position[0] += -cf_sin
             self.position[1] += cf_cos
-        if keys[STD_RIGHT_KEY]:
+        if keys[STD_RIGHT_KEY] and not self.finished:
             self.angle -= self.machine.rotation_speed
 
             self.position[0] += cf_sin

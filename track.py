@@ -72,7 +72,7 @@ class Track:
                 # If player has completed enough laps, initialize the finish sequence.
                 self.player_completed_laps += 1
                 print(str(self.player_completed_laps) + " laps completed!")
-                if self.player_completed_laps >= self.required_laps:
+                if self.player_finished_race():
                     print("race finished!")
             self.reset_key_checkpoints()
 
@@ -89,6 +89,11 @@ class Track:
         for key_checkpoint in self.key_checkpoints:
             key_checkpoint.passed = False
 
+    # Returns True if and only if the registered player 
+    # has finished the race on this track 
+    # (i.e. finished the required number of laps).  
+    def player_finished_race(self):
+        return self.player_completed_laps >= self.required_laps
 
 
 # A key checkpoint for the lap counting system.

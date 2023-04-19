@@ -95,8 +95,8 @@ class TrackCreator:
             init_player_angle = -111.56
         )
 
+    # for now this is just an empty track with the monochrome environment texture set
     def create_track_2():
-        # for now this is just an empty track with the monochrome environment texture set
         finish_line_coll = CollisionRect(
             pos = numpy.array([1127.165, -116.6325]),
             w = 14.33,

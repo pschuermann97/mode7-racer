@@ -45,7 +45,7 @@ class App:
             TrackCreator.create_track_1(),
             TrackCreator.create_track_2()
         ]
-        self.current_race_track = self.race_tracks[1]
+        self.current_race_track = self.race_tracks[0]
 
         # Initializes the mode-7 renderer.
         # Third parameter determines whether the rendered scene has a fog effect or not.
@@ -140,12 +140,17 @@ class App:
         # causes the Mode7-rendered environment to update
         self.mode7.update(self.camera)
 
-        # Computes the elapsed time since game start 
-        # and updates UI.
-        seconds_since_game_start = self.time - self.game_start_timestamp
-        self.ui.update(
-            elapsed_milliseconds = seconds_since_game_start * 1000
-        )
+        # Update timer on UI if player has not finished the current race yet.
+        if not self.player.finished:
+            seconds_since_game_start = self.time - self.game_start_timestamp
+            self.ui.update(
+                elapsed_milliseconds = seconds_since_game_start * 1000
+            )
+
+        # Checks whether player has finished the race.
+        # If so, a status flag is set in the player instance if not done already.
+        if self.current_race_track.player_finished_race() and not self.player.finished:
+            self.player.finished = True
 
         # updates clock
         self.clock.tick()
