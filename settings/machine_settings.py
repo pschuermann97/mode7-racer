@@ -26,7 +26,7 @@ PURPLE_COMET = Machine(
     speed_loss = (0.05 / 750) / 3, # speed loss is a third the strength of the accelerator
     centri = 0.5, # 50% of current speed applied as centrifugal force
     jump_duration_multiplier = 2 / 0.05, # jump should last 2 seconds if machine at max speed
-    rotation_speed = 0.01,
+    rotation_speed = 0.0075,
     idle_image_path = 'gfx/violet_machine.png',
     shadow_image_path = 'gfx/violet_machine_shadow.png'
 )
@@ -35,7 +35,7 @@ FASTER_PURPLE_COMET = Machine(
     max_speed = PURPLE_COMET.max_speed * 1.1,
     acceleration = PURPLE_COMET.acceleration / 2,
     brake = PURPLE_COMET.brake,
-    speed_loss = PURPLE_COMET.speed_loss,
+    speed_loss = PURPLE_COMET.speed_loss / 4,
     centri = PURPLE_COMET.centri,
     jump_duration_multiplier = PURPLE_COMET.jump_duration_multiplier,
     rotation_speed = PURPLE_COMET.rotation_speed * 0.75,
@@ -48,9 +48,11 @@ SLOWER_PURPLE_COMET = Machine(
     acceleration = PURPLE_COMET.acceleration * 2,
     brake = PURPLE_COMET.brake,
     speed_loss = PURPLE_COMET.speed_loss,
-    centri = PURPLE_COMET.centri,
+    centri = PURPLE_COMET.centri * 1.5,
     jump_duration_multiplier = PURPLE_COMET.jump_duration_multiplier,
-    rotation_speed = PURPLE_COMET.rotation_speed,
+    rotation_speed = PURPLE_COMET.rotation_speed * 1.3,
     idle_image_path = 'gfx/violet_machine.png',
     shadow_image_path = 'gfx/violet_machine_shadow.png'
 )
+
+MACHINES = [PURPLE_COMET, FASTER_PURPLE_COMET, SLOWER_PURPLE_COMET]

@@ -50,12 +50,23 @@ class App:
         # Creates the race track collision map.
         self.race_track = TrackCreator.create_track_1()
 
+        # debug only: player chooses a machine
+        # outside debug mode, the player is using Purple Comet
+        if DEBUG_CHOOSE_MACHINE:
+            print("0: Purple Comet")
+            print("1: Faster Purple Comet")
+            print("2: Slower Purple Comet")
+            choice = int(input("Choose a machine: "))
+            player_machine = MACHINES[choice]
+        else:
+            player_machine = PURPLE_COMET
+
         # Creates a player instance and
         # assigns the race track to the player.
         # The player needs to know which race track they are driving on
         # so they can check whether they would leave the track with their movement in the current frame.
         self.player = Player(
-            machine = FASTER_PURPLE_COMET,
+            machine = player_machine,
             init_pos_x = INITIAL_PLAYER_POSITION_X,
             init_pos_y = INITIAL_PLAYER_POSITION_Y,
             init_angle = INITIAL_PLAYER_ANGLE,
