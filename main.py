@@ -13,7 +13,8 @@ from settings.ui_settings import *
 from mode7 import Mode7
 from player import Player
 from camera import Camera
-from track import Track, TrackCreator
+from track import Track
+from settings.track_settings import TrackCreator
 from ui import UI
 
 # debug only imports
