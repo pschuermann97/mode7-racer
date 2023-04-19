@@ -94,3 +94,31 @@ class TrackCreator:
             init_player_pos_y = -119.78,
             init_player_angle = -111.56
         )
+
+    def create_track_2():
+        # for now this is just an empty track with the monochrome environment texture set
+        finish_line_coll = CollisionRect(
+            pos = numpy.array([1127.165, -116.6325]),
+            w = 14.33,
+            h = 1.145
+        )
+
+        track_surface = CollisionRect(
+            pos = numpy.array([27.165, -116.6325]),
+            w = 100,
+            h = 100
+        )
+
+        return Track(
+            name = "monochrome_track",
+            floor_texture_path = "gfx/monochrome_track.png",
+            bg_texture_path = "gfx/monochrome_track_bg.png",
+            track_surface_rects = [track_surface],
+            key_checkpoint_rects = [],
+            ramp_rects = [],
+            finish_line_collider = finish_line_coll,
+            required_laps = STD_REQUIRED_LAPS,
+            init_player_pos_x = 25.55,
+            init_player_pos_y = -119.78,
+            init_player_angle = -111.56
+        )

@@ -41,13 +41,17 @@ class App:
         self.ui_sprites = pygame.sprite.Group()
 
         # Creates the race track collision map.
-        self.race_track = TrackCreator.create_track_1()
+        self.race_tracks = [
+            TrackCreator.create_track_1(),
+            TrackCreator.create_track_2()
+        ]
+        self.current_race_track = self.race_tracks[1]
 
         # Initializes the mode-7 renderer.
         # Third parameter determines whether the rendered scene has a fog effect or not.
         self.mode7 = Mode7(self, 
-            floor_tex_path = 'gfx/track_2023.png', 
-            bg_tex_path = 'gfx/track_2023_bg_resized.png',
+            floor_tex_path = self.current_race_track.floor_texture_path, 
+            bg_tex_path = self.current_race_track.bg_texture_path,
             is_foggy = True
         )
 
@@ -68,10 +72,10 @@ class App:
         # so they can check whether they would leave the track with their movement in the current frame.
         self.player = Player(
             machine = player_machine,
-            init_pos_x = self.race_track.init_player_pos_x,
-            init_pos_y = self.race_track.init_player_pos_y,
-            init_angle = self.race_track.init_player_angle,
-            current_race_track = self.race_track
+            init_pos_x = self.current_race_track.init_player_pos_x,
+            init_pos_y = self.current_race_track.init_player_pos_y,
+            init_angle = self.current_race_track.init_player_angle,
+            current_race_track = self.current_race_track
         )
 
         # need to add the player instance and the player shadow sprite to sprite group to be able to render it
