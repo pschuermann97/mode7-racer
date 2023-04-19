@@ -1,4 +1,5 @@
 import pygame
+from machine import Machine
 
 # Window resolution.
 # For convenience, we also store the halved values in variables 
@@ -47,6 +48,20 @@ PLAYER_COLLISION_RECT_HEIGHT = 2 # height of the player collider
 JUMP_DURATION_MULTIPLIER = 2 / PLAYER_MAX_SPEED # in seconds, multiplied with speed to determine duration of a jump
 INITIAL_PLAYER_ROTATION_SPEED = 0.01 # how fast the player can rotate
 JUMP_HEIGHT = 100 # maximum height the player gains throughout a jump (compared to its standard y coordinate)
+
+
+# machines that are playable in the game
+
+PURPLE_COMET = Machine(
+    max_speed = 0.05,
+    acceleration = 0.05 / 750, # 750 frame update units to get to top speed
+    brake = (0.05 / 750) * 2, # brake is twice as strong as accelerator
+    speed_loss = (0.05 / 750) / 3, # speed loss is a third the strength of the accelerator
+    centri = 0.5, # 50% of current speed applied as centrifugal force
+    jump_duration_multiplier = 2 / 0.05, # jump should last 2 seconds if machine at max speed
+    idle_image = 'gfx/violet_machine.png',
+    shadow_image = 'gfx/violet_machine_shadow.png'
+)
 
 
 # Quadratic function that computes the height of the player during a jump

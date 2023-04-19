@@ -2,7 +2,7 @@
 # including all physics engine related data (acceleration force, max speed, ...)
 # and graphics
 class Machine:
-    def __init__(self, max_speed, acceleration, speed_loss, centri, jump_duration_multiplier, idle_image, shadow_image):
+    def __init__(self, max_speed, acceleration, brake, speed_loss, centri, jump_duration_multiplier, idle_image, shadow_image):
         # ----------- physics variables initialization ----------------------
 
 
