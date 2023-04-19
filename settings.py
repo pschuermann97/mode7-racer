@@ -38,15 +38,8 @@ COLLISION_DETECTION_OFF = False
 FOG_DENSITY = 100
 
 # physics variables of the player machine
-PLAYER_MAX_SPEED = 0.05
-PLAYER_ACCELERATION = PLAYER_MAX_SPEED / 750 # how fast the player can accelerate
-PLAYER_BRAKE = PLAYER_ACCELERATION * 2 # how strong the players brakes are
-PLAYER_SPEED_LOSS = PLAYER_ACCELERATION / 3 # how much speed the player loses when neither accelerating nor braking
-PLAYER_CENTRIFUGAL_FORCE = 0.5 # centrifugal force applied in corners (more precisely, percentage of max speed that is applied as centrifugal force)
 PLAYER_COLLISION_RECT_WIDTH = 1 # width of the player collider (the same for all machines)
-PLAYER_COLLISION_RECT_HEIGHT = 2 # height of the player collider
-JUMP_DURATION_MULTIPLIER = 2 / PLAYER_MAX_SPEED # in seconds, multiplied with speed to determine duration of a jump
-INITIAL_PLAYER_ROTATION_SPEED = 0.01 # how fast the player can rotate
+PLAYER_COLLISION_RECT_HEIGHT = 1 # height of the player collider
 JUMP_HEIGHT = 100 # maximum height the player gains throughout a jump (compared to its standard y coordinate)
 
 
