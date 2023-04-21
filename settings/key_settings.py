@@ -2,7 +2,9 @@
 
 import pygame
 
-STD_ACCEL_KEY = pygame.K_SPACE # space = accelerate
-STD_BRAKE_KEY = pygame.K_s # S = brake 
-STD_LEFT_KEY = pygame.K_a # A = rotate left
-STD_RIGHT_KEY = pygame.K_d # D = rotate right
+STD_ACCEL_KEY = pygame.K_k # K = accelerate
+STD_BRAKE_KEY = pygame.K_j # J = brake 
+STD_BOOST_KEY = pygame.K_l # L = boost
+
+STD_LEFT_KEY = pygame.K_a # A = steer left
+STD_RIGHT_KEY = pygame.K_d # D = steer right
