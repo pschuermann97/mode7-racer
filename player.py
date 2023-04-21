@@ -5,7 +5,7 @@ from settings.debug_settings import IN_DEV_MODE, COLLISION_DETECTION_OFF # debug
 from settings.key_settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY, STD_BOOST_KEY # button mapping config
 from settings.renderer_settings import NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
 from settings.machine_settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT # player collider config
-from settings.machine_settings import HEIGHT_DURING_JUMP, HIT_COST_SPEED_FACTOR
+from settings.machine_settings import HEIGHT_DURING_JUMP, HIT_COST_SPEED_FACTOR, MIN_BOUNCE_BACK_FORCE
 from settings.machine_settings import OBSTACLE_HIT_SPEED_RETENTION 
 
 from collision import CollisionRect
@@ -231,7 +231,9 @@ class Player(pygame.sprite.Sprite):
             if not COLLISION_DETECTION_OFF:
                 # Player bounces back since their move speed is flipped.
                 # Player does not retain all of its speed.
-                self.current_speed = -self.current_speed * OBSTACLE_HIT_SPEED_RETENTION
+                # There is a minimal force that is always applied 
+                # to prevent the player getting stuck outside the track boundaries.
+                self.current_speed = -(self.current_speed * OBSTACLE_HIT_SPEED_RETENTION + MIN_BOUNCE_BACK_FORCE)
 
                 # Player loses energy.
                 # Uses a constant factor (see settings module) to scale current speed to energy loss.

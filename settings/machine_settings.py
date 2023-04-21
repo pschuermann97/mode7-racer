@@ -7,6 +7,7 @@ PLAYER_COLLISION_RECT_WIDTH = 1 # width of the player collider (the same for all
 PLAYER_COLLISION_RECT_HEIGHT = 1 # height of the player collider
 JUMP_HEIGHT = 100 # maximum height the player gains throughout a jump (compared to its standard y coordinate)
 OBSTACLE_HIT_SPEED_RETENTION = 0.5 # percentage of its speed the player machine retains when hitting an obstacle
+MIN_BOUNCE_BACK_FORCE = 0.005 # minimal force applied in opposite direction when the player hits a wall (to prevent player getting stuck just outside the track boundaries)
 
 # maximum energy that a machine usually
 STD_MAX_ENERGY = 100
