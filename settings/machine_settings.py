@@ -8,6 +8,9 @@ PLAYER_COLLISION_RECT_HEIGHT = 1 # height of the player collider
 JUMP_HEIGHT = 100 # maximum height the player gains throughout a jump (compared to its standard y coordinate)
 OBSTACLE_HIT_SPEED_RETENTION = 0.5 # percentage of its speed the player machine retains when hitting an obstacle
 
+# maximum energy that a machine usually
+STD_MAX_ENERGY = 100
+
 # Quadratic function that computes the height of the player during a jump
 # based on the time since the player jumped off the track.
 # 
@@ -30,6 +33,8 @@ PURPLE_COMET = Machine(
     centri = 0.3, # 50% of current speed applied as centrifugal force
     jump_duration_multiplier = 2 / 0.05, # jump should last 2 seconds if machine at max speed
     boost_duration = 2,
+    max_energy = STD_MAX_ENERGY,
+    boost_cost = 12,
     rotation_speed = 0.0075,
     idle_image_path = 'gfx/violet_machine.png',
     shadow_image_path = 'gfx/violet_machine_shadow.png'
@@ -45,6 +50,8 @@ FASTER_PURPLE_COMET = Machine(
     centri = PURPLE_COMET.centri,
     jump_duration_multiplier = PURPLE_COMET.jump_duration_multiplier,
     boost_duration = 1.75,
+    max_energy = STD_MAX_ENERGY,
+    boost_cost = 9,
     rotation_speed = PURPLE_COMET.rotation_speed * 0.75,
     idle_image_path = 'gfx/violet_machine.png',
     shadow_image_path = 'gfx/violet_machine_shadow.png'
@@ -58,6 +65,8 @@ SLOWER_PURPLE_COMET = Machine(
     speed_loss = PURPLE_COMET.speed_loss,
     boosted_speed_loss = PURPLE_COMET.speed_loss,
     boost_duration = 2.25,
+    max_energy = STD_MAX_ENERGY,
+    boost_cost = 16,
     centri = PURPLE_COMET.centri * 1.5,
     jump_duration_multiplier = PURPLE_COMET.jump_duration_multiplier,
     rotation_speed = PURPLE_COMET.rotation_speed * 1.3,

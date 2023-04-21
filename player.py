@@ -23,6 +23,9 @@ class Player(pygame.sprite.Sprite):
         self.machine = machine # holds all relevant data on physical properties of the player machine
         self.current_speed = 0 # how fast the player moves in the current frame
 
+        # current amount of energy that the machine has left
+        self.current_energy = self.machine.max_energy
+
         # Rendering variables (for machine without shadow).
         # The x coordinate of the player is always fixed,
         # the y coordinate usually fixed as well 
