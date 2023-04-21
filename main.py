@@ -160,6 +160,12 @@ class App:
             self.player.finished = False
             self.next_race()
 
+        # Checks whether player has completed at least one lap
+        # and activates their boost power if so (and not activated yet).
+        if self.current_race_track.player_completed_first_lap() and not self.player.has_boost_power:
+            self.player.has_boost_power = True
+            print("You got boost power!!!")
+
         # updates clock
         self.clock.tick()
 

@@ -107,6 +107,11 @@ class Track:
     def player_finished_race(self):
         return self.player_completed_laps >= self.required_laps
 
+    # API for the App class to poll whether player has completed at least one lap.
+    # Idea: player should only be able to boost after first lap completed
+    def player_completed_first_lap(self):
+        return self.player_completed_laps >= 1
+
 
 # A key checkpoint for the lap counting system.
 # Consists of a CollisionRect and a passed-flag.

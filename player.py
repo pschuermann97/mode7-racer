@@ -52,6 +52,7 @@ class Player(pygame.sprite.Sprite):
         self.finished = False # whether the player has finished the current race
         self.boosted = False
         self.last_boost_started_timestamp = None # timestamp of when the player last started a boost
+        self.has_boost_power = False # whether the player is allowed to use their booster (set to False during the first lap, flips to True after completing first lap)
 
     # Updates player data and position.
     # 
@@ -78,7 +79,6 @@ class Player(pygame.sprite.Sprite):
 
         # Make player boost if on dash plate.
         if self.current_race_track.is_on_dash_plate(current_collision_rect) and not self.boosted:
-            print("You got boost power!!!")
             self.boosted = True
             self.last_boost_started_timestamp = time # timestamp for determining when the boost should end
         if self.boosted:
@@ -138,12 +138,15 @@ class Player(pygame.sprite.Sprite):
         print("x: " + str(self.position[0]) + " y: " + str(self.position[1]) + " a: " + str(self.angle))
 
     # Moves the player's machine as in a race (accelerating, braking and steering).
+    #
+    # Parameters:
+    # time - the timestamp of the frame update in which this call was made
     def racing_mode_movement(self, time):
         # collect key events
         keys = pygame.key.get_pressed()
 
         # determine whether the player intends to start a boost in this frame
-        if keys[STD_BOOST_KEY] and not self.boosted:
+        if keys[STD_BOOST_KEY] and self.can_boost():
             self.last_boost_started_timestamp = time
             self.boosted = True
         
@@ -278,6 +281,10 @@ class Player(pygame.sprite.Sprite):
         # check whether boost should end
         if elapsed_time > self.machine.boost_duration:
             self.boosted = False
+
+    # Determines whether the player is currently able to use their boost power.
+    def can_boost(self):
+        return self.has_boost_power and not self.boosted
 
     # (Re-)sets the player object to the initial position
     # for the current race track.
