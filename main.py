@@ -43,8 +43,9 @@ class App:
         # Initializes race track management.
         self.current_race_track_index = 0
         self.race_tracks = [
-            TrackCreator.create_track_1,
-            TrackCreator.create_track_2
+            TrackCreator.create_track_2023_II,
+            TrackCreator.create_track_2023,
+            TrackCreator.create_monochrome_track
         ]
         self.current_race_track = self.race_tracks[self.current_race_track_index]()
 

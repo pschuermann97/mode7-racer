@@ -13,7 +13,7 @@ STD_REQUIRED_LAPS = 3 # number of laps normally required to finish a race
 # Holds several static methods to create the different tracks.
 class TrackCreator:
     # Creates the collision shape for the track whose sprite is named "track_2023.png"
-    def create_track_1():
+    def create_track_2023():
         # creating colliders for track
 
         # left-most rect
@@ -96,7 +96,7 @@ class TrackCreator:
         )
 
     # for now this is just an empty track with the monochrome environment texture set
-    def create_track_2():
+    def create_monochrome_track():
         finish_line_coll = CollisionRect(
             pos = numpy.array([1127.165, -116.6325]),
             w = 14.33,
@@ -116,6 +116,115 @@ class TrackCreator:
             track_surface_rects = [track_surface],
             key_checkpoint_rects = [],
             ramp_rects = [],
+            finish_line_collider = finish_line_coll,
+            required_laps = STD_REQUIRED_LAPS,
+            init_player_pos_x = 25.55,
+            init_player_pos_y = -119.78,
+            init_player_angle = -111.56
+        )
+
+    # Creates the collision shape for the track whose sprite is named "track_2023_II.png".
+    # For now, this is just the collision shape of the first track for testing purposes.
+    def create_track_2023_II():
+        # ------------ creating colliders for track ----------------------
+
+        # ------------ rects kept from the first version of the track ----
+
+        # top left-most rect
+        rect1 = CollisionRect(
+            pos = numpy.array([27.165, -99.615]),
+            w = 14.33,
+            h = 144.77
+        )
+
+        # rect next to rect1's lower end
+        rect2 = CollisionRect(
+            pos = numpy.array([39.17, -162.635]),
+            w = 9.68,
+            h = 18.73
+        )
+
+        # second-to-lowest horizontal rect
+        rect3 = CollisionRect(
+            pos = numpy.array([47.815, -157.725]),
+            w = 26.97,
+            h = 8.91
+        )
+
+        # second vertical rect from the right
+        rect4 = CollisionRect(
+            pos = numpy.array([56.925, -142.14]),
+            w = 8.69,
+            h = 40.08
+        )
+
+        # third-to-lowest horizontal rect
+        rect5 = CollisionRect(
+            pos = numpy.array([62.385, -125.59]),
+            w = 19.55,
+            h = 8.98
+        )
+
+        # top horizontal rect
+        rect7 = CollisionRect(
+            pos = numpy.array([46.08, -33.24]),
+            w = 52.16,
+            h = 11.86
+        )
+
+        # ------------ end of rects kept from the first version of the track ----
+
+        # top right-most vertical rect
+        rect8 = CollisionRect(
+            pos = numpy.array([67.95, -45.725]),
+            w = 8.42,
+            h = 36.99
+        )
+
+        # bottom right-most vertical rect
+        rect9 = CollisionRect(
+            pos = numpy.array([67.95, -147.03]),
+            w = 8.42,
+            h = 97.135
+        )
+
+        # lowest horizontal rect
+        rect10 = CollisionRect(
+            pos = numpy.array([46.08, -191.55]),
+            w = 52.16,
+            h = 8.105
+        )
+
+        # lower left-most vertical rect
+        rect11 = CollisionRect(
+            pos = numpy.array([27.165, -186.8]),
+            w = 14.33,
+            h = 17.605
+        )
+
+        # ------------ end of track collider creation -------------------------
+
+        # finish line collider
+        finish_line_coll = CollisionRect(
+            pos = numpy.array([27.165, -116.6325]),
+            w = 14.33,
+            h = 1.145
+        )
+
+        # (the only) jump ramp
+        ramp1 = CollisionRect(
+            pos = numpy.array([27.165, -177.94]),
+            w = 8.42,
+            h = 0.12
+        )
+
+        return Track(
+            name = "track 2023 II",
+            floor_texture_path = "gfx/track_2023_II.png",
+            bg_texture_path = "gfx/track_2023_bg_resized.png",
+            track_surface_rects = [rect1, rect2, rect3, rect4, rect5, rect7, rect8, rect9, rect10, rect11],
+            key_checkpoint_rects = [rect7, rect5],
+            ramp_rects = [ramp1],
             finish_line_collider = finish_line_coll,
             required_laps = STD_REQUIRED_LAPS,
             init_player_pos_x = 25.55,
