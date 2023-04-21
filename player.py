@@ -2,7 +2,7 @@ import numpy
 import pygame
 
 from settings.debug_settings import IN_DEV_MODE, COLLISION_DETECTION_OFF # debug config
-from settings.key_settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY # button mapping config
+from settings.key_settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY, STD_BOOST_KEY # button mapping config
 from settings.renderer_settings import NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
 from settings.machine_settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT # player collider config
 from settings.machine_settings import HEIGHT_DURING_JUMP
@@ -62,7 +62,7 @@ class Player(pygame.sprite.Sprite):
         if IN_DEV_MODE:
             self.dev_mode_movement()
         else:
-            self.racing_mode_movement()
+            self.racing_mode_movement(time)
 
         # Store the current rectangular collider of the player
         # for use in several environment checks and updates.
@@ -138,9 +138,14 @@ class Player(pygame.sprite.Sprite):
         print("x: " + str(self.position[0]) + " y: " + str(self.position[1]) + " a: " + str(self.angle))
 
     # Moves the player's machine as in a race (accelerating, braking and steering).
-    def racing_mode_movement(self):
+    def racing_mode_movement(self, time):
         # collect key events
         keys = pygame.key.get_pressed()
+
+        # determine whether the player intends to start a boost in this frame
+        if keys[STD_BOOST_KEY] and not self.boosted:
+            self.last_boost_started_timestamp = time
+            self.boosted = True
         
         # Update player speed according to acceleration/brake inputs.
         # Increase speed when acceleration button pressed.
