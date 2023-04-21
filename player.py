@@ -50,6 +50,7 @@ class Player(pygame.sprite.Sprite):
         # Needed to compute the player y coordinate on screen while jumping.
         self.current_jump_duration = 0
         self.finished = False # whether the player has finished the current race
+        self.boosted = False
 
     # Updates player data and position.
     # 
