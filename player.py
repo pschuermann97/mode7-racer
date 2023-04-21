@@ -167,13 +167,14 @@ class Player(pygame.sprite.Sprite):
         # (otherwise the player would move backwards at increasing speed
         # if no button is pressed).
         else:
+            current_speed_loss = self.machine.boosted_speed_loss if self.boosted else self.machine.speed_loss
             if self.current_speed > 0:
-                self.current_speed -= self.machine.speed_loss
+                self.current_speed -= current_speed_loss
                 # Clamp speed to zero (from below) to prevent jitter.
                 if self.current_speed < 0:
                     self.current_speed = 0
             elif self.current_speed < 0:
-                self.current_speed += self.machine.speed_loss 
+                self.current_speed += current_speed_loss
                 # Clamp speed to zero (from above) to prevent jitter.
                 if self.current_speed > 0:
                     self.current_speed = 0
