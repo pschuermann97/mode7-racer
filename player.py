@@ -5,7 +5,7 @@ from settings.debug_settings import IN_DEV_MODE, COLLISION_DETECTION_OFF # debug
 from settings.key_settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY, STD_BOOST_KEY # button mapping config
 from settings.renderer_settings import NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
 from settings.machine_settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT # player collider config
-from settings.machine_settings import HEIGHT_DURING_JUMP
+from settings.machine_settings import HEIGHT_DURING_JUMP, HIT_COST_SPEED_FACTOR
 from settings.machine_settings import OBSTACLE_HIT_SPEED_RETENTION 
 
 from collision import CollisionRect
@@ -231,6 +231,13 @@ class Player(pygame.sprite.Sprite):
                 # Player bounces back since their move speed is flipped.
                 # Player does not retain all of its speed.
                 self.current_speed = -self.current_speed * OBSTACLE_HIT_SPEED_RETENTION
+
+                # Player loses energy.
+                # Uses a constant factor (see settings module) to scale current speed to energy loss.
+                # Lastly, the individual body strength of the machine is taken into account.
+                lost_energy = (abs(self.current_speed) * HIT_COST_SPEED_FACTOR) * self.machine.hit_cost
+                self.current_energy -= lost_energy
+                print("current energy: " + str(self.current_energy))
 
         # Steering.
         if keys[STD_LEFT_KEY] and not self.finished:

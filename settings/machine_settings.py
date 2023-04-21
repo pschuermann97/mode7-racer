@@ -14,9 +14,10 @@ STD_MAX_ENERGY = 100
 # Factor that is used to compute the amount of energy 
 # the machine loses when hitting a normal obstacle 
 # from the current speed of the player.
-# Idea: at a speed of 1500 km/h, a machine would normally lose 5 energy units
+# Idea: at a speed of 1426 km/h (top speed of the Purple Comet, 0.05 in the interna of the physics engine), 
+# a machine would normally lose 5 energy units
 # (not applying the individual shield strength of the machine (Machine.hit_cost)).
-HIT_COST_SPEED_FACTOR = 5 / 1500
+HIT_COST_SPEED_FACTOR = 5 / 0.05
 
 # Quadratic function that computes the height of the player during a jump
 # based on the time since the player jumped off the track.
