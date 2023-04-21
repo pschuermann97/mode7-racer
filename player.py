@@ -53,6 +53,7 @@ class Player(pygame.sprite.Sprite):
         # Needed to compute the player y coordinate on screen while jumping.
         self.current_jump_duration = 0
         self.finished = False # whether the player has finished the current race
+        self.destroyed = False # whether the player machine has been destroyed due to crashing out of bounds or no energy left
         self.boosted = False
         self.last_boost_started_timestamp = None # timestamp of when the player last started a boost
         self.has_boost_power = False # whether the player is allowed to use their booster (set to False during the first lap, flips to True after completing first lap)
@@ -65,7 +66,7 @@ class Player(pygame.sprite.Sprite):
         # move player according to steering inputs and current speed
         if IN_DEV_MODE:
             self.dev_mode_movement()
-        else:
+        elif not self.destroyed:
             self.racing_mode_movement(time)
 
         # Store the current rectangular collider of the player
@@ -238,6 +239,11 @@ class Player(pygame.sprite.Sprite):
                 lost_energy = (abs(self.current_speed) * HIT_COST_SPEED_FACTOR) * self.machine.hit_cost
                 self.current_energy -= lost_energy
                 print("current energy: " + str(self.current_energy))
+                
+                # player machine is destroyed if it has taken more damage than it can sustain
+                if self.current_energy < 0:
+                    self.destroyed = True
+                    print("player machine destroyed!")
 
         # Steering.
         if keys[STD_LEFT_KEY] and not self.finished:
