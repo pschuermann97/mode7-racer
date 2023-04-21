@@ -215,7 +215,81 @@ class TrackCreator:
             h = 17.605
         )
 
+        # second-to-top horizontal rect
+        rect12 = CollisionRect(
+            pos = numpy.array([56.43, -60.21]),
+            w = 31.42,
+            h = 8.01
+        )
+
+        # vertical rect connecting rects 12 and 14
+        rect13 = CollisionRect(
+            pos = numpy.array([44.82, -81.24]),
+            w = 8.2,
+            h = 50.06
+        )
+
+        # third-to-top horizontal rect
+        rect14 = CollisionRect(
+            pos = numpy.array([56.43, -102.47]),
+            w = 31.42,
+            h = 8.01
+        )
+
         # ------------ end of track collider creation -------------------------
+
+        # ------------ dash plate collider creation ---------------------------
+
+        # first dash plate (in order of encounter when driving a normal lap)
+        dash_plate1 = CollisionRect(
+            pos = numpy.array([65.265, -136.89]),
+            w = DASH_PLATE_WIDTH,
+            h = DASH_PLATE_HEIGHT
+        )
+
+        # second dash plate (in order of encounter when driving a normal lap)
+        dash_plate2 = CollisionRect(
+            pos = numpy.array([70.756, -166.1]),
+            w = DASH_PLATE_WIDTH,
+            h = DASH_PLATE_HEIGHT
+        )
+
+        # third dash plate (in order of encounter when driving a normal lap)
+        dash_plate3 = CollisionRect(
+            pos = numpy.array([60.17, -188.88]),
+            w = DASH_PLATE_WIDTH,
+            h = DASH_PLATE_HEIGHT
+        )
+
+        # fourth dash plate (in order of encounter when driving a normal lap)
+        dash_plate4 = CollisionRect(
+            pos = numpy.array([39.89, -194.165]),
+            w = DASH_PLATE_WIDTH,
+            h = DASH_PLATE_HEIGHT
+        )
+
+        # left-most of the three dash plates before the small gap
+        dash_plate_left = CollisionRect(
+            pos = numpy.array([22.6, -179.17]),
+            w = DASH_PLATE_WIDTH,
+            h = DASH_PLATE_HEIGHT
+        )
+
+        # middle-one of the three dash plates before the small gap
+        dash_plate_middle = CollisionRect(
+            pos = numpy.array([25.235, -179.17]),
+            w = DASH_PLATE_WIDTH,
+            h = DASH_PLATE_HEIGHT
+        )
+
+        # right-most of the three dash plates before the small gap
+        dash_plate_right = CollisionRect(
+            pos = numpy.array([28, -179.17]),
+            w = DASH_PLATE_WIDTH,
+            h = DASH_PLATE_HEIGHT
+        )
+
+        # ------------ dash plate collider creation ---------------------------
 
         # finish line collider
         finish_line_coll = CollisionRect(
@@ -235,11 +309,11 @@ class TrackCreator:
             name = "track 2023 II",
             floor_texture_path = "gfx/track_2023_II.png",
             bg_texture_path = "gfx/track_2023_bg_resized.png",
-            track_surface_rects = [rect1, rect2, rect3, rect4, rect5, rect7, rect8, rect9, rect10, rect11],
+            track_surface_rects = [rect1, rect2, rect3, rect4, rect5, rect7, rect8, rect9, rect10, rect11, rect12, rect13, rect14],
             key_checkpoint_rects = [rect7, rect5],
             ramp_rects = [ramp1],
             finish_line_collider = finish_line_coll,
-            dash_plate_rects = [],
+            dash_plate_rects = [dash_plate1, dash_plate2, dash_plate3, dash_plate4, dash_plate_left, dash_plate_middle, dash_plate_right],
             required_laps = STD_REQUIRED_LAPS,
             init_player_pos_x = 25.55,
             init_player_pos_y = -119.78,
