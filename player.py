@@ -326,10 +326,14 @@ class Player(pygame.sprite.Sprite):
         # reset forces
         self.current_speed = 0
 
+        # reset energy to max
+        self.current_energy = self.machine.max_energy
+
         # reset status flags
         self.jumping = False
         self.finished = False
         self.boosted = False
+        self.has_boost_power = False
 
         # reset screen position
         self.rect.topleft = [
