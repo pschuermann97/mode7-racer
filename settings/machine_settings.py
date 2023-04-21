@@ -22,11 +22,14 @@ def HEIGHT_DURING_JUMP(time, jump_duration):
 
 PURPLE_COMET = Machine(
     max_speed = 0.05,
+    boosted_max_speed = 0.06,
     acceleration = 0.05 / 750, # 750 frame update units to get to top speed
     brake = (0.05 / 750) * 2, # brake is twice as strong as accelerator
     speed_loss = (0.05 / 750) / 3, # speed loss is a third the strength of the accelerator
-    centri = 0.5, # 50% of current speed applied as centrifugal force
+    boosted_speed_loss = (0.05 / 750) / 6,
+    centri = 0.3, # 50% of current speed applied as centrifugal force
     jump_duration_multiplier = 2 / 0.05, # jump should last 2 seconds if machine at max speed
+    boost_duration = 2,
     rotation_speed = 0.0075,
     idle_image_path = 'gfx/violet_machine.png',
     shadow_image_path = 'gfx/violet_machine_shadow.png'
@@ -34,11 +37,14 @@ PURPLE_COMET = Machine(
 
 FASTER_PURPLE_COMET = Machine(
     max_speed = PURPLE_COMET.max_speed * 1.1,
+    boosted_max_speed = PURPLE_COMET.max_speed * 1.4,
     acceleration = PURPLE_COMET.acceleration / 2,
     brake = PURPLE_COMET.brake,
     speed_loss = PURPLE_COMET.speed_loss / 2,
+    boosted_speed_loss = PURPLE_COMET.boosted_speed_loss,
     centri = PURPLE_COMET.centri,
     jump_duration_multiplier = PURPLE_COMET.jump_duration_multiplier,
+    boost_duration = 1.75,
     rotation_speed = PURPLE_COMET.rotation_speed * 0.75,
     idle_image_path = 'gfx/violet_machine.png',
     shadow_image_path = 'gfx/violet_machine_shadow.png'
@@ -46,9 +52,12 @@ FASTER_PURPLE_COMET = Machine(
 
 SLOWER_PURPLE_COMET = Machine(
     max_speed = PURPLE_COMET.max_speed * 0.8,
+    boosted_max_speed = PURPLE_COMET.max_speed * 1.5, # strong booster
     acceleration = PURPLE_COMET.acceleration * 2,
     brake = PURPLE_COMET.brake,
     speed_loss = PURPLE_COMET.speed_loss,
+    boosted_speed_loss = PURPLE_COMET.speed_loss,
+    boost_duration = 2.25,
     centri = PURPLE_COMET.centri * 1.5,
     jump_duration_multiplier = PURPLE_COMET.jump_duration_multiplier,
     rotation_speed = PURPLE_COMET.rotation_speed * 1.3,

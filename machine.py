@@ -2,13 +2,15 @@
 # including all physics engine related data (acceleration force, max speed, ...)
 # and graphics
 class Machine:
-    def __init__(self, max_speed, acceleration, brake, speed_loss, centri, jump_duration_multiplier, rotation_speed, idle_image_path, shadow_image_path):
+    def __init__(self, max_speed, boosted_max_speed, acceleration, brake, speed_loss, boosted_speed_loss, 
+            centri, jump_duration_multiplier, boost_duration, rotation_speed, idle_image_path, shadow_image_path):
         # ----------- physics variables initialization ----------------------
 
 
 
         # top speed
         self.max_speed = max_speed
+        self.boosted_max_speed = boosted_max_speed # max speed when having a boost active
 
         # acceleration force:
         # quantity of speed added per frame in which the player has the accelerator on
@@ -24,6 +26,7 @@ class Machine:
         # in which the player is not accelerating 
         # (but neither pushing the brakes)
         self.speed_loss = speed_loss
+        self.boosted_speed_loss = boosted_speed_loss # speed loss is different when having a boost active
 
         # centrifugal force:
         # Determines how hard the machine is pushed towards the outside when steering.
@@ -34,6 +37,9 @@ class Machine:
         # in seconds,
         # multiplied with the current speed in order to determine duration of a jump
         self.jump_duration_multiplier = jump_duration_multiplier
+
+        # duration of a boost in seconds
+        self.boost_duration = boost_duration
 
         # how fast the player can rotate when steering
         self.rotation_speed = rotation_speed

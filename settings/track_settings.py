@@ -7,6 +7,10 @@ from track import Track, KeyCheckpoint
 # race configuration
 STD_REQUIRED_LAPS = 3 # number of laps normally required to finish a race
 
+# obstacle sizes for "prefab" obstacles
+DASH_PLATE_HEIGHT = 2
+DASH_PLATE_WIDTH = 2
+
 # A class that capsulates the creation of the objects representing the race tracks in memory
 # to avoid crowding the main module.
 #
@@ -81,6 +85,13 @@ class TrackCreator:
             h = 0.12
         )
 
+        # (the only) dash plate
+        dash_plate1 = CollisionRect(
+            pos = numpy.array([32.4, -150.965]),
+            w = DASH_PLATE_WIDTH,
+            h = DASH_PLATE_HEIGHT
+        )
+
         return Track(
             name = "track 2023",
             floor_texture_path = "gfx/track_2023.png",
@@ -89,6 +100,7 @@ class TrackCreator:
             key_checkpoint_rects = [rect7, rect5],
             ramp_rects = [ramp1],
             finish_line_collider = finish_line_coll,
+            dash_plate_rects = [dash_plate1],
             required_laps = STD_REQUIRED_LAPS,
             init_player_pos_x = 25.55,
             init_player_pos_y = -119.78,
@@ -117,6 +129,7 @@ class TrackCreator:
             key_checkpoint_rects = [],
             ramp_rects = [],
             finish_line_collider = finish_line_coll,
+            dash_plate_rects = [],
             required_laps = STD_REQUIRED_LAPS,
             init_player_pos_x = 25.55,
             init_player_pos_y = -119.78,
@@ -226,6 +239,7 @@ class TrackCreator:
             key_checkpoint_rects = [rect7, rect5],
             ramp_rects = [ramp1],
             finish_line_collider = finish_line_coll,
+            dash_plate_rects = [],
             required_laps = STD_REQUIRED_LAPS,
             init_player_pos_x = 25.55,
             init_player_pos_y = -119.78,

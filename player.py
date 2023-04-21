@@ -2,7 +2,7 @@ import numpy
 import pygame
 
 from settings.debug_settings import IN_DEV_MODE, COLLISION_DETECTION_OFF # debug config
-from settings.key_settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY # button mapping config
+from settings.key_settings import STD_ACCEL_KEY, STD_LEFT_KEY, STD_RIGHT_KEY, STD_BRAKE_KEY, STD_BOOST_KEY # button mapping config
 from settings.renderer_settings import NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y # rendering config
 from settings.machine_settings import PLAYER_COLLISION_RECT_WIDTH, PLAYER_COLLISION_RECT_HEIGHT # player collider config
 from settings.machine_settings import HEIGHT_DURING_JUMP
@@ -45,11 +45,13 @@ class Player(pygame.sprite.Sprite):
 
         # player status flags/variables
         self.jumping = False
-        self.jumped_off_timestamp = None # timestamp of when the player last jumped off a ramp
+        self.jumped_off_timestamp = None # timestamp when the player last jumped off a ramp
         # When jumping: this is the duration of the jump from start to landing.
         # Needed to compute the player y coordinate on screen while jumping.
         self.current_jump_duration = 0
         self.finished = False # whether the player has finished the current race
+        self.boosted = False
+        self.last_boost_started_timestamp = None # timestamp of when the player last started a boost
 
     # Updates player data and position.
     # 
@@ -60,7 +62,7 @@ class Player(pygame.sprite.Sprite):
         if IN_DEV_MODE:
             self.dev_mode_movement()
         else:
-            self.racing_mode_movement()
+            self.racing_mode_movement(time)
 
         # Store the current rectangular collider of the player
         # for use in several environment checks and updates.
@@ -73,6 +75,14 @@ class Player(pygame.sprite.Sprite):
         # Update the lap count.
         # To do so, the track object needs the current position of the player.
         self.current_race_track.update_lap_count(current_collision_rect)
+
+        # Make player boost if on dash plate.
+        if self.current_race_track.is_on_dash_plate(current_collision_rect) and not self.boosted:
+            print("You got boost power!!!")
+            self.boosted = True
+            self.last_boost_started_timestamp = time # timestamp for determining when the boost should end
+        if self.boosted:
+            self.continue_boost(time)
 
         # Make player jump if on ramp.
         if self.current_race_track.is_on_ramp(current_collision_rect) and not self.jumping:
@@ -128,9 +138,14 @@ class Player(pygame.sprite.Sprite):
         print("x: " + str(self.position[0]) + " y: " + str(self.position[1]) + " a: " + str(self.angle))
 
     # Moves the player's machine as in a race (accelerating, braking and steering).
-    def racing_mode_movement(self):
+    def racing_mode_movement(self, time):
         # collect key events
         keys = pygame.key.get_pressed()
+
+        # determine whether the player intends to start a boost in this frame
+        if keys[STD_BOOST_KEY] and not self.boosted:
+            self.last_boost_started_timestamp = time
+            self.boosted = True
         
         # Update player speed according to acceleration/brake inputs.
         # Increase speed when acceleration button pressed.
@@ -157,22 +172,24 @@ class Player(pygame.sprite.Sprite):
         # (otherwise the player would move backwards at increasing speed
         # if no button is pressed).
         else:
+            current_speed_loss = self.machine.boosted_speed_loss if self.boosted else self.machine.speed_loss
             if self.current_speed > 0:
-                self.current_speed -= self.machine.speed_loss
+                self.current_speed -= current_speed_loss
                 # Clamp speed to zero (from below) to prevent jitter.
                 if self.current_speed < 0:
                     self.current_speed = 0
             elif self.current_speed < 0:
-                self.current_speed += self.machine.speed_loss 
+                self.current_speed += current_speed_loss
                 # Clamp speed to zero (from above) to prevent jitter.
                 if self.current_speed > 0:
                     self.current_speed = 0
 
         # clamp speed between negative maximum speed and maximum speed
-        if self.current_speed < -self.machine.max_speed:
-            self.current_speed = -self.machine.max_speed
-        if self.current_speed > self.machine.max_speed:
-            self.current_speed = self.machine.max_speed
+        current_max_speed = self.machine.boosted_max_speed if self.boosted else self.machine.max_speed
+        if self.current_speed < -current_max_speed:
+            self.current_speed = -current_max_speed
+        if self.current_speed > current_max_speed:
+            self.current_speed = current_max_speed
 
         # Compute sine and cosine of current angle 
         # to be able to update player position
@@ -252,6 +269,16 @@ class Player(pygame.sprite.Sprite):
             if not self.current_race_track.is_on_track(current_collision_rect):
                 print("player out of bounds!")
 
+    # Called once per frame if the player currently has a booster active.
+    # Checks whether the booster should end since its duration has exceeded.
+    def continue_boost(self, time):
+        # compute time since boost started
+        elapsed_time = time - self.last_boost_started_timestamp
+
+        # check whether boost should end
+        if elapsed_time > self.machine.boost_duration:
+            self.boosted = False
+
     # (Re-)sets the player object to the initial position
     # for the current race track.
     # Also resets all forces that are currently applied to the player.
@@ -272,6 +299,7 @@ class Player(pygame.sprite.Sprite):
         # reset status flags
         self.jumping = False
         self.finished = False
+        self.boosted = False
 
         # reset screen position
         self.rect.topleft = [
