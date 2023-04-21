@@ -150,8 +150,10 @@ class Player(pygame.sprite.Sprite):
 
         # determine whether the player intends to start a boost in this frame
         if keys[STD_BOOST_KEY] and self.can_boost():
-            self.last_boost_started_timestamp = time
-            self.boosted = True
+            self.last_boost_started_timestamp = time # take timestamp
+            self.current_energy -= self.machine.boost_cost # boosting costs a bit of energy
+            print("current energy: " + str(self.current_energy))
+            self.boosted = True # status flag update
         
         # Update player speed according to acceleration/brake inputs.
         # Increase speed when acceleration button pressed.
@@ -286,8 +288,11 @@ class Player(pygame.sprite.Sprite):
             self.boosted = False
 
     # Determines whether the player is currently able to use their boost power.
+    # (i)   player must have booster unlocked (i.e. completed first lap, usually)
+    # (ii)  player cannot have a boost active at the moment
+    # (iii) player has to have enough energy
     def can_boost(self):
-        return self.has_boost_power and not self.boosted
+        return self.has_boost_power and not self.boosted and self.current_energy >= self.machine.boost_cost
 
     # (Re-)sets the player object to the initial position
     # for the current race track.

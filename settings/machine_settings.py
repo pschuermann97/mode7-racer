@@ -11,6 +11,13 @@ OBSTACLE_HIT_SPEED_RETENTION = 0.5 # percentage of its speed the player machine 
 # maximum energy that a machine usually
 STD_MAX_ENERGY = 100
 
+# Factor that is used to compute the amount of energy 
+# the machine loses when hitting a normal obstacle 
+# from the current speed of the player.
+# Idea: at a speed of 1500 km/h, a machine would normally lose 5 energy units
+# (not applying the individual shield strength of the machine (Machine.hit_cost)).
+HIT_COST_SPEED_FACTOR = 5 / 1500
+
 # Quadratic function that computes the height of the player during a jump
 # based on the time since the player jumped off the track.
 # 
@@ -35,6 +42,7 @@ PURPLE_COMET = Machine(
     boost_duration = 2,
     max_energy = STD_MAX_ENERGY,
     boost_cost = 12,
+    hit_cost = 1,
     rotation_speed = 0.0075,
     idle_image_path = 'gfx/violet_machine.png',
     shadow_image_path = 'gfx/violet_machine_shadow.png'
@@ -52,6 +60,7 @@ FASTER_PURPLE_COMET = Machine(
     boost_duration = 1.75,
     max_energy = STD_MAX_ENERGY,
     boost_cost = 9,
+    hit_cost = 0.5,
     rotation_speed = PURPLE_COMET.rotation_speed * 0.75,
     idle_image_path = 'gfx/violet_machine.png',
     shadow_image_path = 'gfx/violet_machine_shadow.png'
@@ -67,6 +76,7 @@ SLOWER_PURPLE_COMET = Machine(
     boost_duration = 2.25,
     max_energy = STD_MAX_ENERGY,
     boost_cost = 16,
+    hit_cost = 2,
     centri = PURPLE_COMET.centri * 1.5,
     jump_duration_multiplier = PURPLE_COMET.jump_duration_multiplier,
     rotation_speed = PURPLE_COMET.rotation_speed * 1.3,
