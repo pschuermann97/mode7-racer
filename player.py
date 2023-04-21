@@ -75,6 +75,11 @@ class Player(pygame.sprite.Sprite):
         # To do so, the track object needs the current position of the player.
         self.current_race_track.update_lap_count(current_collision_rect)
 
+        # Make player boost if on dash plate.
+        if self.current_race_track.is_on_dash_plate(current_collision_rect) and not self.boosted:
+            print("You got boost power!!!")
+            self.boosted = True
+
         # Make player jump if on ramp.
         if self.current_race_track.is_on_ramp(current_collision_rect) and not self.jumping:
             self.jumping = True # set status flag
@@ -170,10 +175,11 @@ class Player(pygame.sprite.Sprite):
                     self.current_speed = 0
 
         # clamp speed between negative maximum speed and maximum speed
-        if self.current_speed < -self.machine.max_speed:
-            self.current_speed = -self.machine.max_speed
-        if self.current_speed > self.machine.max_speed:
-            self.current_speed = self.machine.max_speed
+        current_max_speed = self.machine.boosted_max_speed if self.boosted else self.machine.max_speed
+        if self.current_speed < -current_max_speed:
+            self.current_speed = -current_max_speed
+        if self.current_speed > current_max_speed:
+            self.current_speed = current_max_speed
 
         # Compute sine and cosine of current angle 
         # to be able to update player position
