@@ -43,8 +43,8 @@ class App:
         # Initializes race track management.
         self.current_race_track_index = 0
         self.race_tracks = [
-            TrackCreator.create_track_2023_II,
             TrackCreator.create_track_2023,
+            TrackCreator.create_track_2023_II,
             TrackCreator.create_monochrome_track
         ]
         self.current_race_track = self.race_tracks[self.current_race_track_index]()
@@ -128,10 +128,10 @@ class App:
         )
 
         # Take initial timestamp that is 
-        # used for the timer that tracks the time since game start. 
+        # used for the timer that tracks the time since race start. 
         # Need to used method get_time since self.time field is not initialized at this point.
         self.get_time() # need to update current timestamp first
-        self.game_start_timestamp = self.time
+        self.race_start_timestamp = self.time
 
     def update(self):
         # updates the player based on time elapsed since game start
@@ -145,9 +145,9 @@ class App:
 
         # Update timer on UI if player has not finished the current race yet.
         if not self.player.finished:
-            seconds_since_game_start = self.time - self.game_start_timestamp
+            seconds_since_race_start = self.time - self.race_start_timestamp
             self.ui.update(
-                elapsed_milliseconds = seconds_since_game_start * 1000
+                elapsed_milliseconds = seconds_since_race_start * 1000
             )
 
         # Checks whether player has finished the race.
@@ -194,6 +194,9 @@ class App:
             bg_tex_path = self.current_race_track.bg_texture_path,
             is_foggy = True
         )
+
+        # reset timer
+        self.race_start_timestamp = self.time
 
     def draw(self):
         # draws the mode-7 environment
