@@ -161,7 +161,8 @@ class Player(pygame.sprite.Sprite):
         if keys[STD_ACCEL_KEY] and not self.finished:
             self.current_speed += self.machine.acceleration
         # Decrease speed heavily when brake button pressed.
-        elif keys[STD_BRAKE_KEY] and not self.finished:
+        # The player cannot brake when mid-air.
+        elif keys[STD_BRAKE_KEY] and not self.finished and not self.jumping:
             # case 1: player currently moves forwards
             if self.current_speed > 0:
                 self.current_speed -= self.machine.brake  
@@ -180,7 +181,9 @@ class Player(pygame.sprite.Sprite):
         # Decreasing hereby means approaching zero
         # (otherwise the player would move backwards at increasing speed
         # if no button is pressed).
-        else:
+        #
+        # In this game, the player does not lose speed while jumping.
+        elif not self.jumping:
             current_speed_loss = self.machine.boosted_speed_loss if self.boosted else self.machine.speed_loss
             if self.current_speed > 0:
                 self.current_speed -= current_speed_loss
