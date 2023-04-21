@@ -3,7 +3,7 @@
 # and graphics
 class Machine:
     def __init__(self, max_speed, boosted_max_speed, acceleration, brake, speed_loss, boosted_speed_loss, 
-            centri, jump_duration_multiplier, rotation_speed, idle_image_path, shadow_image_path):
+            centri, jump_duration_multiplier, boost_duration, rotation_speed, idle_image_path, shadow_image_path):
         # ----------- physics variables initialization ----------------------
 
 
@@ -37,6 +37,9 @@ class Machine:
         # in seconds,
         # multiplied with the current speed in order to determine duration of a jump
         self.jump_duration_multiplier = jump_duration_multiplier
+
+        # duration of a boost in seconds
+        self.boost_duration = boost_duration
 
         # how fast the player can rotate when steering
         self.rotation_speed = rotation_speed

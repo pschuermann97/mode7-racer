@@ -45,12 +45,13 @@ class Player(pygame.sprite.Sprite):
 
         # player status flags/variables
         self.jumping = False
-        self.jumped_off_timestamp = None # timestamp of when the player last jumped off a ramp
+        self.jumped_off_timestamp = None # timestamp when the player last jumped off a ramp
         # When jumping: this is the duration of the jump from start to landing.
         # Needed to compute the player y coordinate on screen while jumping.
         self.current_jump_duration = 0
         self.finished = False # whether the player has finished the current race
         self.boosted = False
+        self.last_boost_started_timestamp = None # timestamp of when the player last started a boost
 
     # Updates player data and position.
     # 
@@ -79,6 +80,9 @@ class Player(pygame.sprite.Sprite):
         if self.current_race_track.is_on_dash_plate(current_collision_rect) and not self.boosted:
             print("You got boost power!!!")
             self.boosted = True
+            self.last_boost_started_timestamp = time # timestamp for determining when the boost should end
+        if self.boosted:
+            self.continue_boost(time)
 
         # Make player jump if on ramp.
         if self.current_race_track.is_on_ramp(current_collision_rect) and not self.jumping:
@@ -259,6 +263,16 @@ class Player(pygame.sprite.Sprite):
             if not self.current_race_track.is_on_track(current_collision_rect):
                 print("player out of bounds!")
 
+    # Called once per frame if the player currently has a booster active.
+    # Checks whether the booster should end since its duration has exceeded.
+    def continue_boost(self, time):
+        # compute time since boost started
+        elapsed_time = time - self.last_boost_started_timestamp
+
+        # check whether boost should end
+        if elapsed_time > self.machine.boost_duration:
+            self.boosted = False
+
     # (Re-)sets the player object to the initial position
     # for the current race track.
     # Also resets all forces that are currently applied to the player.
@@ -279,6 +293,7 @@ class Player(pygame.sprite.Sprite):
         # reset status flags
         self.jumping = False
         self.finished = False
+        self.boosted = False
 
         # reset screen position
         self.rect.topleft = [
