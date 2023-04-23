@@ -167,10 +167,13 @@ class Player(pygame.sprite.Sprite):
             self.current_energy -= self.machine.boost_cost # boosting costs a bit of energy
             print("current energy: " + str(self.current_energy))
             self.boosted = True # status flag update
+
+        # ------------ updating player's speed ------------------
         
-        # Update player speed according to acceleration/brake inputs.
         # Increase speed when acceleration button pressed.
-        if keys[STD_ACCEL_KEY] and not self.finished:
+        # Acceleration input should be ignored when the speed currently is above the machine's current max speed.
+        current_max_speed = self.machine.boosted_max_speed if self.boosted else self.machine.max_speed
+        if keys[STD_ACCEL_KEY] and not self.finished and not self.current_speed > current_max_speed:
             self.current_speed += self.machine.acceleration * delta
         # Decrease speed heavily when brake button pressed.
         # The player cannot brake when mid-air.
@@ -196,7 +199,9 @@ class Player(pygame.sprite.Sprite):
         #
         # In this game, the player does not lose speed while jumping.
         elif not self.jumping:
-            current_speed_loss = (self.machine.boosted_speed_loss if self.boosted else self.machine.speed_loss) * delta
+            current_speed_loss = (self.machine.boosted_speed_loss 
+                if self.boosted or self.current_speed > self.machine.max_speed # stronger speed loss when machine is above its regular top speed
+                else self.machine.speed_loss) * delta
             if self.current_speed > 0:
                 self.current_speed -= current_speed_loss
                 # Clamp speed to zero (from below) to prevent jitter.
@@ -208,12 +213,7 @@ class Player(pygame.sprite.Sprite):
                 if self.current_speed > 0:
                     self.current_speed = 0
 
-        # clamp speed between negative maximum speed and maximum speed
-        current_max_speed = self.machine.boosted_max_speed if self.boosted else self.machine.max_speed
-        if self.current_speed < -current_max_speed:
-            self.current_speed = -current_max_speed
-        if self.current_speed > current_max_speed:
-            self.current_speed = current_max_speed
+        # -------- end of updating player's speed -----------
 
         # Compute sine and cosine of current angle 
         # to be able to update player position
