@@ -5,20 +5,24 @@ from settings.renderer_settings import WIDTH, HEIGHT
 
 # UI screen coordinates
 
-# shield meter
-SHIELD_METER_HEIGHT = 16
-
 # speed meter
 SPEED_METER_DIGIT_SPRITE_WIDTH = 16
 SPEED_METER_DIGIT_SPRITE_HEIGHT = 16
 RIGHT_MOST_SPEEDMETER_DIGIT_SCREEN_X_COORD = WIDTH - SPEED_METER_DIGIT_SPRITE_WIDTH
 SPEED_METER_DIGIT_SCREEN_Y_COORD = HEIGHT - 1.5 * SPEED_METER_DIGIT_SPRITE_HEIGHT # no padding in sprite so we add one of 12px in code
 
-# timer
+# energy meter
+NUM_TIMER_DIGITS = 7 # some timer-related variables need to be defined here since timer and energy bar are aligned
 TIMER_DIGIT_SPRITE_WIDTH = SPEED_METER_DIGIT_SPRITE_WIDTH
-TIMER_DIGIT_SPRITE_HEIGHT = SPEED_METER_DIGIT_SPRITE_HEIGHT
 RIGHT_MOST_TIMER_DIGIT_SCREEN_X_COORD = WIDTH - TIMER_DIGIT_SPRITE_WIDTH
-TIMER_DIGIT_SCREEN_Y_COORD = SHIELD_METER_HEIGHT # timer should be right below the shield meter
+ENERGY_METER_HEIGHT = 16
+ENERGY_METER_TOP_Y = 4 # offset of the energy meter from the top of the screen
+ENERGY_METER_LEFT_X = RIGHT_MOST_TIMER_DIGIT_SCREEN_X_COORD - TIMER_DIGIT_SPRITE_WIDTH * NUM_TIMER_DIGITS
+
+# timer
+
+TIMER_DIGIT_SPRITE_HEIGHT = SPEED_METER_DIGIT_SPRITE_HEIGHT
+TIMER_DIGIT_SCREEN_Y_COORD = ENERGY_METER_TOP_Y + ENERGY_METER_HEIGHT # timer should be right below the shield meter
 TIMER_PADDING = TIMER_DIGIT_SPRITE_WIDTH / 2 # padding between minutes and seconds, seconds and milliseconds
 # Computes the individual x offset for the timer digits
 # (note that there are gaps 

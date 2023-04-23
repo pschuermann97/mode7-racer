@@ -45,3 +45,5 @@ class UI:
         self.timer_sprites[6].image = NUMBER_IMAGES[
             (int(elapsed_milliseconds) // 600000) % 10
         ]
+
+        # draw energy bar

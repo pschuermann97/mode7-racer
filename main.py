@@ -232,6 +232,9 @@ class App:
         # draws UI sprites to screen
         self.ui_sprites.draw(self.screen)
 
+        # draws debug objects like energy bar
+        self.draw_debug_objects()
+
         # update the contents of the whole display
         pygame.display.flip()
 
@@ -284,6 +287,19 @@ class App:
         # log player speed
         # if keys[pygame.K_p]:
         #     print("player speed:" + str(self.player.current_speed))
+
+    def draw_debug_objects(self):
+        # draw debug mode energy bar to screen
+        pygame.draw.rect(
+            self.screen, 
+            pygame.Color(160, 0, 0), 
+            pygame.Rect(
+                ENERGY_METER_LEFT_X, # left
+                ENERGY_METER_TOP_Y, # top
+                (RIGHT_MOST_TIMER_DIGIT_SCREEN_X_COORD - ENERGY_METER_LEFT_X) * (self.player.current_energy / self.player.machine.max_energy), # pos x
+                ENERGY_METER_TOP_Y + (ENERGY_METER_HEIGHT / 2) # pos y
+            )
+        )
 
 # Execution of game loop if executed as a script.
 if __name__ == '__main__':
