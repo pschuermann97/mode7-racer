@@ -104,7 +104,6 @@ class Player(pygame.sprite.Sprite):
             self.current_energy += self.machine.recover_speed * delta
             if self.current_energy > self.machine.max_energy:
                 self.current_energy = self.machine.max_energy
-            print("current energy: " + str(self.current_energy))
 
 
     # Moves and rotates the camera freely based on player input. 
@@ -165,7 +164,6 @@ class Player(pygame.sprite.Sprite):
         if keys[STD_BOOST_KEY] and self.can_boost():
             self.last_boost_started_timestamp = time # take timestamp
             self.current_energy -= self.machine.boost_cost # boosting costs a bit of energy
-            print("current energy: " + str(self.current_energy))
             self.boosted = True # status flag update
 
         # ------------ updating player's speed ------------------
@@ -255,7 +253,6 @@ class Player(pygame.sprite.Sprite):
                 # Lastly, the individual body strength of the machine is taken into account.
                 lost_energy = (abs(self.current_speed) * HIT_COST_SPEED_FACTOR) * self.machine.hit_cost
                 self.current_energy -= lost_energy
-                print("current energy: " + str(self.current_energy))
                 
                 # player machine is destroyed if it has taken more damage than it can sustain
                 if self.current_energy < 0:
@@ -305,6 +302,7 @@ class Player(pygame.sprite.Sprite):
                 PLAYER_COLLISION_RECT_HEIGHT
             )
             if not self.current_race_track.is_on_track(current_collision_rect):
+                self.current_energy = -1 # leads to destruction of player machine in next frame since energy < 0
                 print("player out of bounds!")
 
     # Called once per frame if the player currently has a booster active.
