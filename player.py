@@ -62,12 +62,13 @@ class Player(pygame.sprite.Sprite):
     # 
     # Parameters:
     # time: number of frames since the game started
-    def update(self, time):
+    def update(self, time, delta):
+        
         # move player according to steering inputs and current speed
         if IN_DEV_MODE:
             self.dev_mode_movement()
         elif not self.destroyed:
-            self.racing_mode_movement(time)
+            self.racing_mode_movement(time, delta)
 
         # Store the current rectangular collider of the player
         # for use in several environment checks and updates.
@@ -100,7 +101,7 @@ class Player(pygame.sprite.Sprite):
         # Make player recover energy if in recovery zone.
         # Jumping over a recovery zone of course does not count.
         if self.current_race_track.is_on_recovery_zone(current_collision_rect) and not self.jumping:
-            self.current_energy += self.machine.recover_speed
+            self.current_energy += self.machine.recover_speed * delta
             if self.current_energy > self.machine.max_energy:
                 self.current_energy = self.machine.max_energy
             print("current energy: " + str(self.current_energy))
@@ -155,7 +156,8 @@ class Player(pygame.sprite.Sprite):
     #
     # Parameters:
     # time - the timestamp of the frame update in which this call was made
-    def racing_mode_movement(self, time):
+    # delta - the time between this frame and the previous frame
+    def racing_mode_movement(self, time, delta):
         # collect key events
         keys = pygame.key.get_pressed()
 
@@ -169,20 +171,20 @@ class Player(pygame.sprite.Sprite):
         # Update player speed according to acceleration/brake inputs.
         # Increase speed when acceleration button pressed.
         if keys[STD_ACCEL_KEY] and not self.finished:
-            self.current_speed += self.machine.acceleration
+            self.current_speed += self.machine.acceleration * delta
         # Decrease speed heavily when brake button pressed.
         # The player cannot brake when mid-air.
         elif keys[STD_BRAKE_KEY] and not self.finished and not self.jumping:
             # case 1: player currently moves forwards
             if self.current_speed > 0:
-                self.current_speed -= self.machine.brake  
+                self.current_speed -= self.machine.brake * delta 
                 # Clamp speed to zero since the player
                 # should not be able to drive backwards.
                 if self.current_speed < 0:
                     self.current_speed = 0
             # case 2: player currently moves backwards (e.g. because of bouncing back)
             elif self.current_speed < 0:
-                self.current_speed += self.machine.brake
+                self.current_speed += self.machine.brake * delta
                 # Clamp speed to zero since the player 
                 # should not go forward again
                 if self.current_speed > 0:
@@ -194,7 +196,7 @@ class Player(pygame.sprite.Sprite):
         #
         # In this game, the player does not lose speed while jumping.
         elif not self.jumping:
-            current_speed_loss = self.machine.boosted_speed_loss if self.boosted else self.machine.speed_loss
+            current_speed_loss = (self.machine.boosted_speed_loss if self.boosted else self.machine.speed_loss) * delta
             if self.current_speed > 0:
                 self.current_speed -= current_speed_loss
                 # Clamp speed to zero (from below) to prevent jitter.
@@ -221,7 +223,7 @@ class Player(pygame.sprite.Sprite):
 
         # Store the scaled versions of those two values for convenience.
         speed_sin, speed_cos = self.current_speed * sin_a, self.current_speed * cos_a # speed
-        cf_sin, cf_cos = self.machine.centri * speed_sin * -1, self.machine.centri * speed_cos * -1 # centrifugal forces
+        cf_sin, cf_cos = self.machine.centri * speed_sin * -1 * delta, self.machine.centri * speed_cos * -1 * delta # centrifugal forces
 
         # Compute player's position in the next frame including the moved collision rect.
         next_frame_position_x = self.position[0] + speed_cos
@@ -263,13 +265,13 @@ class Player(pygame.sprite.Sprite):
         # Steering.
         if keys[STD_LEFT_KEY] and not self.finished:
             # rotate player
-            self.angle += self.machine.rotation_speed
+            self.angle += self.machine.rotation_speed * delta
 
             # apply centrifugal force
             self.position[0] += -cf_sin
             self.position[1] += cf_cos
         if keys[STD_RIGHT_KEY] and not self.finished:
-            self.angle -= self.machine.rotation_speed
+            self.angle -= self.machine.rotation_speed * delta
 
             self.position[0] += cf_sin
             self.position[1] += -cf_cos

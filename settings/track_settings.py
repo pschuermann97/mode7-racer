@@ -138,6 +138,7 @@ class TrackCreator:
             ramp_rects = [],
             finish_line_collider = finish_line_coll,
             dash_plate_rects = [],
+            recovery_rects = [],
             required_laps = STD_REQUIRED_LAPS,
             init_player_pos_x = 25.55,
             init_player_pos_y = -119.78,

@@ -69,10 +69,20 @@ class App:
         else:
             player_machine = DEFAULT_MACHINE # default machine can be changed in settings.machine_settings
 
+        # Timestamp of the last frame rendered.
+        # Needed to make up for different framerates on different machines.
+        # If physics-related operations like accelerating, braking, restoring health, ...
+        # are not scaled with the time between this frame and the last frame,
+        # players with faster framerate accelerate faster etc.
+        # because more frame updates in computed in the same time.
+        self.get_time()
+        self.last_frame = self.time
+
         # Creates a player instance and
         # assigns the race track to the player.
         # The player needs to know which race track they are driving on
-        # so they can check whether they would leave the track with their movement in the current frame.
+        # so they can check whether they would leave the track with their movement in the current frame
+        # or are hitting a track gimmick.
         self.player = Player(
             machine = player_machine,
             init_pos_x = self.current_race_track.init_player_pos_x,
@@ -130,12 +140,14 @@ class App:
         # Take initial timestamp that is 
         # used for the timer that tracks the time since race start. 
         # Need to used method get_time since self.time field is not initialized at this point.
-        self.get_time() # need to update current timestamp first
         self.race_start_timestamp = self.time
 
     def update(self):
+        # computes time since last frame
+        delta = self.time - self.last_frame
+        
         # updates the player based on time elapsed since game start
-        self.player.update(self.time)
+        self.player.update(self.time, delta)
 
         # updates camera position (which is done mainly based on player position)
         self.camera.update()
@@ -175,6 +187,9 @@ class App:
 
         # log output for debug
         self.debug_logs()
+
+        # timestamp of current frame for delta computation in next frame
+        self.last_frame = self.time
 
     # Starts the next race 
     # according to the race track list created in the constructor.

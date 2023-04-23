@@ -32,21 +32,23 @@ def HEIGHT_DURING_JUMP(time, jump_duration):
 
 # machines that are playable in the game
 
+PURPLE_COMET_ACCELERATION = 10 / 750
+
 PURPLE_COMET = Machine(
     max_speed = 0.05,
     boosted_max_speed = 0.06,
-    acceleration = 0.05 / 750, # 750 frame update units to get to top speed
-    brake = (0.05 / 750) * 2, # brake is twice as strong as accelerator
-    speed_loss = (0.05 / 750) / 3, # speed loss is a third the strength of the accelerator
-    boosted_speed_loss = (0.05 / 750) / 6,
-    centri = 0.3, # 50% of current speed applied as centrifugal force
+    acceleration = PURPLE_COMET_ACCELERATION, # 750 frame update units to get to top speed
+    brake = PURPLE_COMET_ACCELERATION * 2, # brake is twice as strong as accelerator
+    speed_loss = PURPLE_COMET_ACCELERATION / 3, # speed loss is a third the strength of the accelerator
+    boosted_speed_loss = PURPLE_COMET_ACCELERATION / 6,
+    centri = 30, # 50% of current speed applied as centrifugal force
     jump_duration_multiplier = 2 / 0.05, # jump should last 2 seconds if machine at max speed
     boost_duration = 2,
     max_energy = STD_MAX_ENERGY,
     boost_cost = 12,
     hit_cost = 1,
-    recover_speed = 0.025,
-    rotation_speed = 0.0075,
+    recover_speed = 9,
+    rotation_speed = 2.5,
     idle_image_path = 'gfx/violet_machine.png',
     shadow_image_path = 'gfx/violet_machine_shadow.png'
 )
