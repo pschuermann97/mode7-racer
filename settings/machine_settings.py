@@ -33,6 +33,8 @@ def HEIGHT_DURING_JUMP(time, jump_duration):
 # machines that are playable in the game
 
 PURPLE_COMET_ACCELERATION = 10 / 750
+PURPLE_COMET_IDLE_IMAGE_PATH = "gfx/machines/purple_comet/violet_machine0000.png"
+PURPLE_COMET_SHADOW_IMAGE_PATH = "gfx/machines/purple_comet/violet_machine_shadow.png"
 
 PURPLE_COMET = Machine(
     max_speed = 0.05,
@@ -49,8 +51,8 @@ PURPLE_COMET = Machine(
     hit_cost = 1,
     recover_speed = 13,
     rotation_speed = 2.5,
-    idle_image_path = 'gfx/violet_machine.png',
-    shadow_image_path = 'gfx/violet_machine_shadow.png'
+    idle_image_path = PURPLE_COMET_IDLE_IMAGE_PATH,
+    shadow_image_path = PURPLE_COMET_SHADOW_IMAGE_PATH
 )
 
 FASTER_PURPLE_COMET = Machine(
@@ -68,8 +70,8 @@ FASTER_PURPLE_COMET = Machine(
     hit_cost = 0.5,
     recover_speed = PURPLE_COMET.recover_speed / 2,
     rotation_speed = PURPLE_COMET.rotation_speed * 0.75,
-    idle_image_path = 'gfx/violet_machine.png',
-    shadow_image_path = 'gfx/violet_machine_shadow.png'
+    idle_image_path = PURPLE_COMET_IDLE_IMAGE_PATH,
+    shadow_image_path = PURPLE_COMET_SHADOW_IMAGE_PATH
 )
 
 SLOWER_PURPLE_COMET = Machine(
@@ -87,8 +89,8 @@ SLOWER_PURPLE_COMET = Machine(
     centri = PURPLE_COMET.centri * 1.5,
     jump_duration_multiplier = PURPLE_COMET.jump_duration_multiplier,
     rotation_speed = PURPLE_COMET.rotation_speed * 1.3,
-    idle_image_path = 'gfx/violet_machine.png',
-    shadow_image_path = 'gfx/violet_machine_shadow.png'
+    idle_image_path = PURPLE_COMET_IDLE_IMAGE_PATH,
+    shadow_image_path = PURPLE_COMET_SHADOW_IMAGE_PATH
 )
 
 MACHINES = [PURPLE_COMET, FASTER_PURPLE_COMET, SLOWER_PURPLE_COMET]
