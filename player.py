@@ -10,6 +10,8 @@ from settings.machine_settings import OBSTACLE_HIT_SPEED_RETENTION
 
 from collision import CollisionRect
 
+from animation import AnimatedMachine
+
 class Player(pygame.sprite.Sprite):
     # Constructor.
     # machine: the machine that is controlled by this player
