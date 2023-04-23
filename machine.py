@@ -3,8 +3,8 @@
 # and graphics
 class Machine:
     def __init__(self, max_speed, boosted_max_speed, acceleration, brake, speed_loss, boosted_speed_loss, 
-            centri, jump_duration_multiplier, boost_duration, max_energy, boost_cost, hit_cost, rotation_speed, 
-            idle_image_path, shadow_image_path):
+            centri, jump_duration_multiplier, boost_duration, max_energy, boost_cost, hit_cost, recover_speed,
+            rotation_speed, idle_image_path, shadow_image_path):
         # ----------- physics variables initialization ----------------------
 
 
@@ -50,6 +50,9 @@ class Machine:
 
         # used in determining the amount of energy the machine loses when hitting obstacles
         self.hit_cost = hit_cost
+
+        # how fast the machine recovers energy when in a recovery zone
+        self.recover_speed = recover_speed
 
         # how fast the player can rotate when steering
         self.rotation_speed = rotation_speed

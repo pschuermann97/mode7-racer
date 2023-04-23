@@ -82,7 +82,8 @@ class Player(pygame.sprite.Sprite):
         self.current_race_track.update_lap_count(current_collision_rect)
 
         # Make player boost if on dash plate.
-        if self.current_race_track.is_on_dash_plate(current_collision_rect) and not self.boosted:
+        # Jumping over a dash plate of course does not lead to a boost.
+        if self.current_race_track.is_on_dash_plate(current_collision_rect) and not self.jumping and not self.boosted:
             self.boosted = True
             self.last_boost_started_timestamp = time # timestamp for determining when the boost should end
         if self.boosted:
@@ -96,7 +97,14 @@ class Player(pygame.sprite.Sprite):
         if self.jumping:
             self.continue_jump(time)
 
-        # make player recover energy if in recovery zone
+        # Make player recover energy if in recovery zone.
+        # Jumping over a recovery zone of course does not count.
+        if self.current_race_track.is_on_recovery_zone(current_collision_rect) and not self.jumping:
+            self.current_energy += self.machine.recover_speed
+            if self.current_energy > self.machine.max_energy:
+                self.current_energy = self.machine.max_energy
+            print("current energy: " + str(self.current_energy))
+
 
     # Moves and rotates the camera freely based on player input. 
     def dev_mode_movement(self):
