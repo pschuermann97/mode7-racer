@@ -34,7 +34,7 @@ class Animation:
     # This is what makes the animation playback speed independent of the framerate
     # of the hardware that currently executes the game.
     def advance(self, delta):
-        self.frame_position += delta * speed
+        self.frame_position += delta * self.speed
 
         # in case of overflow, wrap around
         while self.frame_position > self.length():
@@ -43,7 +43,7 @@ class Animation:
     # Returns the current frame of this animation.
     def current_frame(self):
         # integer type cast cuts the fractional part, effectively flooring the number
-        return self.frames[int(self.frame_position)]
+        return self.frames[int(self.frame_position) % self.length()]
 
 
 
@@ -72,7 +72,7 @@ class AnimatedObject:
     # 
     # Parameters:
     # delta -  time since the last rendered game frame and the current one
-    def advance(self, delta):
+    def advance_current_animation(self, delta):
         self.current_anim.advance(delta)
 
 
@@ -80,7 +80,7 @@ class AnimatedObject:
 # A class handling the animations for the machines that are controllable in the game.
 class AnimatedMachine(AnimatedObject):
     def __init__(self, driving_anim, idle_anim):
-        self.animations = { "idle": idle_anim, "driving": driving_anim }
+        super().__init__({ "idle": idle_anim, "driving": driving_anim })
 
     def switch_to_driving_animation(self):
         self.switch_animation("driving")

@@ -1,6 +1,8 @@
 # Settings for the machines that are controllable in the game.
 
+import pygame
 from machine import Machine
+from animation import Animation
 
 # physics variables of the player machine
 PLAYER_COLLISION_RECT_WIDTH = 1 # width of the player collider (the same for all machines)
@@ -29,12 +31,33 @@ HIT_COST_SPEED_FACTOR = 5 / 0.05
 def HEIGHT_DURING_JUMP(time, jump_duration):
     return - ( time * ( time - jump_duration ) ) * JUMP_HEIGHT
 
+# speed of the animations of the machines
+DRIVING_ANIM_SPEED = 12
+IDLE_ANIM_SPEED = 12
 
 # machines that are playable in the game
 
+PURPLE_COMET_GRAPHICS_ROOT_PATH = "gfx/machines/purple_comet/"
+
 PURPLE_COMET_ACCELERATION = 10 / 750
-PURPLE_COMET_IDLE_IMAGE_PATH = "gfx/machines/purple_comet/violet_machine0000.png"
-PURPLE_COMET_SHADOW_IMAGE_PATH = "gfx/machines/purple_comet/violet_machine_shadow.png"
+PURPLE_COMET_SHADOW_IMAGE_PATH = PURPLE_COMET_GRAPHICS_ROOT_PATH + "violet_machine_shadow.png"
+
+PURPLE_COMET_DRIVING_ANIMATION = Animation(
+    frames = [
+        pygame.image.load(PURPLE_COMET_GRAPHICS_ROOT_PATH + "violet_machine0001.png"),
+        pygame.image.load(PURPLE_COMET_GRAPHICS_ROOT_PATH + "violet_machine0002.png"),
+        pygame.image.load(PURPLE_COMET_GRAPHICS_ROOT_PATH + "violet_machine0003.png"),
+        pygame.image.load(PURPLE_COMET_GRAPHICS_ROOT_PATH + "violet_machine0004.png")
+    ],
+    speed = DRIVING_ANIM_SPEED
+)
+
+PURPLE_COMET_IDLE_ANIMATION = Animation(
+    frames = [
+        pygame.image.load(PURPLE_COMET_GRAPHICS_ROOT_PATH + "violet_machine0000.png")
+    ],
+    speed = IDLE_ANIM_SPEED
+)
 
 PURPLE_COMET = Machine(
     max_speed = 0.05,
@@ -51,7 +74,8 @@ PURPLE_COMET = Machine(
     hit_cost = 1,
     recover_speed = 13,
     rotation_speed = 2.5,
-    idle_image_path = PURPLE_COMET_IDLE_IMAGE_PATH,
+    idle_anim = PURPLE_COMET_IDLE_ANIMATION,
+    driving_anim = PURPLE_COMET_DRIVING_ANIMATION,
     shadow_image_path = PURPLE_COMET_SHADOW_IMAGE_PATH
 )
 
@@ -70,7 +94,8 @@ FASTER_PURPLE_COMET = Machine(
     hit_cost = 0.5,
     recover_speed = PURPLE_COMET.recover_speed / 2,
     rotation_speed = PURPLE_COMET.rotation_speed * 0.75,
-    idle_image_path = PURPLE_COMET_IDLE_IMAGE_PATH,
+    idle_anim = PURPLE_COMET_IDLE_ANIMATION,
+    driving_anim = PURPLE_COMET_DRIVING_ANIMATION,
     shadow_image_path = PURPLE_COMET_SHADOW_IMAGE_PATH
 )
 
@@ -89,7 +114,8 @@ SLOWER_PURPLE_COMET = Machine(
     centri = PURPLE_COMET.centri * 1.5,
     jump_duration_multiplier = PURPLE_COMET.jump_duration_multiplier,
     rotation_speed = PURPLE_COMET.rotation_speed * 1.3,
-    idle_image_path = PURPLE_COMET_IDLE_IMAGE_PATH,
+    idle_anim = PURPLE_COMET_IDLE_ANIMATION,
+    driving_anim = PURPLE_COMET_DRIVING_ANIMATION,
     shadow_image_path = PURPLE_COMET_SHADOW_IMAGE_PATH
 )
 

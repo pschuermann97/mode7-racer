@@ -12,7 +12,7 @@ from collision import CollisionRect
 
 from animation import AnimatedMachine
 
-class Player(pygame.sprite.Sprite):
+class Player(pygame.sprite.Sprite, AnimatedMachine):
     # Constructor.
     # machine: the machine that is controlled by this player
     # current_race_track: the track that the player is playing
@@ -28,12 +28,21 @@ class Player(pygame.sprite.Sprite):
         # current amount of energy that the machine has left
         self.current_energy = self.machine.max_energy
 
+        # initialize animation variables by calling respective super class constructor
+        AnimatedMachine.__init__(self, 
+            idle_anim = self.machine.idle_anim,
+            driving_anim = self.machine.driving_anim
+        )
+        
+        # switch animation to initial one
+        self.switch_animation("driving")
+
         # Rendering variables (for machine without shadow).
         # The x coordinate of the player is always fixed,
         # the y coordinate usually fixed as well 
         # changed according to some configured quadratic function during a jump. 
-        super().__init__() # calling constructor of pygame's Sprite class (responsible for rendering)
-        self.image = pygame.image.load(self.machine.idle_image_path)
+        pygame.sprite.Sprite.__init__(self) # calling constructor of pygame's Sprite class (responsible for rendering)
+        self.image = self.current_frame()
         self.rect = self.image.get_rect()
         self.rect.topleft = [NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y]
 
@@ -45,8 +54,9 @@ class Player(pygame.sprite.Sprite):
         # shadow sprite is created in a way that it is fine if player + shadow are at same screen coordinates
         self.shadow_sprite.rect.topleft = [NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y]
 
-        # collision
-        self.current_race_track = current_race_track # race track collision map reference
+        # race track collision map reference
+        # in order to be able to react to environment
+        self.current_race_track = current_race_track
 
         # player status flags/variables
         self.jumping = False
@@ -65,7 +75,6 @@ class Player(pygame.sprite.Sprite):
     # Parameters:
     # time: number of frames since the game started
     def update(self, time, delta):
-        
         # move player according to steering inputs and current speed
         if IN_DEV_MODE:
             self.dev_mode_movement()
@@ -106,6 +115,10 @@ class Player(pygame.sprite.Sprite):
             self.current_energy += self.machine.recover_speed * delta
             if self.current_energy > self.machine.max_energy:
                 self.current_energy = self.machine.max_energy
+
+        # advance player's current animation and update the image of the player sprite
+        self.advance_current_animation(delta)
+        self.image = self.current_frame()
 
 
     # Moves and rotates the camera freely based on player input. 

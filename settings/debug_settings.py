@@ -10,4 +10,4 @@ COLLISION_DETECTION_OFF = False
 
 # whether the debug menu for choosing a machine appears before starting the game
 DEBUG_CHOOSE_MACHINE = False
-DEFAULT_MACHINE = MACHINES[2]
+DEFAULT_MACHINE = MACHINES[1]
