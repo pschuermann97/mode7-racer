@@ -96,6 +96,8 @@ class Player(pygame.sprite.Sprite):
         if self.jumping:
             self.continue_jump(time)
 
+        # make player recover energy if in recovery zone
+
     # Moves and rotates the camera freely based on player input. 
     def dev_mode_movement(self):
         # Compute sine and cosine of current angle 

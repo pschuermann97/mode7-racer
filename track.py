@@ -6,7 +6,7 @@
 # as well as for the skybox-like background.
 class Track:
     def __init__(self, name, floor_texture_path, bg_texture_path, track_surface_rects, key_checkpoint_rects, ramp_rects, finish_line_collider, 
-            dash_plate_rects, required_laps, init_player_pos_x, init_player_pos_y, init_player_angle):
+            dash_plate_rects, recovery_rects, required_laps, init_player_pos_x, init_player_pos_y, init_player_angle):
         self.name = name
 
         # texture variables
@@ -22,6 +22,8 @@ class Track:
         self.finish_line_collider = finish_line_collider
 
         self.dash_plate_rects = dash_plate_rects
+
+        self.recovery_zone_rects = recovery_rects
 
         self.player_completed_laps = 0 # race track counts laps the player has completed
         self.required_laps = required_laps
@@ -47,6 +49,16 @@ class Track:
     # other (CollisionRect)
     def is_on_dash_plate(self, other):
         for rect_coll in self.dash_plate_rects:
+            if rect_coll.overlap(other):
+                return True
+        return False
+
+    # Determines whether the passed rectangular collider hits a recovery zone on the track.
+    #
+    # Parameters:
+    # other (CollisionRect)
+    def is_on_recovery_zone(self, other):
+        for rect_coll in self.recovery_zone_rects:
             if rect_coll.overlap(other):
                 return True
         return False

@@ -92,6 +92,13 @@ class TrackCreator:
             h = DASH_PLATE_HEIGHT
         )
 
+        # (the only) recovery zone
+        recovery_zone_1 = CollisionRect(
+            pos = numpy.array([67.99, -75.64]),
+            w = 2.28,
+            h = 61.54
+        )
+
         return Track(
             name = "track 2023",
             floor_texture_path = "gfx/track_2023.png",
@@ -101,6 +108,7 @@ class TrackCreator:
             ramp_rects = [ramp1],
             finish_line_collider = finish_line_coll,
             dash_plate_rects = [dash_plate1],
+            recovery_rects = [recovery_zone_1],
             required_laps = STD_REQUIRED_LAPS,
             init_player_pos_x = 25.55,
             init_player_pos_y = -119.78,
@@ -289,7 +297,7 @@ class TrackCreator:
             h = DASH_PLATE_HEIGHT
         )
 
-        # ------------ dash plate collider creation ---------------------------
+        # ------------ end of dash plate collider creation ---------------------------
 
         # finish line collider
         finish_line_coll = CollisionRect(
@@ -305,6 +313,13 @@ class TrackCreator:
             h = 0.12
         )
 
+        # (the only) recovery
+        recovery_zone_1 = CollisionRect(
+            pos = numpy.array([56.81, -141.72]),
+            w = 6.8,
+            h = 24.21
+        )
+
         return Track(
             name = "track 2023 II",
             floor_texture_path = "gfx/track_2023_II.png",
@@ -314,6 +329,7 @@ class TrackCreator:
             ramp_rects = [ramp1],
             finish_line_collider = finish_line_coll,
             dash_plate_rects = [dash_plate1, dash_plate2, dash_plate3, dash_plate4, dash_plate_left, dash_plate_middle, dash_plate_right],
+            recovery_rects = [recovery_zone_1],
             required_laps = STD_REQUIRED_LAPS,
             init_player_pos_x = 25.55,
             init_player_pos_y = -119.78,
