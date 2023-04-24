@@ -101,18 +101,12 @@ class TrackCreator:
 
         return Track(
             name = "track 2023",
-            floor_texture_path = "gfx/track_2023.png",
-            bg_texture_path = "gfx/track_2023_bg_resized.png",
             track_surface_rects = [rect1, rect2, rect3, rect4, rect5, rect6, rect7],
             key_checkpoint_rects = [rect7, rect5],
             ramp_rects = [ramp1],
             finish_line_collider = finish_line_coll,
             dash_plate_rects = [dash_plate1],
-            recovery_rects = [recovery_zone_1],
-            required_laps = STD_REQUIRED_LAPS,
-            init_player_pos_x = 25.55,
-            init_player_pos_y = -119.78,
-            init_player_angle = -111.56
+            recovery_rects = [recovery_zone_1]
         )
 
     # for now this is just an empty track with the monochrome environment texture set
@@ -131,18 +125,12 @@ class TrackCreator:
 
         return Track(
             name = "monochrome_track",
-            floor_texture_path = "gfx/monochrome_track.png",
-            bg_texture_path = "gfx/monochrome_track_bg.png",
             track_surface_rects = [track_surface],
             key_checkpoint_rects = [],
             ramp_rects = [],
             finish_line_collider = finish_line_coll,
             dash_plate_rects = [],
-            recovery_rects = [],
-            required_laps = STD_REQUIRED_LAPS,
-            init_player_pos_x = 25.55,
-            init_player_pos_y = -119.78,
-            init_player_angle = -111.56
+            recovery_rects = []
         )
 
     # Creates the collision shape for the track whose sprite is named "track_2023_II.png".
@@ -323,16 +311,10 @@ class TrackCreator:
 
         return Track(
             name = "track 2023 II",
-            floor_texture_path = "gfx/track_2023_II.png",
-            bg_texture_path = "gfx/track_2023_bg_resized.png",
             track_surface_rects = [rect1, rect2, rect3, rect4, rect5, rect7, rect8, rect9, rect10, rect11, rect12, rect13, rect14],
             key_checkpoint_rects = [rect7, rect5],
             ramp_rects = [ramp1],
             finish_line_collider = finish_line_coll,
             dash_plate_rects = [dash_plate1, dash_plate2, dash_plate3, dash_plate4, dash_plate_left, dash_plate_middle, dash_plate_right],
-            recovery_rects = [recovery_zone_1],
-            required_laps = STD_REQUIRED_LAPS,
-            init_player_pos_x = 25.55,
-            init_player_pos_y = -119.78,
-            init_player_angle = -111.56
+            recovery_rects = [recovery_zone_1]
         )

@@ -14,6 +14,7 @@ from mode7 import Mode7
 from player import Player
 from camera import Camera
 from track import Track
+from race import Race
 from settings.track_settings import TrackCreator
 from ui import UI
 
@@ -41,20 +42,47 @@ class App:
         self.ui_sprites = pygame.sprite.Group()
 
         # Initializes race track management.
-        self.current_race_track_index = 0
-        self.race_tracks = [
-            TrackCreator.create_track_2023,
-            TrackCreator.create_track_2023_II,
-            TrackCreator.create_monochrome_track
+        self.current_race_index = 0
+        self.races = [
+            Race(
+                race_track_creator = TrackCreator.create_track_2023,
+                floor_tex_path = "gfx/track_2023.png",
+                bg_tex_path = "gfx/track_2023_bg_resized.png",
+                required_laps = STD_REQUIRED_LAPS,
+                race_mode = "time-attack",
+                init_player_pos_x = 25.55,
+                init_player_pos_y = -119.78,
+                init_player_angle = -111.56
+            ),
+            Race(
+                race_track_creator = TrackCreator.create_track_2023_II,
+                floor_tex_path = "gfx/track_2023_II.png",
+                bg_tex_path = "gfx/track_2023_bg_resized.png",
+                required_laps = STD_REQUIRED_LAPS,
+                race_mode = "time-attack",
+                init_player_pos_x = 25.55,
+                init_player_pos_y = -119.78,
+                init_player_angle = -111.56
+            ),
+            Race(
+                race_track_creator = TrackCreator.create_monochrome_track,
+                floor_tex_path = "gfx/monochrome_track.png",
+                bg_tex_path = "gfx/monochrome_track_bg.png",
+                required_laps = STD_REQUIRED_LAPS,
+                race_mode = "time_attack",
+                init_player_pos_x = 25.55,
+                init_player_pos_y = -119.78,
+                init_player_angle = -111.56
+            )
         ]
-        self.current_race_track = self.race_tracks[self.current_race_track_index]()
+        self.current_race = self.races[self.current_race_index]
 
         # Initializes the mode-7 renderer.
         # Third parameter determines whether the rendered scene has a fog effect or not.
         self.mode7 = Mode7(
             app = self, 
-            floor_tex_path = self.current_race_track.floor_texture_path, 
-            bg_tex_path = self.current_race_track.bg_texture_path,
+            floor_tex_path = self.current_race.floor_texture_path, 
+            bg_tex_path = self.current_race.bg_texture_path,
             is_foggy = True
         )
 
@@ -85,10 +113,7 @@ class App:
         # or are hitting a track gimmick.
         self.player = Player(
             machine = player_machine,
-            init_pos_x = self.current_race_track.init_player_pos_x,
-            init_pos_y = self.current_race_track.init_player_pos_y,
-            init_angle = self.current_race_track.init_player_angle,
-            current_race_track = self.current_race_track
+            current_race = self.current_race
         )
 
         # need to add the player instance and the player shadow sprite to sprite group to be able to render it
@@ -164,7 +189,7 @@ class App:
 
         # Checks whether player has finished the race.
         # If so, a status flag is set in the player instance if not done already.
-        if self.current_race_track.player_finished_race() and not self.player.finished:
+        if self.current_race.player_finished_race() and not self.player.finished:
             self.player.finished = True
 
         # load next race if player finished the current one
@@ -174,7 +199,7 @@ class App:
 
         # Checks whether player has completed at least one lap
         # and activates their boost power if so (and not activated yet).
-        if self.current_race_track.player_completed_first_lap() and not self.player.has_boost_power:
+        if self.current_race.player_completed_first_lap() and not self.player.has_boost_power:
             self.player.has_boost_power = True
             print("You got boost power!!!")
 
@@ -192,18 +217,16 @@ class App:
         self.last_frame = self.time
 
     # Starts the next race 
-    # according to the race track list created in the constructor.
+    # according to the race list created in the constructor.
     def next_race(self):
         # increase counter
-        self.current_race_track_index += 1
+        self.current_race_index += 1
         
-        # Create track and store it as the current track.
-        # The field race_tracks contains some imported static methods
-        # that create RaceTrack objects.
-        self.current_race_track = self.race_tracks[self.current_race_track_index]()
+        # Update race data reference
+        self.current_race = self.races[self.current_race_index]
 
         # assign player the new race track
-        self.player.current_race_track = self.current_race_track
+        self.player.current_race = self.current_race
         
         # reset player to starting position of (new) race track
         self.player.reinitialize()
@@ -211,8 +234,8 @@ class App:
         # replace renderer field with Mode-7 renderer for the new race track 
         self.mode7 = Mode7(
             app = self,
-            floor_tex_path = self.current_race_track.floor_texture_path,
-            bg_tex_path = self.current_race_track.bg_texture_path,
+            floor_tex_path = self.current_race.floor_texture_path,
+            bg_tex_path = self.current_race.bg_texture_path,
             is_foggy = True
         )
 

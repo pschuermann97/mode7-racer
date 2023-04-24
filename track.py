@@ -5,13 +5,9 @@
 # Parameters floor_texture_path and bg_texture_path are the paths to the textures for the track and planet 
 # as well as for the skybox-like background.
 class Track:
-    def __init__(self, name, floor_texture_path, bg_texture_path, track_surface_rects, key_checkpoint_rects, ramp_rects, finish_line_collider, 
-            dash_plate_rects, recovery_rects, required_laps, init_player_pos_x, init_player_pos_y, init_player_angle):
+    def __init__(self, name, track_surface_rects, key_checkpoint_rects, ramp_rects, finish_line_collider, 
+            dash_plate_rects, recovery_rects):
         self.name = name
-
-        # texture variables
-        self.floor_texture_path = floor_texture_path
-        self.bg_texture_path = bg_texture_path
 
         self.track_surface_rects = track_surface_rects
         
@@ -24,14 +20,6 @@ class Track:
         self.dash_plate_rects = dash_plate_rects
 
         self.recovery_zone_rects = recovery_rects
-
-        self.player_completed_laps = 0 # race track counts laps the player has completed
-        self.required_laps = required_laps
-
-        # initial player position and rotation
-        self.init_player_pos_x = init_player_pos_x
-        self.init_player_pos_y = init_player_pos_y
-        self.init_player_angle = init_player_angle
 
     # Determines whether the passed rectangular collider is on the track surface or not.
     # 
@@ -73,6 +61,13 @@ class Track:
                 return True
         return False
 
+    # Determines whether the passed rectangular collider is on the finish line or not.
+    #
+    # Parameters:
+    # other (CollisionRect)
+    def is_on_finish_line(self, other):
+        return self.finish_line_collider.overlap(other)
+
     # Checks for each key checkpoint if the passed player collider
     # is over one (or more) key checkpoint.
     # If yes, these key checkpoints are marked as passed.
@@ -80,25 +75,6 @@ class Track:
         for key_checkpoint in self.key_checkpoints:
             if key_checkpoint.collider.overlap(player_coll):
                 key_checkpoint.passed = True
-
-    # First updates the passed flags of the key checkpoints.
-    # Then checks whether the player has crossed the finish line.
-    # If so all key checkpoints are reset after checking whether player has passed all of them
-    # (if so, the player is credited a completed lap).
-    def update_lap_count(self, player_coll):
-        self.update_key_checkpoints(player_coll)
-
-        # if player has crossed the finish line
-        if self.finish_line_collider.overlap(player_coll):
-            # if player has honestly finished a lap
-            if self.all_key_checkpoints_passed():
-                # Increment completed laps.
-                # If player has completed enough laps, initialize the finish sequence.
-                self.player_completed_laps += 1
-                print(str(self.player_completed_laps) + " laps completed!")
-                if self.player_finished_race():
-                    print("race finished!")
-            self.reset_key_checkpoints()
 
     # Returns true if and only if 
     # the player has passed all key checkpoints on the track.
@@ -112,17 +88,6 @@ class Track:
     def reset_key_checkpoints(self):
         for key_checkpoint in self.key_checkpoints:
             key_checkpoint.passed = False
-
-    # Returns True if and only if the registered player 
-    # has finished the race on this track 
-    # (i.e. finished the required number of laps).  
-    def player_finished_race(self):
-        return self.player_completed_laps >= self.required_laps
-
-    # API for the App class to poll whether player has completed at least one lap.
-    # Idea: player should only be able to boost after first lap completed
-    def player_completed_first_lap(self):
-        return self.player_completed_laps >= 1
 
 
 # A key checkpoint for the lap counting system.

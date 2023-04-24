@@ -15,12 +15,16 @@ from animation import AnimatedMachine
 class Player(pygame.sprite.Sprite, AnimatedMachine):
     # Constructor.
     # machine: the machine that is controlled by this player
-    # current_race_track: the track that the player is playing
-    def __init__(self, machine, init_pos_x, init_pos_y, init_angle, current_race_track):
-        # logical transformation variables
-        self.position = numpy.array([init_pos_x, init_pos_y])
-        self.angle = init_angle
-
+    # current_race: the race that the player is currently playing
+    def __init__(self, machine, current_race):
+        # race data reference
+        # in order to be able to react to environment
+        # and initialize the player position
+        self.current_race = current_race
+        
+        # initialize position and rotation (according to the currently played race)
+        self.reinitialize_position_angle()
+        
         # physics variables
         self.machine = machine # holds all relevant data on physical properties of the player machine
         self.current_speed = 0 # how fast the player moves in the current frame
@@ -53,10 +57,6 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         self.shadow_sprite.rect = self.shadow_sprite.image.get_rect()
         # shadow sprite is created in a way that it is fine if player + shadow are at same screen coordinates
         self.shadow_sprite.rect.topleft = [NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y]
-
-        # race track collision map reference
-        # in order to be able to react to environment
-        self.current_race_track = current_race_track
 
         # player status flags/variables
         self.jumping = False
@@ -91,18 +91,18 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
 
         # Update the lap count.
         # To do so, the track object needs the current position of the player.
-        self.current_race_track.update_lap_count(current_collision_rect)
+        self.current_race.update_lap_count(current_collision_rect)
 
         # Make player boost if on dash plate.
         # Jumping over a dash plate of course does not lead to a boost.
-        if self.current_race_track.is_on_dash_plate(current_collision_rect) and not self.jumping and not self.boosted:
+        if self.current_race.is_on_dash_plate(current_collision_rect) and not self.jumping and not self.boosted:
             self.boosted = True
             self.last_boost_started_timestamp = time # timestamp for determining when the boost should end
         if self.boosted:
             self.continue_boost(time)
 
         # Make player jump if on ramp.
-        if self.current_race_track.is_on_ramp(current_collision_rect) and not self.jumping:
+        if self.current_race.is_on_ramp(current_collision_rect) and not self.jumping:
             self.jumping = True # set status flag
             self.current_jump_duration = self.machine.jump_duration_multiplier * self.current_speed # compute duration of jump based on speed
             self.jumped_off_timestamp = time # timestamp for computing height in later frames
@@ -111,7 +111,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
 
         # Make player recover energy if in recovery zone.
         # Jumping over a recovery zone of course does not count.
-        if self.current_race_track.is_on_recovery_zone(current_collision_rect) and not self.jumping:
+        if self.current_race.is_on_recovery_zone(current_collision_rect) and not self.jumping:
             self.current_energy += self.machine.recover_speed * delta
             if self.current_energy > self.machine.max_energy:
                 self.current_energy = self.machine.max_energy
@@ -252,7 +252,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         # If no, make them bounce back.
         #
         # Debug-only feature: if collision detection is turned off, the player is always moved, never bounced back.
-        if self.current_race_track.is_on_track(frame_lookahead_collision_rect) or self.jumping or COLLISION_DETECTION_OFF:
+        if self.current_race.is_on_track(frame_lookahead_collision_rect) or self.jumping or COLLISION_DETECTION_OFF:
             self.position[0] = next_frame_position_x
             self.position[1] = next_frame_position_y
         else:
@@ -316,7 +316,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
                 PLAYER_COLLISION_RECT_WIDTH,
                 PLAYER_COLLISION_RECT_HEIGHT
             )
-            if not self.current_race_track.is_on_track(current_collision_rect):
+            if not self.current_race.is_on_track(current_collision_rect):
                 self.current_energy = -1 # leads to destruction of player machine in next frame since energy < 0
                 print("player out of bounds!")
 
@@ -342,14 +342,8 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
     # Also resets all forces that are currently applied to the player.
     # Example usage: get the player to the start position at the start of a race
     def reinitialize(self):
-        # reset position
-        self.position = numpy.array([
-            self.current_race_track.init_player_pos_x,
-            self.current_race_track.init_player_pos_y
-        ])
-
-        # reset rotation
-        self.angle = self.current_race_track.init_player_angle
+        # reset position and rotation
+        self.reinitialize_position_angle()
 
         # reset forces
         self.current_speed = 0
@@ -368,3 +362,8 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
             NORMAL_ON_SCREEN_PLAYER_POSITION_X,
             NORMAL_ON_SCREEN_PLAYER_POSITION_Y
         ]
+
+    # Resets the position and rotation of the player to the initial ones prescribed by the current race. 
+    def reinitialize_position_angle(self):
+        self.position = numpy.array([self.current_race.init_player_pos_x, self.current_race.init_player_pos_y])
+        self.angle = self.current_race.init_player_angle
