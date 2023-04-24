@@ -36,6 +36,16 @@ class App:
 
         self.in_racing_mode = False
 
+        # Creates a group of sprites that contains all the sprites
+        # that move across the screen.
+        self.moving_sprites = pygame.sprite.Group()
+
+        # Creates a group of sprites for all that do not move
+        self.static_sprites = pygame.sprite.Group()
+
+        # Creates a group of sprites for all sprites in the UI.
+        self.ui_sprites = pygame.sprite.Group()
+
         # ------------- end of general initialization -------------
 
 
@@ -109,21 +119,19 @@ class App:
         ]
 
         # initialize the actual race mode
-        self.init_race_mode(self.races[self.current_race_index])
+        self.init_race_mode(
+            next_race = self.races[self.current_race_index]
+        )
         
-    # Contains some general initialization logic for any game mode
+    # Contains some general (re-)initialization logic for any game mode
     # in which races are played. 
-    def init_race_mode(self, race):
-        # Creates a group of sprites that contains all the sprites
-        # that move across the screen.
-        self.moving_sprites = pygame.sprite.Group()
-
-        # Creates a group of sprites for all that do not move
-        self.static_sprites = pygame.sprite.Group()
-
-        # Creates a group of sprites for all sprites in the UI.
-        self.ui_sprites = pygame.sprite.Group()
-
+    # This includes creating the respective groups for sprites, 
+    # initializing some status flags,
+    # initializing the racing UI, ...
+    #
+    # Parameters:
+    # next_race - next race that should be played after (re-)initialization
+    def init_race_mode(self, next_race):
         # player can set this flag to True via a button press to indicate that the next race should be loaded
         self.should_load_next_race = False 
 
@@ -158,7 +166,7 @@ class App:
         # or are hitting a track gimmick.
         self.player = Player(
             machine = player_machine,
-            current_race = race
+            current_race = next_race
         )
 
         # need to add the player instance and the player shadow sprite to sprite group to be able to render it
@@ -212,11 +220,11 @@ class App:
         # Need to used method get_time since self.time field is not initialized at this point.
         self.race_start_timestamp = self.time
 
-        # loads the actual race track
-        self.load_race(race)
-
         # sets status flag
         self.in_racing_mode = True
+
+        # load the next race track
+        self.load_race(next_race)
 
     def update(self):
         # computes time since last frame
@@ -323,7 +331,8 @@ class App:
         self.ui_sprites.draw(self.screen)
 
         # draws debug objects like energy bar
-        self.draw_debug_objects()
+        if self.in_racing_mode:
+            self.draw_racing_mode_debug_objects()
 
         # update the contents of the whole display
         pygame.display.flip()
@@ -385,7 +394,7 @@ class App:
         # if keys[pygame.K_p]:
         #     print("player speed:" + str(self.player.current_speed))
 
-    def draw_debug_objects(self):
+    def draw_racing_mode_debug_objects(self):
         # draw debug mode energy bar to screen
         pygame.draw.rect(
             self.screen, 
