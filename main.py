@@ -51,9 +51,15 @@ class App:
 
 
 
-        # ------------- game mode selection -----------------------
+        # ------------- (debug mode) game mode selection -----------------------
 
-
+        if DEBUG_CHOOSE_GAME_MODE:
+            print("Choose a game mode: ")
+            print("1: League race")
+            print("2: Single race")
+            game_mode_choice = int(input("Your choice: "))
+        else:
+            game_mode_choice = DEFAULT_GAME_MODE
 
         # ------------- end of game mode selection ----------------
 
@@ -61,7 +67,11 @@ class App:
 
         # ------------- initialize game (depending on mode) -------
 
-        self.init_league_race_mode()
+        if game_mode_choice == 1:
+            self.init_league_race_mode()
+        if game_mode_choice == 2:
+            self.init_single_race_mode()
+
 
         # ------------- end of mode-dependent game initialization -------
 
