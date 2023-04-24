@@ -11,3 +11,6 @@ COLLISION_DETECTION_OFF = False
 # whether the debug menu for choosing a machine appears before starting the game
 DEBUG_CHOOSE_MACHINE = False
 DEFAULT_MACHINE = MACHINES[2]
+
+# whether it should be possible to restart the current race with the R key
+DEBUG_RESTART_RACE_ON_R = True

@@ -354,6 +354,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         # reset status flags
         self.jumping = False
         self.finished = False
+        self.destroyed = False
         self.boosted = False
         self.has_boost_power = False
 

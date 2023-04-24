@@ -8,6 +8,7 @@ from settings.machine_settings import *
 from settings.renderer_settings import *
 from settings.track_settings import *
 from settings.ui_settings import *
+from settings.key_settings import STD_CONFIRM_KEY, STD_DEBUG_RESTART_KEY
 
 # other imports from this project
 from mode7 import Mode7
@@ -76,6 +77,9 @@ class App:
             )
         ]
         self.current_race = self.races[self.current_race_index]
+        
+        # player can set this flag to True via a button press to indicate that the next race should be loaded
+        self.should_load_next_race = False 
 
         # Initializes the mode-7 renderer.
         # Third parameter determines whether the rendered scene has a fog effect or not.
@@ -192,8 +196,8 @@ class App:
         if self.current_race.player_finished_race() and not self.player.finished:
             self.player.finished = True
 
-        # load next race if player finished the current one
-        if self.player.finished:
+        # load next race if player finished the current one and pushed the confirm button (which set the flag)
+        if self.should_load_next_race:
             self.player.finished = False
             self.next_race()
 
@@ -229,6 +233,9 @@ class App:
         # Update race data reference
         self.current_race = self.races[self.current_race_index]
 
+        # reset all progress data stored for this race
+        self.current_race.reset_data()
+
         # assign player the new race track
         self.player.current_race = self.current_race
         
@@ -245,6 +252,11 @@ class App:
 
         # reset timer
         self.race_start_timestamp = self.time
+
+        # reset flag
+        self.should_load_next_race = False
+
+        print("---------------- race on " + self.current_race.race_track.name + " was restarted ------------------")
 
     def draw(self):
         # draws the mode-7 environment
@@ -271,12 +283,19 @@ class App:
         self.time = pygame.time.get_ticks() * 0.001
 
     def check_event(self):
-        for i in pygame.event.get():
+        for event in pygame.event.get():
             # Terminate the process running the game 
             # if escape key is pressed or anything else caused the quit-game event
-            if i.type == pygame.QUIT:
+            if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+            # check for key presses in menu screens
+            if event.type == pygame.KEYDOWN:
+                if event.key == STD_CONFIRM_KEY and self.player.finished:
+                    self.should_load_next_race = True 
+                if event.key == STD_DEBUG_RESTART_KEY and DEBUG_RESTART_RACE_ON_R:
+                    self.load_current_race()
 
     # Main game loop, runs until termination of process.
     def run(self):
