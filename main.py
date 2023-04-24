@@ -54,6 +54,8 @@ class App:
 
         
 
+    # Initialization for the league race mode:
+    # a league consists of five consecutive races that the player has to complete.
     def init_league_race_mode(self):
         # Creates a group of sprites that contains all the sprites
         # that move across the screen.
@@ -205,6 +207,11 @@ class App:
 
         # loads the actual race track
         self.load_current_race()
+
+    # Contains some general initialization logic for any game mode
+    # in which races are played. 
+    def init_race_mode(self, race):
+        pass
 
     def update(self):
         # computes time since last frame
