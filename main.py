@@ -91,18 +91,13 @@ class App:
             )
         ]
         self.current_race = self.races[self.current_race_index]
-        
+
         # player can set this flag to True via a button press to indicate that the next race should be loaded
         self.should_load_next_race = False 
 
-        # Initializes the mode-7 renderer.
-        # Third parameter determines whether the rendered scene has a fog effect or not.
-        self.mode7 = Mode7(
-            app = self, 
-            floor_tex_path = self.current_race.floor_texture_path, 
-            bg_tex_path = self.current_race.bg_texture_path,
-            is_foggy = self.current_race.is_foggy
-        )
+        # Declares the mode-7 renderer.
+        # Initialized later when loading the race.
+        self.mode7 = None
 
         # debug only: player chooses a machine
         # outside debug mode, the player is using Purple Comet
@@ -185,6 +180,9 @@ class App:
         # Need to used method get_time since self.time field is not initialized at this point.
         self.race_start_timestamp = self.time
 
+        # loads the actual race track
+        self.load_current_race()
+
     def update(self):
         # computes time since last frame
         delta = self.time - self.last_frame
@@ -256,7 +254,8 @@ class App:
         # reset player to starting position of (new) race track
         self.player.reinitialize()
 
-        # replace renderer field with Mode-7 renderer for the new race track 
+        # Replace renderer field with Mode-7 renderer for the new race track.
+        # Third parameter determines whether the renderer has a fog effect applied or not.
         self.mode7 = Mode7(
             app = self,
             floor_tex_path = self.current_race.floor_texture_path,
