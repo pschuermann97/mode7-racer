@@ -29,9 +29,32 @@ from collision import CollisionRect
 # handling the game's internal clock.
 class App:
     def __init__(self):
+        # ------------- general initialization --------------------
+
         self.screen = pygame.display.set_mode(WIN_RES)
         self.clock = pygame.time.Clock()
 
+        # ------------- end of general initialization -------------
+
+
+
+        # ------------- game mode selection -----------------------
+
+
+
+        # ------------- end of game mode selection ----------------
+
+
+
+        # ------------- initialize game (depending on mode) -------
+
+        self.init_league_race_mode()
+
+        # ------------- end of mode-dependent game initialization -------
+
+        
+
+    def init_league_race_mode(self):
         # Creates a group of sprites that contains all the sprites
         # that move across the screen.
         self.moving_sprites = pygame.sprite.Group()
@@ -260,7 +283,7 @@ class App:
             app = self,
             floor_tex_path = self.current_race.floor_texture_path,
             bg_tex_path = self.current_race.bg_texture_path,
-            is_foggy = True
+            is_foggy = self.current_race.is_foggy
         )
 
         # reset timer
