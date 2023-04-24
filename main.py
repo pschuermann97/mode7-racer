@@ -47,13 +47,25 @@ class App:
         self.races = [
             Race(
                 race_track_creator = TrackCreator.create_track_2023,
+                floor_tex_path = "gfx/event_horizon_track1.png",
+                bg_tex_path = "gfx/event_horizon_bg.png",
+                required_laps = STD_REQUIRED_LAPS,
+                race_mode = "time-attack",
+                init_player_pos_x = 25.55,
+                init_player_pos_y = -119.78,
+                init_player_angle = -111.56,
+                is_foggy = False
+            ),
+            Race(
+                race_track_creator = TrackCreator.create_track_2023,
                 floor_tex_path = "gfx/track_2023.png",
                 bg_tex_path = "gfx/track_2023_bg_resized.png",
                 required_laps = STD_REQUIRED_LAPS,
                 race_mode = "time-attack",
                 init_player_pos_x = 25.55,
                 init_player_pos_y = -119.78,
-                init_player_angle = -111.56
+                init_player_angle = -111.56,
+                is_foggy = True
             ),
             Race(
                 race_track_creator = TrackCreator.create_track_2023_II,
@@ -63,7 +75,8 @@ class App:
                 race_mode = "time-attack",
                 init_player_pos_x = 25.55,
                 init_player_pos_y = -119.78,
-                init_player_angle = -111.56
+                init_player_angle = -111.56,
+                is_foggy = True
             ),
             Race(
                 race_track_creator = TrackCreator.create_monochrome_track,
@@ -73,7 +86,8 @@ class App:
                 race_mode = "time_attack",
                 init_player_pos_x = 25.55,
                 init_player_pos_y = -119.78,
-                init_player_angle = -111.56
+                init_player_angle = -111.56,
+                is_foggy = True
             )
         ]
         self.current_race = self.races[self.current_race_index]
@@ -87,7 +101,7 @@ class App:
             app = self, 
             floor_tex_path = self.current_race.floor_texture_path, 
             bg_tex_path = self.current_race.bg_texture_path,
-            is_foggy = True
+            is_foggy = self.current_race.is_foggy
         )
 
         # debug only: player chooses a machine

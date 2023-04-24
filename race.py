@@ -6,7 +6,7 @@
 # - the mode of the race (grand-prix, time-attack, ...)
 class Race:
     def __init__(self, race_track_creator, floor_tex_path, bg_tex_path, required_laps, 
-            init_player_pos_x, init_player_pos_y, init_player_angle, race_mode):
+            init_player_pos_x, init_player_pos_y, init_player_angle, is_foggy, race_mode):
         # create collision map for played track using the passed function
         self.race_track = race_track_creator()
         
@@ -22,6 +22,9 @@ class Race:
         self.init_player_pos_x = init_player_pos_x
         self.init_player_pos_y = init_player_pos_y
         self.init_player_angle = init_player_angle
+
+        # whether the renderer should apply a fog effect during this race
+        self.is_foggy = is_foggy
         
         self.race_mode = race_mode
 
