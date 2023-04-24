@@ -70,6 +70,9 @@ class App:
     # Initialization for the league race mode:
     # a league consists of five consecutive races that the player has to complete.
     def init_league_race_mode(self):
+        # reinitialize sprite groups as empty groups (to tidy up)
+        self.initialize_sprite_groups()
+        
         # League creation (should be refactored to submodule of settings)
         league_1_races = [
             Race(
@@ -126,6 +129,19 @@ class App:
         self.init_race_mode(
             next_race = self.current_league.current_race()
         )
+
+    # 
+    def init_single_race_mode(self):
+        # tidy up sprites
+        self.initialize_sprite_groups()
+
+        # ------------- track selection (todo) -------------
+
+
+
+        # ------------- end of track selection -------------
+
+        # load race
         
     # Contains some general (re-)initialization logic for any game mode
     # in which races are played. 
@@ -308,6 +324,13 @@ class App:
         self.should_load_next_race = False
 
         print("---------------- race on " + race.race_track.name + " was restarted ------------------")
+
+    # (Re-)initializes all sprite groups as empty groups.
+    # Can be used to tidy up when switching game modes.
+    def initialize_sprite_groups(self):
+        self.moving_sprites = pygame.sprite.Group()
+        self.static_sprites = pygame.sprite.Group()
+        self.ui_sprites = pygame.sprite.Group()
 
     def draw(self):
         # draws the mode-7 environment
