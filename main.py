@@ -92,6 +92,74 @@ class App:
         ]
         self.current_race = self.races[self.current_race_index]
 
+
+
+        # ------------- (debug mode) game mode selection -----------------------
+
+        if DEBUG_CHOOSE_GAME_MODE:
+            print("Choose a game mode: ")
+            print("1: League race")
+            print("2: Single race")
+            game_mode_choice = int(input("Your choice: "))
+        else:
+            game_mode_choice = DEFAULT_GAME_MODE
+
+        # ------------- end of game mode selection ----------------
+
+
+
+        # ------------- initialize game (depending on mode) -------
+
+        if game_mode_choice == 1:
+            self.init_league_race_mode()
+        if game_mode_choice == 2:
+            self.init_single_race_mode()
+
+
+        # ------------- end of mode-dependent game initialization -------
+
+        
+
+    # Initialization for the league race mode:
+    # a league consists of five consecutive races that the player has to complete.
+    def init_league_race_mode(self):
+        # reinitialize sprite groups as empty groups (to tidy up)
+        self.initialize_sprite_groups()
+
+        # league selection (todo)
+        self.current_league = LEAGUES[0]
+
+        # initialize the actual race mode
+        self.init_race_mode(
+            next_race = self.current_league.current_race()
+        )
+
+    # 
+    def init_single_race_mode(self):
+        # tidy up sprites
+        self.initialize_sprite_groups()
+
+        # ------------- track selection (todo) -------------
+
+        race_choice = 2
+
+        # ------------- end of track selection -------------
+
+        # Init race mode and load race.
+        # We exploit that a single race can be seen as a League object 
+        # whose race list only contains one race.
+        self.current_league = League( [SINGLE_MODE_RACES[race_choice]] )
+        self.init_race_mode(next_race = self.current_league.current_race())
+        
+    # Contains some general (re-)initialization logic for any game mode
+    # in which races are played. 
+    # This includes creating the respective groups for sprites, 
+    # initializing some status flags,
+    # initializing the racing UI, ...
+    #
+    # Parameters:
+    # next_race - next race that should be played after (re-)initialization
+    def init_race_mode(self, next_race):
         # player can set this flag to True via a button press to indicate that the next race should be loaded
         self.should_load_next_race = False 
 
