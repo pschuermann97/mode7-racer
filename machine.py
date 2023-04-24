@@ -4,7 +4,7 @@
 class Machine:
     def __init__(self, max_speed, boosted_max_speed, acceleration, brake, speed_loss, boosted_speed_loss, 
             centri, jump_duration_multiplier, boost_duration, max_energy, boost_cost, hit_cost, recover_speed,
-            rotation_speed, idle_image_path, shadow_image_path):
+            rotation_speed, idle_anim, driving_anim, shadow_image_path):
         # ----------- physics variables initialization ----------------------
 
 
@@ -67,8 +67,11 @@ class Machine:
 
 
 
-        # image that is drawn when the machine is idle
-        self.idle_image_path = idle_image_path
+        # images of the animation that is played when the machine is idle
+        self.idle_anim = idle_anim
+
+        # images of the animation that is played when the accelerator of the machine is on
+        self.driving_anim = driving_anim
 
         # image of the shadow that the machine casts on the track
         # (should be drawn under the machine)
