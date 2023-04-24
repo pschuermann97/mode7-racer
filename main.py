@@ -34,6 +34,8 @@ class App:
         self.screen = pygame.display.set_mode(WIN_RES)
         self.clock = pygame.time.Clock()
 
+        self.in_racing_mode = False
+
         # ------------- end of general initialization -------------
 
 
@@ -213,41 +215,46 @@ class App:
         # loads the actual race track
         self.load_race(race)
 
+        # sets status flag
+        self.in_racing_mode = True
+
     def update(self):
         # computes time since last frame
         delta = self.time - self.last_frame
         
-        # updates the player based on time elapsed since game start
-        self.player.update(self.time, delta)
+        # For things only needed to be done during a race. 
+        if self.in_racing_mode:
+            # updates the player based on time elapsed since game start
+            self.player.update(self.time, delta)
 
-        # updates camera position (which is done mainly based on player position)
-        self.camera.update()
+            # updates camera position (which is done mainly based on player position)
+            self.camera.update()
 
-        # causes the Mode7-rendered environment to update
-        self.mode7.update(self.camera)
+            # causes the Mode7-rendered environment to update
+            self.mode7.update(self.camera)
 
-        # Update timer on UI if player has not finished the current race yet.
-        if not self.player.finished:
-            seconds_since_race_start = self.time - self.race_start_timestamp
-            self.ui.update(
-                elapsed_milliseconds = seconds_since_race_start * 1000
-            )
+            # Update timer on UI if player has not finished the current race yet.
+            if not self.player.finished:
+                seconds_since_race_start = self.time - self.race_start_timestamp
+                self.ui.update(
+                    elapsed_milliseconds = seconds_since_race_start * 1000
+                )
 
-        # Checks whether player has finished the race.
-        # If so, a status flag is set in the player instance if not done already.
-        if self.current_race.player_finished_race() and not self.player.finished:
-            self.player.finished = True
+            # Checks whether player has finished the race.
+            # If so, a status flag is set in the player instance if not done already.
+            if self.current_race.player_finished_race() and not self.player.finished:
+                self.player.finished = True
 
-        # load next race if player finished the current one and pushed the confirm button (which set the flag)
-        if self.should_load_next_race:
-            self.player.finished = False
-            self.next_race()
+            # load next race if player finished the current one and pushed the confirm button (which set the flag)
+            if self.should_load_next_race:
+                self.player.finished = False
+                self.next_race()
 
-        # Checks whether player has completed at least one lap
-        # and activates their boost power if so (and not activated yet).
-        if self.current_race.player_completed_first_lap() and not self.player.has_boost_power:
-            self.player.has_boost_power = True
-            print("You got boost power!!!")
+            # Checks whether player has completed at least one lap
+            # and activates their boost power if so (and not activated yet).
+            if self.current_race.player_completed_first_lap() and not self.player.has_boost_power:
+                self.player.has_boost_power = True
+                print("You got boost power!!!")
 
         # updates clock
         self.clock.tick()
