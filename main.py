@@ -9,6 +9,7 @@ from settings.renderer_settings import *
 from settings.track_settings import *
 from settings.ui_settings import *
 from settings.key_settings import STD_CONFIRM_KEY, STD_DEBUG_RESTART_KEY
+from settings.league_settings import *
 
 # other imports from this project
 from mode7 import Mode7
@@ -16,6 +17,7 @@ from player import Player
 from camera import Camera
 from track import Track
 from race import Race
+from league import League
 from settings.track_settings import TrackCreator
 from ui import UI
 
@@ -29,8 +31,12 @@ from collision import CollisionRect
 # handling the game's internal clock.
 class App:
     def __init__(self):
+        # ------------- general initialization --------------------
+
         self.screen = pygame.display.set_mode(WIN_RES)
         self.clock = pygame.time.Clock()
+
+        self.in_racing_mode = False
 
         # Creates a group of sprites that contains all the sprites
         # that move across the screen.
@@ -42,55 +48,7 @@ class App:
         # Creates a group of sprites for all sprites in the UI.
         self.ui_sprites = pygame.sprite.Group()
 
-        # Initializes race track management.
-        self.current_race_index = 0
-        self.races = [
-            Race(
-                race_track_creator = TrackCreator.create_track_2023,
-                floor_tex_path = "gfx/event_horizon_track1.png",
-                bg_tex_path = "gfx/event_horizon_bg.png",
-                required_laps = STD_REQUIRED_LAPS,
-                race_mode = "time-attack",
-                init_player_pos_x = 25.55,
-                init_player_pos_y = -119.78,
-                init_player_angle = -111.56,
-                is_foggy = False
-            ),
-            Race(
-                race_track_creator = TrackCreator.create_track_2023,
-                floor_tex_path = "gfx/track_2023.png",
-                bg_tex_path = "gfx/track_2023_bg_resized.png",
-                required_laps = STD_REQUIRED_LAPS,
-                race_mode = "time-attack",
-                init_player_pos_x = 25.55,
-                init_player_pos_y = -119.78,
-                init_player_angle = -111.56,
-                is_foggy = True
-            ),
-            Race(
-                race_track_creator = TrackCreator.create_track_2023_II,
-                floor_tex_path = "gfx/track_2023_II.png",
-                bg_tex_path = "gfx/track_2023_bg_resized.png",
-                required_laps = STD_REQUIRED_LAPS,
-                race_mode = "time-attack",
-                init_player_pos_x = 25.55,
-                init_player_pos_y = -119.78,
-                init_player_angle = -111.56,
-                is_foggy = True
-            ),
-            Race(
-                race_track_creator = TrackCreator.create_monochrome_track,
-                floor_tex_path = "gfx/monochrome_track.png",
-                bg_tex_path = "gfx/monochrome_track_bg.png",
-                required_laps = STD_REQUIRED_LAPS,
-                race_mode = "time_attack",
-                init_player_pos_x = 25.55,
-                init_player_pos_y = -119.78,
-                init_player_angle = -111.56,
-                is_foggy = True
-            )
-        ]
-        self.current_race = self.races[self.current_race_index]
+        # ------------- end of general initialization -------------
 
 
 
@@ -194,7 +152,7 @@ class App:
         # or are hitting a track gimmick.
         self.player = Player(
             machine = player_machine,
-            current_race = self.current_race
+            current_race = next_race
         )
 
         # need to add the player instance and the player shadow sprite to sprite group to be able to render it
@@ -248,44 +206,49 @@ class App:
         # Need to used method get_time since self.time field is not initialized at this point.
         self.race_start_timestamp = self.time
 
-        # loads the actual race track
-        self.load_current_race()
+        # sets status flag
+        self.in_racing_mode = True
+
+        # load the next race track
+        self.load_race(next_race)
 
     def update(self):
         # computes time since last frame
         delta = self.time - self.last_frame
         
-        # updates the player based on time elapsed since game start
-        self.player.update(self.time, delta)
+        # For things only needed to be done during a race. 
+        if self.in_racing_mode:
+            # updates the player based on time elapsed since game start
+            self.player.update(self.time, delta)
 
-        # updates camera position (which is done mainly based on player position)
-        self.camera.update()
+            # updates camera position (which is done mainly based on player position)
+            self.camera.update()
 
-        # causes the Mode7-rendered environment to update
-        self.mode7.update(self.camera)
+            # causes the Mode7-rendered environment to update
+            self.mode7.update(self.camera)
 
-        # Update timer on UI if player has not finished the current race yet.
-        if not self.player.finished:
-            seconds_since_race_start = self.time - self.race_start_timestamp
-            self.ui.update(
-                elapsed_milliseconds = seconds_since_race_start * 1000
-            )
+            # Update timer on UI if player has not finished the current race yet.
+            if not self.player.finished:
+                seconds_since_race_start = self.time - self.race_start_timestamp
+                self.ui.update(
+                    elapsed_milliseconds = seconds_since_race_start * 1000
+                )
 
-        # Checks whether player has finished the race.
-        # If so, a status flag is set in the player instance if not done already.
-        if self.current_race.player_finished_race() and not self.player.finished:
-            self.player.finished = True
+            # Checks whether player has finished the race.
+            # If so, a status flag is set in the player instance if not done already.
+            if self.current_league.current_race().player_finished_race() and not self.player.finished:
+                self.player.finished = True
 
-        # load next race if player finished the current one and pushed the confirm button (which set the flag)
-        if self.should_load_next_race:
-            self.player.finished = False
-            self.next_race()
+            # load next race if player finished the current one and pushed the confirm button (which set the flag)
+            if self.should_load_next_race:
+                self.player.finished = False
+                self.load_race(self.current_league.next_race())
 
-        # Checks whether player has completed at least one lap
-        # and activates their boost power if so (and not activated yet).
-        if self.current_race.player_completed_first_lap() and not self.player.has_boost_power:
-            self.player.has_boost_power = True
-            print("You got boost power!!!")
+            # Checks whether player has completed at least one lap
+            # and activates their boost power if so (and not activated yet).
+            if self.current_league.current_race().player_completed_first_lap() and not self.player.has_boost_power:
+                self.player.has_boost_power = True
+                print("You got boost power!!!")
 
         # updates clock
         self.clock.tick()
@@ -300,24 +263,13 @@ class App:
         # timestamp of current frame for delta computation in next frame
         self.last_frame = self.time
 
-    # Starts the next race 
-    # according to the race list created in the constructor.
-    def next_race(self):
-        # increase counter
-        self.current_race_index += 1
-        
-        self.load_current_race()
-
-    # (Re-)loads the current race.
-    def load_current_race(self):
-        # Update race data reference
-        self.current_race = self.races[self.current_race_index]
-
+    # (Re-)loads the passed race.
+    def load_race(self, race):
         # reset all progress data stored for this race
-        self.current_race.reset_data()
+        race.reset_data()
 
-        # assign player the new race track
-        self.player.current_race = self.current_race
+        # assign player the new race
+        self.player.current_race = race
         
         # reset player to starting position of (new) race track
         self.player.reinitialize()
@@ -326,9 +278,9 @@ class App:
         # Third parameter determines whether the renderer has a fog effect applied or not.
         self.mode7 = Mode7(
             app = self,
-            floor_tex_path = self.current_race.floor_texture_path,
-            bg_tex_path = self.current_race.bg_texture_path,
-            is_foggy = True
+            floor_tex_path = race.floor_texture_path,
+            bg_tex_path = race.bg_texture_path,
+            is_foggy = race.is_foggy
         )
 
         # reset timer
@@ -337,7 +289,14 @@ class App:
         # reset flag
         self.should_load_next_race = False
 
-        print("---------------- race on " + self.current_race.race_track.name + " was restarted ------------------")
+        print("---------------- race on " + race.race_track.name + " was restarted ------------------")
+
+    # (Re-)initializes all sprite groups as empty groups.
+    # Can be used to tidy up when switching game modes.
+    def initialize_sprite_groups(self):
+        self.moving_sprites = pygame.sprite.Group()
+        self.static_sprites = pygame.sprite.Group()
+        self.ui_sprites = pygame.sprite.Group()
 
     def draw(self):
         # draws the mode-7 environment
@@ -353,7 +312,8 @@ class App:
         self.ui_sprites.draw(self.screen)
 
         # draws debug objects like energy bar
-        self.draw_debug_objects()
+        if self.in_racing_mode:
+            self.draw_racing_mode_debug_objects()
 
         # update the contents of the whole display
         pygame.display.flip()
@@ -376,7 +336,7 @@ class App:
                 if event.key == STD_CONFIRM_KEY and self.player.finished:
                     self.should_load_next_race = True 
                 if event.key == STD_DEBUG_RESTART_KEY and DEBUG_RESTART_RACE_ON_R:
-                    self.load_current_race()
+                    self.load_race(self.current_league.current_race())
 
     # Main game loop, runs until termination of process.
     def run(self):
@@ -415,7 +375,7 @@ class App:
         # if keys[pygame.K_p]:
         #     print("player speed:" + str(self.player.current_speed))
 
-    def draw_debug_objects(self):
+    def draw_racing_mode_debug_objects(self):
         # draw debug mode energy bar to screen
         pygame.draw.rect(
             self.screen, 
