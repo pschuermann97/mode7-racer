@@ -9,6 +9,7 @@ from settings.renderer_settings import *
 from settings.track_settings import *
 from settings.ui_settings import *
 from settings.key_settings import STD_CONFIRM_KEY, STD_DEBUG_RESTART_KEY
+from settings.league_settings import LEAGUES
 
 # other imports from this project
 from mode7 import Mode7
@@ -82,58 +83,9 @@ class App:
     def init_league_race_mode(self):
         # reinitialize sprite groups as empty groups (to tidy up)
         self.initialize_sprite_groups()
-        
-        # League creation (should be refactored to submodule of settings)
-        league_1_races = [
-            Race(
-                race_track_creator = TrackCreator.create_track_2023,
-                floor_tex_path = "gfx/event_horizon_track1.png",
-                bg_tex_path = "gfx/event_horizon_bg.png",
-                required_laps = STD_REQUIRED_LAPS,
-                race_mode = "time-attack",
-                init_player_pos_x = 25.55,
-                init_player_pos_y = -119.78,
-                init_player_angle = -111.56,
-                is_foggy = False
-            ),
-            Race(
-                race_track_creator = TrackCreator.create_track_2023,
-                floor_tex_path = "gfx/track_2023.png",
-                bg_tex_path = "gfx/track_2023_bg_resized.png",
-                required_laps = STD_REQUIRED_LAPS,
-                race_mode = "time-attack",
-                init_player_pos_x = 25.55,
-                init_player_pos_y = -119.78,
-                init_player_angle = -111.56,
-                is_foggy = True
-            ),
-            Race(
-                race_track_creator = TrackCreator.create_track_2023_II,
-                floor_tex_path = "gfx/track_2023_II.png",
-                bg_tex_path = "gfx/track_2023_bg_resized.png",
-                required_laps = STD_REQUIRED_LAPS,
-                race_mode = "time-attack",
-                init_player_pos_x = 25.55,
-                init_player_pos_y = -119.78,
-                init_player_angle = -111.56,
-                is_foggy = True
-            ),
-            Race(
-                race_track_creator = TrackCreator.create_monochrome_track,
-                floor_tex_path = "gfx/monochrome_track.png",
-                bg_tex_path = "gfx/monochrome_track_bg.png",
-                required_laps = STD_REQUIRED_LAPS,
-                race_mode = "time_attack",
-                init_player_pos_x = 25.55,
-                init_player_pos_y = -119.78,
-                init_player_angle = -111.56,
-                is_foggy = True
-            )
-        ]
-        league_1 = League(league_1_races)
 
-        # TODO: league selection
-        self.current_league = league_1
+        # league selection (todo)
+        self.current_league = LEAGUES[0]
 
         # initialize the actual race mode
         self.init_race_mode(
