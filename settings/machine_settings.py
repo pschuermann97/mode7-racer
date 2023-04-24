@@ -100,7 +100,7 @@ FASTER_PURPLE_COMET = Machine(
 )
 
 SLOWER_PURPLE_COMET = Machine(
-    max_speed = PURPLE_COMET.max_speed * 0.8,
+    max_speed = PURPLE_COMET.max_speed * 0.9,
     boosted_max_speed = PURPLE_COMET.max_speed * 1.5, # strong booster
     acceleration = PURPLE_COMET.acceleration * 2,
     brake = PURPLE_COMET.brake,

@@ -222,6 +222,10 @@ class App:
         # increase counter
         self.current_race_index += 1
         
+        self.load_current_race()
+
+    # (Re-)loads the current race.
+    def load_current_race(self):
         # Update race data reference
         self.current_race = self.races[self.current_race_index]
 
