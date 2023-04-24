@@ -55,6 +55,10 @@ LEAGUE_1_RACES = [
 ]
 LEAGUE_1 = League(LEAGUE_1_RACES)
 
+# special league that is not meant to be played 
+# but serves as the track list to select from in single race
+SINGLE_MODE_RACES = LEAGUE_1_RACES 
+
 # ---------------------------- end of league creation --------------------------
 
 LEAGUES = [LEAGUE_1]

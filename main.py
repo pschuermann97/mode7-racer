@@ -9,7 +9,7 @@ from settings.renderer_settings import *
 from settings.track_settings import *
 from settings.ui_settings import *
 from settings.key_settings import STD_CONFIRM_KEY, STD_DEBUG_RESTART_KEY
-from settings.league_settings import LEAGUES
+from settings.league_settings import *
 
 # other imports from this project
 from mode7 import Mode7
@@ -99,11 +99,15 @@ class App:
 
         # ------------- track selection (todo) -------------
 
-
+        race_choice = 0
 
         # ------------- end of track selection -------------
 
-        # load race
+        # Init race mode and load race.
+        # We exploit that a single race can be seen as a League object 
+        # whose race list only contains one race.
+        self.current_league = League( [SINGLE_MODE_RACES[race_choice]] )
+        self.init_race_mode(next_race = self.current_league.current_race())
         
     # Contains some general (re-)initialization logic for any game mode
     # in which races are played. 
