@@ -16,6 +16,7 @@ from player import Player
 from camera import Camera
 from track import Track
 from race import Race
+from league import League
 from settings.track_settings import TrackCreator
 from ui import UI
 
@@ -69,9 +70,8 @@ class App:
     # Initialization for the league race mode:
     # a league consists of five consecutive races that the player has to complete.
     def init_league_race_mode(self):
-        # Initializes race track management.
-        self.current_race_index = 0
-        self.races = [
+        # League creation (should be refactored to submodule of settings)
+        league_1_races = [
             Race(
                 race_track_creator = TrackCreator.create_track_2023,
                 floor_tex_path = "gfx/event_horizon_track1.png",
@@ -117,10 +117,14 @@ class App:
                 is_foggy = True
             )
         ]
+        league_1 = League(league_1_races)
+
+        # TODO: league selection
+        self.current_league = league_1
 
         # initialize the actual race mode
         self.init_race_mode(
-            next_race = self.races[self.current_race_index]
+            next_race = self.current_league.current_race()
         )
         
     # Contains some general (re-)initialization logic for any game mode
@@ -250,17 +254,17 @@ class App:
 
             # Checks whether player has finished the race.
             # If so, a status flag is set in the player instance if not done already.
-            if self.current_race.player_finished_race() and not self.player.finished:
+            if self.current_league.current_race().player_finished_race() and not self.player.finished:
                 self.player.finished = True
 
             # load next race if player finished the current one and pushed the confirm button (which set the flag)
             if self.should_load_next_race:
                 self.player.finished = False
-                self.next_race()
+                self.load_race(self.current_league.next_race())
 
             # Checks whether player has completed at least one lap
             # and activates their boost power if so (and not activated yet).
-            if self.current_race.player_completed_first_lap() and not self.player.has_boost_power:
+            if self.current_league.current_race().player_completed_first_lap() and not self.player.has_boost_power:
                 self.player.has_boost_power = True
                 print("You got boost power!!!")
 
@@ -277,24 +281,12 @@ class App:
         # timestamp of current frame for delta computation in next frame
         self.last_frame = self.time
 
-    # Starts the next race 
-    # according to the race list created in the constructor.
-    def next_race(self):
-        # increase counter
-        self.current_race_index += 1
-
-        self.current_race = self.races[self.current_race_index]
-        
-        self.load_race(self.current_race)
-
     # (Re-)loads the passed race.
     def load_race(self, race):
-        self.current_race = race
-        
         # reset all progress data stored for this race
         race.reset_data()
 
-        # assign player the new race track
+        # assign player the new race
         self.player.current_race = race
         
         # reset player to starting position of (new) race track
@@ -355,7 +347,7 @@ class App:
                 if event.key == STD_CONFIRM_KEY and self.player.finished:
                     self.should_load_next_race = True 
                 if event.key == STD_DEBUG_RESTART_KEY and DEBUG_RESTART_RACE_ON_R:
-                    self.load_race(self.current_race)
+                    self.load_race(self.current_league.current_race())
 
     # Main game loop, runs until termination of process.
     def run(self):

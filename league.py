@@ -11,12 +11,12 @@ class League:
 
     # Returns the data object representing the race that the player is currently playing.
     def current_race(self):
-        return self.races[current_race_index]
+        return self.races[self.current_race_index]
 
     # Moves the index to the next race and returns that race.
     def next_race(self):
         self.current_race_index += 1
-        return self.races[current_race_index]
+        return self.current_race()
 
     # Returns True if and only if the player has completed this league.
     def is_completed(self):
