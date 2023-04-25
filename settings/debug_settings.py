@@ -15,7 +15,7 @@ DEFAULT_MACHINE = MACHINES[0]
 
 # Whether the debug menu for choosing a game mode appears before starting the game.
 # If set to False, the default game mode is loaded.
-DEBUG_CHOOSE_GAME_MODE = True
+DEBUG_CHOOSE_GAME_MODE = False
 DEFAULT_GAME_MODE = 1
 
 # whether it should be possible to restart the current race with the R key
