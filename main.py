@@ -99,7 +99,7 @@ class App:
 
         # ------------- track selection (todo) -------------
 
-        race_choice = 2
+        race_choice = 3
 
         # ------------- end of track selection -------------
 
