@@ -121,7 +121,7 @@ class Mode7:
                 ry = x * -sin + y * cos
 
                 # Apply mode-7 style projection.
-                # Player position is used as offset here to allow movement
+                # Camera position is used as offset here to allow movement
                 px = (rx / z + pos[1]) * SCALE
                 py = (ry / z + pos[0]) * SCALE
 

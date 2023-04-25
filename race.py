@@ -59,8 +59,10 @@ class Race:
             self.race_track.reset_key_checkpoints()
 
     # Restarts the race and resets all race data to their initial value.
+    # E.g. player's completed laps, passed key checkpoints, ...
     def reset_data(self):
         self.player_completed_laps = 0
+        self.race_track.reset_key_checkpoints()
 
     # ------------- exposure of RaceTrack API ---------------------
 
