@@ -40,6 +40,7 @@ IDLE_ANIM_SPEED = 12
 PURPLE_COMET_GRAPHICS_ROOT_PATH = "gfx/machines/purple_comet/"
 
 PURPLE_COMET_ACCELERATION = 10 / 750
+PURPLE_COMET_MAX_SPEED = 0.05
 PURPLE_COMET_SHADOW_IMAGE_PATH = PURPLE_COMET_GRAPHICS_ROOT_PATH + "violet_machine_shadow.png"
 
 PURPLE_COMET_DRIVING_ANIMATION = Animation(
@@ -60,9 +61,10 @@ PURPLE_COMET_IDLE_ANIMATION = Animation(
 )
 
 PURPLE_COMET = Machine(
-    max_speed = 0.05,
-    boosted_max_speed = 0.06,
+    max_speed = PURPLE_COMET_MAX_SPEED,
+    boosted_max_speed = PURPLE_COMET_MAX_SPEED * 1.2,
     acceleration = PURPLE_COMET_ACCELERATION, # 750 frame update units to get to top speed
+    boosted_acceleration = PURPLE_COMET_ACCELERATION * 10,
     brake = PURPLE_COMET_ACCELERATION * 2, # brake is twice as strong as accelerator
     speed_loss = PURPLE_COMET_ACCELERATION / 3, # speed loss is a third the strength of the accelerator
     boosted_speed_loss = PURPLE_COMET_ACCELERATION / 6,
@@ -83,6 +85,7 @@ FASTER_PURPLE_COMET = Machine(
     max_speed = PURPLE_COMET.max_speed * 1.1,
     boosted_max_speed = PURPLE_COMET.max_speed * 1.4,
     acceleration = PURPLE_COMET.acceleration / 2,
+    boosted_acceleration = PURPLE_COMET.boosted_acceleration,
     brake = PURPLE_COMET.brake,
     speed_loss = PURPLE_COMET.speed_loss / 2,
     boosted_speed_loss = PURPLE_COMET.boosted_speed_loss,
@@ -103,6 +106,7 @@ SLOWER_PURPLE_COMET = Machine(
     max_speed = PURPLE_COMET.max_speed * 0.9,
     boosted_max_speed = PURPLE_COMET.max_speed * 1.5, # strong booster
     acceleration = PURPLE_COMET.acceleration * 2,
+    boosted_acceleration = PURPLE_COMET.boosted_acceleration,
     brake = PURPLE_COMET.brake,
     speed_loss = PURPLE_COMET.speed_loss,
     boosted_speed_loss = PURPLE_COMET.boosted_speed_loss * 10,

@@ -42,7 +42,7 @@ LEAGUE_1_RACES = [
         is_foggy = True
     ),
     Race(
-        race_track_creator = TrackCreator.create_monochrome_track,
+        race_track_creator = TrackCreator.create_event_horizon_track2,
         floor_tex_path = "gfx/event_horizon_track2.png",
         bg_tex_path = "gfx/event_horizon_bg.png",
         required_laps = STD_REQUIRED_LAPS,

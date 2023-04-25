@@ -187,7 +187,9 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         # Acceleration input should be ignored when the speed currently is above the machine's current max speed.
         current_max_speed = self.machine.boosted_max_speed if self.boosted else self.machine.max_speed
         if keys[STD_ACCEL_KEY] and not self.finished and not self.current_speed > current_max_speed:
-            self.current_speed += self.machine.acceleration * delta
+            self.current_speed += (
+                self.machine.boosted_acceleration if self.boosted else self.machine.acceleration
+            ) * delta
         # Decrease speed heavily when brake button pressed.
         # The player cannot brake when mid-air.
         elif keys[STD_BRAKE_KEY] and not self.finished and not self.jumping:

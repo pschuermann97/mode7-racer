@@ -2,8 +2,9 @@
 # including all physics engine related data (acceleration force, max speed, ...)
 # and graphics
 class Machine:
-    def __init__(self, max_speed, boosted_max_speed, acceleration, brake, speed_loss, boosted_speed_loss, 
-            centri, jump_duration_multiplier, boost_duration, max_energy, boost_cost, hit_cost, recover_speed,
+    def __init__(self, max_speed, boosted_max_speed, acceleration, boosted_acceleration, brake, speed_loss, 
+            boosted_speed_loss, centri, jump_duration_multiplier, boost_duration, max_energy, 
+            boost_cost, hit_cost, recover_speed,
             rotation_speed, idle_anim, driving_anim, shadow_image_path):
         # ----------- physics variables initialization ----------------------
 
@@ -16,6 +17,7 @@ class Machine:
         # acceleration force:
         # quantity of speed added per frame in which the player has the accelerator on
         self.acceleration = acceleration
+        self.boosted_acceleration = boosted_acceleration # accel force is different (usually stronger) when the booster is used
 
         # brake force:
         # quantity of speed subtracted per frame in which the player holds down the brakes

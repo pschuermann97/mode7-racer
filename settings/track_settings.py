@@ -318,3 +318,61 @@ class TrackCreator:
             dash_plate_rects = [dash_plate1, dash_plate2, dash_plate3, dash_plate4, dash_plate_left, dash_plate_middle, dash_plate_right],
             recovery_rects = [recovery_zone_1]
         )
+
+    # for now this is just an empty track with the monochrome environment texture set
+    def create_event_horizon_track2():
+        # finish line collider (not properly set yet)
+        finish_line_coll = CollisionRect(
+            pos = numpy.array([27.165, 11116.6325]),
+            w = 14.33,
+            h = 1.145
+        )
+
+        # -------------- track collision rect creation ---------------------
+
+        # lower left-most rect
+        rect1 = CollisionRect(
+            pos = numpy.array([28.24, -111.04]),
+            w = 14.08,
+            h = 81.86
+        )
+
+        # top left-most rect
+        rect2 = CollisionRect(
+            pos = numpy.array([28.24, -34.39]),
+            w = 14.08,
+            h = 43.5
+        )
+
+        # third-to-top horizontal rect
+        rect3 = CollisionRect(
+            pos = numpy.array([52.3, -75.14]),
+            w = 62.21,
+            h = 10.06
+        )
+
+        # second-to-top horizontal rect
+        rect4 = CollisionRect(
+            pos = numpy.array([52.3, -51.35]),
+            w = 62.21,
+            h = 10.06
+        )
+
+        # top right-most vertical rect
+        rect5 = CollisionRect(
+            pos = numpy.array([79.01, -63.34]),
+            w = 8.8,
+            h = 33.85
+        )
+
+        # -------------- track collision rect creation ---------------------
+
+        return Track(
+            name = "event_horizon_track2",
+            track_surface_rects = [rect1, rect2, rect3, rect4, rect5],
+            key_checkpoint_rects = [],
+            ramp_rects = [],
+            finish_line_collider = finish_line_coll,
+            dash_plate_rects = [],
+            recovery_rects = []
+        )
