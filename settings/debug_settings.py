@@ -11,7 +11,7 @@ COLLISION_DETECTION_OFF = False
 # Whether the debug menu for choosing a machine appears before starting the game.
 # If set to False, the default machine is used.
 DEBUG_CHOOSE_MACHINE = False
-DEFAULT_MACHINE = MACHINES[0]
+DEFAULT_MACHINE = MACHINES[2]
 
 # Whether the debug menu for choosing a game mode appears before starting the game.
 # If set to False, the default game mode is loaded.
