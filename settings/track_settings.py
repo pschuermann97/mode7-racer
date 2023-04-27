@@ -330,6 +330,8 @@ class TrackCreator:
 
         # -------------- track collision rect creation ---------------------
 
+        # -------------- top left part of the track ------------------------
+
         # lower left-most rect
         rect1 = CollisionRect(
             pos = numpy.array([28.24, -111.04]),
@@ -365,14 +367,93 @@ class TrackCreator:
             h = 33.85
         )
 
-        # -------------- track collision rect creation ---------------------
+        # rect around the healing zone
+        rect6 = CollisionRect(
+            pos = numpy.array([35.78, -126.75]),
+            w = 29.17,
+            h = 50.44
+        )
+
+        # top horizontal rect
+        rect7 = CollisionRect(
+            pos = numpy.array([37.84, -16.7]),
+            w = 33.45,
+            h = 8.12
+        )
+
+        # small vertical rect before first jump
+        rect8 = CollisionRect(
+            pos = numpy.array([50.43, -23]),
+            w = 4.13,
+            h = 20.73
+        )
+
+        # -------------- end of rects for top left part of the track ----
+
+        # -------------- rects for lower right part of the track -----------
+
+        # left-most vertical rect
+        rect9 = CollisionRect(
+            pos = numpy.array([66.92, -135.67]),
+            w = 8.545,
+            h = 62.52
+        )
+
+        # lower horizontal rect
+        rect10 = CollisionRect(
+            pos = numpy.array([76.21, -162.47]),
+            w = 13.56,
+            h = 8.91
+        )
+
+        # right vertical rect
+        rect11 = CollisionRect(
+            pos = numpy.array([85.67, -148.74]),
+            w = 8.2,
+            h = 36.37
+        )
+
+        # top horizontal rect (right next to ramp)
+        rect12 = CollisionRect(
+            pos = numpy.array([84.735, -141.19]),
+            w = 10.035,
+            h = 21.26
+        )
+
+        # -------------- end of rects for lower right part of the track ----
+
+        # -------------- end of track collision rect creation ---------------------
+
+        # -------------- ramp collision rects creation ----------------------------
+
+        ramp1 = CollisionRect(
+            pos = numpy.array([50.4, -33.6]),
+            w = 8.27,
+            h = 0.23
+        )
+
+        ramp2 = CollisionRect(
+            pos = numpy.array([79.16, -141.19]),
+            w = 0.22,
+            h = 21.26
+        )
+
+        # -------------- end of ramp collision rects creation ----------------------------
+
+        # -------------- dash plate creation ---------------------------------------------
+
+        debug_dash_plate = CollisionRect(
+            pos = numpy.array([50.4, -30.6]),
+            w = 8.27,
+            h = 0.23
+        )
 
         return Track(
             name = "event_horizon_track2",
-            track_surface_rects = [rect1, rect2, rect3, rect4, rect5],
+            track_surface_rects = [rect1, rect2, rect3, rect4, rect5, rect6, rect7, rect8, rect9, rect10, rect11, rect12],
             key_checkpoint_rects = [],
-            ramp_rects = [],
+            ramp_rects = [ramp1, ramp2],
             finish_line_collider = finish_line_coll,
-            dash_plate_rects = [],
+            dash_plate_rects = [debug_dash_plate],
             recovery_rects = []
         )
