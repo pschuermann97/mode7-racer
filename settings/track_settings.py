@@ -384,7 +384,7 @@ class TrackCreator:
         # small vertical rect before first jump
         rect8 = CollisionRect(
             pos = numpy.array([50.43, -23]),
-            w = 4.13,
+            w = 8.27,
             h = 20.73
         )
 
@@ -442,10 +442,25 @@ class TrackCreator:
 
         # -------------- dash plate creation ---------------------------------------------
 
+        # giant not-too-accurate dash plate before the first jump
         debug_dash_plate = CollisionRect(
             pos = numpy.array([50.4, -30.6]),
             w = 8.27,
             h = 0.23
+        )
+
+        # first dash plate when driving a proper lap around the track
+        dash_plate1 = CollisionRect(
+            pos = numpy.array([53.145, -71.66]),
+            h = DASH_PLATE_HEIGHT,
+            w = DASH_PLATE_WIDTH
+        )
+
+        # second dash plate when driving a proper lap around the track
+        dash_plate2 = CollisionRect(
+            pos = numpy.array([53.12, -54.52]),
+            h = DASH_PLATE_HEIGHT,
+            w = DASH_PLATE_WIDTH
         )
 
         return Track(
@@ -454,6 +469,6 @@ class TrackCreator:
             key_checkpoint_rects = [rect7, rect11, rect5],
             ramp_rects = [ramp1, ramp2],
             finish_line_collider = finish_line_coll,
-            dash_plate_rects = [debug_dash_plate],
+            dash_plate_rects = [debug_dash_plate, dash_plate1, dash_plate2],
             recovery_rects = []
         )
