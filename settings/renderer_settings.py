@@ -31,5 +31,5 @@ SCALE = 20
 FOG_DENSITY = 100
 
 # how fast the background moves when the player rotates
-BACKGROUND_ROTATION_SPEED = 50
+BACKGROUND_ROTATION_SPEED = 120
 
