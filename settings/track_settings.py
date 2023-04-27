@@ -321,11 +321,11 @@ class TrackCreator:
 
     # for now this is just an empty track with the monochrome environment texture set
     def create_event_horizon_track2():
-        # finish line collider (not properly set yet)
+        # finish line collider
         finish_line_coll = CollisionRect(
-            pos = numpy.array([27.165, 11116.6325]),
+            pos = numpy.array([27.165, -95.3]),
             w = 14.33,
-            h = 1.145
+            h = 0.955
         )
 
         # -------------- track collision rect creation ---------------------
@@ -394,9 +394,9 @@ class TrackCreator:
 
         # left-most vertical rect
         rect9 = CollisionRect(
-            pos = numpy.array([66.92, -135.67]),
+            pos = numpy.array([66.92, -124.9]),
             w = 8.545,
-            h = 62.52
+            h = 82.9
         )
 
         # lower horizontal rect
@@ -451,7 +451,7 @@ class TrackCreator:
         return Track(
             name = "event_horizon_track2",
             track_surface_rects = [rect1, rect2, rect3, rect4, rect5, rect6, rect7, rect8, rect9, rect10, rect11, rect12],
-            key_checkpoint_rects = [],
+            key_checkpoint_rects = [rect7, rect11, rect5],
             ramp_rects = [ramp1, ramp2],
             finish_line_collider = finish_line_coll,
             dash_plate_rects = [debug_dash_plate],
