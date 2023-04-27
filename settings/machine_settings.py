@@ -62,7 +62,7 @@ PURPLE_COMET_IDLE_ANIMATION = Animation(
 
 PURPLE_COMET = Machine(
     max_speed = PURPLE_COMET_MAX_SPEED,
-    boosted_max_speed = PURPLE_COMET_MAX_SPEED * 1.2,
+    boosted_max_speed = PURPLE_COMET_MAX_SPEED * 1.4,
     acceleration = PURPLE_COMET_ACCELERATION, # 750 frame update units to get to top speed
     boosted_acceleration = PURPLE_COMET_ACCELERATION * 10,
     brake = PURPLE_COMET_ACCELERATION * 2, # brake is twice as strong as accelerator
