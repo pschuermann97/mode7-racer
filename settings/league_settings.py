@@ -16,7 +16,7 @@ LEAGUE_1_RACES = [
         race_mode = "time-attack",
         init_player_pos_x = 25.55,
         init_player_pos_y = -119.78,
-        init_player_angle = -111.56,
+        init_player_angle = -111.565,
         is_foggy = False
     ),
     Race(
@@ -27,7 +27,7 @@ LEAGUE_1_RACES = [
         race_mode = "time-attack",
         init_player_pos_x = 25.55,
         init_player_pos_y = -119.78,
-        init_player_angle = -111.56,
+        init_player_angle = -111.565,
         is_foggy = True
     ),
     Race(
@@ -38,7 +38,7 @@ LEAGUE_1_RACES = [
         race_mode = "time-attack",
         init_player_pos_x = 25.55,
         init_player_pos_y = -119.78,
-        init_player_angle = -111.56,
+        init_player_angle = -111.565,
         is_foggy = True
     ),
     Race(
@@ -47,9 +47,9 @@ LEAGUE_1_RACES = [
         bg_tex_path = "gfx/event_horizon_bg.png",
         required_laps = STD_REQUIRED_LAPS,
         race_mode = "time_attack",
-        init_player_pos_x = 25.55,
-        init_player_pos_y = -119.78,
-        init_player_angle = -111.56,
+        init_player_pos_x = 26.26,
+        init_player_pos_y = -98.86,
+        init_player_angle = -111.565,
         is_foggy = False
     ),
     Race(
@@ -60,7 +60,7 @@ LEAGUE_1_RACES = [
         race_mode = "time_attack",
         init_player_pos_x = 25.55,
         init_player_pos_y = -119.78,
-        init_player_angle = -111.56,
+        init_player_angle = -111.565,
         is_foggy = True
     )
 ]

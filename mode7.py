@@ -90,7 +90,7 @@ class Mode7:
             # compute background image render
             for j in range(0, horizon):
                 # background image is shifted by angle the player is rotated by
-                screen_array[i][j] = bg_array[(i + int(angle * BACKGROUND_ROTATION_SPEED)) % bg_tex_size[0]][j % bg_tex_size[1]]
+                screen_array[i][j] = bg_array[(i - int(angle * BACKGROUND_ROTATION_SPEED)) % bg_tex_size[0]][j % bg_tex_size[1]]
             # compute floor render
             for j in range(horizon, HEIGHT):
                 # Let us imagine that the floor texture is tiled infinitely 
