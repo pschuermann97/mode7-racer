@@ -21,3 +21,6 @@ DEFAULT_SINGLE_RACE_CHOICE = 3
 
 # whether it should be possible to restart the current race with the R key
 DEBUG_RESTART_RACE_ON_R = True
+
+# whether debug information should be logged to the standard output
+SHOULD_DEBUG_LOG = False

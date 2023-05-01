@@ -258,7 +258,8 @@ class App:
         pygame.display.set_caption(f'{self.clock.get_fps(): 0.1f}')
 
         # log output for debug
-        self.debug_logs()
+        if SHOULD_DEBUG_LOG:
+            self.debug_logs()
 
         # timestamp of current frame for delta computation in next frame
         self.last_frame = self.time
