@@ -28,7 +28,7 @@ Note: numba does not work with Python 3.11 yet (May 1, 2023).
 
 ## Test build
 
-You can find a test build under ... which features 4 consecutive races.
+You can find a test build under https://pschuermann97.itch.io/mode7-racer which features 4 consecutive races.
 The controls for the game are as follows:
 
 - A/D: steer
@@ -37,3 +37,4 @@ The controls for the game are as follows:
 - L: use booster (unlocked after finishing one lap)
 
 Every race requires 3 laps to complete.
+After finishing a race, press K to skip to the next one.
