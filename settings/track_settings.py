@@ -463,6 +463,15 @@ class TrackCreator:
             w = DASH_PLATE_WIDTH
         )
 
+        # --------------- end of dash plate creation --------------------
+
+        # only healing zone
+        recovery_rect1 = CollisionRect(
+            pos = numpy.array([36.07, -126.85]),
+            w = 26.62,
+            h = 48.51
+        )
+
         return Track(
             name = "event_horizon_track2",
             track_surface_rects = [rect1, rect2, rect3, rect4, rect5, rect6, rect7, rect8, rect9, rect10, rect11, rect12],
@@ -470,5 +479,5 @@ class TrackCreator:
             ramp_rects = [ramp1, ramp2],
             finish_line_collider = finish_line_coll,
             dash_plate_rects = [debug_dash_plate, dash_plate1, dash_plate2],
-            recovery_rects = []
+            recovery_rects = [recovery_rect1]
         )
