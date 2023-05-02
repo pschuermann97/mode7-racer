@@ -248,7 +248,6 @@ class App:
             # and activates their boost power if so (and not activated yet).
             if self.current_league.current_race().player_completed_first_lap() and not self.player.has_boost_power:
                 self.player.has_boost_power = True
-                print("You got boost power!!!")
 
         # updates clock
         self.clock.tick()
@@ -289,8 +288,6 @@ class App:
 
         # reset flag
         self.should_load_next_race = False
-
-        print("---------------- race on " + race.race_track.name + " was restarted ------------------")
 
     # (Re-)initializes all sprite groups as empty groups.
     # Can be used to tidy up when switching game modes.
