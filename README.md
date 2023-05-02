@@ -18,8 +18,8 @@ If you want to just try out the prototype and do not want to install the require
 
 ## Installation instructions
 
-1. Install Python version 3.10 on your machine (https://www.python.org/downloads/release/python-31011/). In this project, Python 3.10.10 was used. Note that the will NOT run with the Python 3.11 interpreter since not all dependencies work with Python 3.11.
-2. Install pygame 2.2.0. If you are using pip to manage your Python packages, this can be done by running the command `pip install pygame==2.0.1`.
+1. Install Python version 3.10 on your machine (https://www.python.org/downloads/release/python-31011/). In this project, Python 3.10.10 was used. Note that the project's scripts will NOT run with the Python 3.11 interpreter since not all dependencies work with Python 3.11.
+2. Install pygame 2.2.0. If you are using pip to manage your Python packages, this can be done by running the command `pip install pygame==2.2.0`.
 3. For performance optimization and to be able to run the Mode7 renderer in real time, this implementation uses the Python just-in-time compiler numba (https://numba.pydata.org/) which compiles numerical functions to machine code at runtime to greatly accelerate their execution.
 For this implementation, numba version 0.56.4 was used which you can install via pip by running the command `pip install numba==0.56.4`.
 Note: numba does not work with Python 3.11 yet (May 1, 2023).
