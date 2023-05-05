@@ -35,6 +35,7 @@ The controls for the game are as follows:
 - K: accelerate
 - J: break
 - L: use booster (unlocked after finishing one lap)
+- R: restart race
 
 Every race requires 3 laps to complete.
 After finishing a race, press K to skip to the next one.
