@@ -16,6 +16,8 @@ The Mode7 rendering module used in this implementation is based on the Mode7 tut
 If you want to experiment with the code of the game prototype, see paragraph "Installation instructions" below.
 If you want to just try out the prototype and do not want to install the required dependencies on your machine, see "Test build".
 
+Please note that the content of this repository is available under the Creative Commons license CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/).
+
 ## Installation instructions
 
 1. Install Python version 3.10 on your machine (https://www.python.org/downloads/release/python-31011/). In this project, Python 3.10.10 was used. Note that the project's scripts will NOT run with the Python 3.11 interpreter since not all dependencies work with Python 3.11.
