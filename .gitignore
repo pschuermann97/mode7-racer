@@ -33,6 +33,9 @@ MANIFEST
 *.manifest
 *.spec
 
+# zipped builds should be ignored
+*.zip
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt

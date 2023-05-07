@@ -99,7 +99,7 @@ class App:
 
         # ------------- track selection (todo) -------------
 
-        race_choice = 3
+        race_choice = DEFAULT_SINGLE_RACE_CHOICE
 
         # ------------- end of track selection -------------
 
@@ -248,7 +248,6 @@ class App:
             # and activates their boost power if so (and not activated yet).
             if self.current_league.current_race().player_completed_first_lap() and not self.player.has_boost_power:
                 self.player.has_boost_power = True
-                print("You got boost power!!!")
 
         # updates clock
         self.clock.tick()
@@ -258,7 +257,8 @@ class App:
         pygame.display.set_caption(f'{self.clock.get_fps(): 0.1f}')
 
         # log output for debug
-        self.debug_logs()
+        if SHOULD_DEBUG_LOG:
+            self.debug_logs()
 
         # timestamp of current frame for delta computation in next frame
         self.last_frame = self.time
@@ -288,8 +288,6 @@ class App:
 
         # reset flag
         self.should_load_next_race = False
-
-        print("---------------- race on " + race.race_track.name + " was restarted ------------------")
 
     # (Re-)initializes all sprite groups as empty groups.
     # Can be used to tidy up when switching game modes.
