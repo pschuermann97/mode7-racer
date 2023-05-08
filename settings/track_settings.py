@@ -119,8 +119,8 @@ class TrackCreator:
 
         track_surface = CollisionRect(
             pos = numpy.array([27.165, -116.6325]),
-            w = 100,
-            h = 100
+            w = 10000,
+            h = 10000
         )
 
         return Track(
