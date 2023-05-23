@@ -64,6 +64,17 @@ LEAGUE_1_RACES = [
         is_foggy = True
     ),
     Race(
+        race_track_creator = TrackCreator.create_track_2023,
+        floor_tex_path = "gfx/track_2023_snow.png",
+        bg_tex_path = "gfx/track_2023_snow_bg.png",
+        required_laps = STD_REQUIRED_LAPS,
+        race_mode = "time-attack",
+        init_player_pos_x = 25.55,
+        init_player_pos_y = -119.78,
+        init_player_angle = -111.565,
+        is_foggy = False
+    ),
+    Race(
         race_track_creator = TrackCreator.create_monochrome_track,
         floor_tex_path = "gfx/black_hole_track1.png",
         bg_tex_path = "gfx/black_hole_track_bg.png",
