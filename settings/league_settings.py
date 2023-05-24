@@ -8,7 +8,7 @@ from settings.track_settings import TrackCreator, STD_REQUIRED_LAPS
 # ------------- creation of the different leagues in the game --------------------------
 
 LEAGUE_1_RACES = [
-    Race(
+    Race( # first city track in event horizon biome
         race_track_creator = TrackCreator.create_track_2023,
         floor_tex_path = "gfx/event_horizon_track1.png",
         bg_tex_path = "gfx/event_horizon_bg.png",
@@ -19,7 +19,7 @@ LEAGUE_1_RACES = [
         init_player_angle = -111.565,
         is_foggy = False
     ),
-    Race(
+    Race( # first city track
         race_track_creator = TrackCreator.create_track_2023,
         floor_tex_path = "gfx/track_2023.png",
         bg_tex_path = "gfx/track_2023_bg_resized.png",
@@ -30,7 +30,7 @@ LEAGUE_1_RACES = [
         init_player_angle = -111.565,
         is_foggy = True
     ),
-    Race(
+    Race( # second city track
         race_track_creator = TrackCreator.create_track_2023_II,
         floor_tex_path = "gfx/track_2023_II.png",
         bg_tex_path = "gfx/track_2023_bg_resized.png",
@@ -41,7 +41,7 @@ LEAGUE_1_RACES = [
         init_player_angle = -111.565,
         is_foggy = True
     ),
-    Race(
+    Race( # second event horizon track
         race_track_creator = TrackCreator.create_event_horizon_track2,
         floor_tex_path = "gfx/event_horizon_track2.png",
         bg_tex_path = "gfx/event_horizon_bg.png",
@@ -52,7 +52,7 @@ LEAGUE_1_RACES = [
         init_player_angle = -111.565,
         is_foggy = False
     ),
-    Race(
+    Race( # first city track in snow biome
         race_track_creator = TrackCreator.create_track_2023,
         floor_tex_path = "gfx/track_2023_snow.png",
         bg_tex_path = "gfx/track_2023_snow_bg.png",
@@ -63,7 +63,7 @@ LEAGUE_1_RACES = [
         init_player_angle = -111.565,
         is_foggy = False
     ),
-    Race(
+    Race( # desert track
         race_track_creator = TrackCreator.create_monochrome_track,
         floor_tex_path = "gfx/desert_track1.png",
         bg_tex_path = "gfx/monochrome_track_bg.png",
@@ -74,7 +74,7 @@ LEAGUE_1_RACES = [
         init_player_angle = -111.565,
         is_foggy = False
     ),
-    Race(
+    Race( # monochrome track
         race_track_creator = TrackCreator.create_monochrome_track,
         floor_tex_path = "gfx/monochrome_track.png",
         bg_tex_path = "gfx/monochrome_track_bg.png",
@@ -85,7 +85,7 @@ LEAGUE_1_RACES = [
         init_player_angle = -111.565,
         is_foggy = True
     ),
-    Race(
+    Race( # empty plane in black-hole biome
         race_track_creator = TrackCreator.create_monochrome_track,
         floor_tex_path = "gfx/black_hole_track1.png",
         bg_tex_path = "gfx/black_hole_track_bg.png",

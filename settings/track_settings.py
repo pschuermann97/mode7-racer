@@ -5,7 +5,7 @@ from collision import CollisionRect
 from track import Track, KeyCheckpoint 
 
 # race configuration
-STD_REQUIRED_LAPS = 5 # number of laps normally required to finish a race
+STD_REQUIRED_LAPS = 3 # number of laps normally required to finish a race
 
 # obstacle sizes for "prefab" obstacles
 DASH_PLATE_HEIGHT = 2
