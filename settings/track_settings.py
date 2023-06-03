@@ -106,7 +106,8 @@ class TrackCreator:
             ramp_rects = [ramp1],
             finish_line_collider = finish_line_coll,
             dash_plate_rects = [dash_plate1],
-            recovery_rects = [recovery_zone_1]
+            recovery_rects = [recovery_zone_1],
+            has_guard_rails = True
         )
 
     # for now this is just an empty track with the monochrome environment texture set
@@ -130,7 +131,8 @@ class TrackCreator:
             ramp_rects = [],
             finish_line_collider = finish_line_coll,
             dash_plate_rects = [],
-            recovery_rects = []
+            recovery_rects = [],
+            has_guard_rails = False
         )
 
     # Creates the collision shape for the track whose sprite is named "track_2023_II.png".
@@ -316,7 +318,8 @@ class TrackCreator:
             ramp_rects = [ramp1],
             finish_line_collider = finish_line_coll,
             dash_plate_rects = [dash_plate1, dash_plate2, dash_plate3, dash_plate4, dash_plate_left, dash_plate_middle, dash_plate_right],
-            recovery_rects = [recovery_zone_1]
+            recovery_rects = [recovery_zone_1],
+            has_guard_rails = True
         )
 
     # for now this is just an empty track with the monochrome environment texture set
@@ -479,5 +482,6 @@ class TrackCreator:
             ramp_rects = [ramp1, ramp2],
             finish_line_collider = finish_line_coll,
             dash_plate_rects = [debug_dash_plate, dash_plate1, dash_plate2],
-            recovery_rects = [recovery_rect1]
+            recovery_rects = [recovery_rect1],
+            has_guard_rails = True
         )

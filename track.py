@@ -6,7 +6,7 @@
 # as well as for the skybox-like background.
 class Track:
     def __init__(self, name, track_surface_rects, key_checkpoint_rects, ramp_rects, finish_line_collider, 
-            dash_plate_rects, recovery_rects):
+            dash_plate_rects, recovery_rects, has_guard_rails):
         self.name = name
 
         self.track_surface_rects = track_surface_rects
@@ -20,6 +20,21 @@ class Track:
         self.dash_plate_rects = dash_plate_rects
 
         self.recovery_zone_rects = recovery_rects
+
+        # Flag determining whether the track has solid borders or not
+        # (in the latter case, the player just falls off the track)
+        self.has_guard_rails = has_guard_rails
+
+
+    
+    # ------------------ methods for collision detection ---------------------------
+
+
+
+    # These methods check whether a passed rectangular collider 
+    # collides with something on the track.  
+
+
 
     # Determines whether the passed rectangular collider is on the track surface or not.
     # 
@@ -68,6 +83,16 @@ class Track:
     def is_on_finish_line(self, other):
         return self.finish_line_collider.overlap(other)
 
+
+
+    # --------------------- end of methods for collision detection ---------------------------
+
+
+
+    # --------------------- methods for handling the key checkpoints on the track ------------------
+
+
+
     # Checks for each key checkpoint if the passed player collider
     # is over one (or more) key checkpoint.
     # If yes, these key checkpoints are marked as passed.
@@ -88,6 +113,20 @@ class Track:
     def reset_key_checkpoints(self):
         for key_checkpoint in self.key_checkpoints:
             key_checkpoint.passed = False
+
+
+
+    # ----------------- end of the methods for handling the key checkpoints on the track
+
+
+
+    # Capsulates the check whether the guard rails on this track 
+    # are active in a specific frame.
+    # Note that this might not only depend on whether the track has guard rails
+    # but also traps on the track might be able to temporarily disable the track's guard rails. 
+    def guard_rails_active(self):
+        return self.has_guard_rails
+
 
 
 # A key checkpoint for the lap counting system.

@@ -215,6 +215,9 @@ class App:
     def update(self):
         # computes time since last frame
         delta = self.time - self.last_frame
+
+        # timestamp of current frame start (!) for delta computation in next frame
+        self.last_frame = self.time
         
         # For things only needed to be done during a race. 
         if self.in_racing_mode:
@@ -259,9 +262,6 @@ class App:
         # log output for debug
         if SHOULD_DEBUG_LOG:
             self.debug_logs()
-
-        # timestamp of current frame for delta computation in next frame
-        self.last_frame = self.time
 
     # (Re-)loads the passed race.
     def load_race(self, race):
