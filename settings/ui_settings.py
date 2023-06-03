@@ -2,6 +2,7 @@
 
 import pygame
 from settings.renderer_settings import WIDTH, HEIGHT
+from settings.machine_settings import PURPLE_COMET_MAX_SPEED # for speed display factor
 
 # UI screen coordinates
 
@@ -37,7 +38,7 @@ def TIMER_DIGIT_X_OFFSET(i):
 # end of UI screen coordinates
 
 # other UI configuration
-SPEED_DISPLAY_MULTIPLIER = 1426 / 0.05 # so max speed of Purple Comet will be shown as 1426 km/h
+SPEED_DISPLAY_MULTIPLIER = 1426 / PURPLE_COMET_MAX_SPEED # so max speed of Purple Comet will be shown as 1426 km/h
 
 
 

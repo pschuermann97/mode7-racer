@@ -1,5 +1,5 @@
 # foreign module imports
-import pygame
+import pygame, time
 import sys
 
 # import of the game settings
@@ -252,8 +252,10 @@ class App:
             if self.current_league.current_race().player_completed_first_lap() and not self.player.has_boost_power:
                 self.player.has_boost_power = True
 
-        # updates clock
-        self.clock.tick()
+        # Updates clock.
+        # The passed framerate argument slows time in the game down artificially
+        # so that the game never runs with a higher framerate than the passed one.
+        self.clock.tick(TARGET_FPS)
 
         # caption of the window displays current frame rate
         # (f'...' is a more readable + faster way to write format strings than with "%")
@@ -317,9 +319,7 @@ class App:
         pygame.display.flip()
 
     def get_time(self):
-        # time since game started in seconds
-        # (get_ticks returns this time in milliseconds)
-        self.time = pygame.time.get_ticks() * 0.001
+        self.time = time.time()
 
     def check_event(self):
         for event in pygame.event.get():

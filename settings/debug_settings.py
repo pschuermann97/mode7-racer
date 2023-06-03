@@ -8,6 +8,10 @@ IN_DEV_MODE = False
 # whether collisions with the track borders and obstacles are being detected (i.e. solid)
 COLLISION_DETECTION_OFF = False
 
+# framerate that should be achieved if possible 
+# (also an upper limit to the frame rate)
+TARGET_FPS = 100
+
 # Whether the debug menu for choosing a machine appears before starting the game.
 # If set to False, the default machine is used.
 DEBUG_CHOOSE_MACHINE = False

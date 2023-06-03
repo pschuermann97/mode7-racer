@@ -11,7 +11,11 @@ JUMP_HEIGHT = 100 # maximum height the player gains throughout a jump (compared 
 OBSTACLE_HIT_SPEED_RETENTION = 0.5 # percentage of its speed the player machine retains when hitting an obstacle
 MIN_BOUNCE_BACK_FORCE = 0.005 # minimal force applied in opposite direction when the player hits a wall (to prevent player getting stuck just outside the track boundaries)
 
-# maximum energy that a machine usually
+# reference values for machine stats
+PURPLE_COMET_ACCELERATION = 5000 / 750
+PURPLE_COMET_MAX_SPEED = 25
+
+# maximum energy that a machine usually has
 STD_MAX_ENERGY = 100
 
 # Factor that is used to compute the amount of energy 
@@ -20,7 +24,7 @@ STD_MAX_ENERGY = 100
 # Idea: at a speed of 1426 km/h (top speed of the Purple Comet, 0.05 in the interna of the physics engine), 
 # a machine would normally lose 5 energy units
 # (not applying the individual shield strength of the machine (Machine.hit_cost)).
-HIT_COST_SPEED_FACTOR = 5 / 0.05
+HIT_COST_SPEED_FACTOR = 5 / PURPLE_COMET_MAX_SPEED
 
 # Quadratic function that computes the height of the player during a jump
 # based on the time since the player jumped off the track.
@@ -39,8 +43,6 @@ IDLE_ANIM_SPEED = 12
 
 PURPLE_COMET_GRAPHICS_ROOT_PATH = "gfx/machines/purple_comet/"
 
-PURPLE_COMET_ACCELERATION = 10 / 750
-PURPLE_COMET_MAX_SPEED = 0.05
 PURPLE_COMET_SHADOW_IMAGE_PATH = PURPLE_COMET_GRAPHICS_ROOT_PATH + "violet_machine_shadow.png"
 
 PURPLE_COMET_DRIVING_ANIMATION = Animation(
@@ -69,7 +71,7 @@ PURPLE_COMET = Machine(
     speed_loss = PURPLE_COMET_ACCELERATION / 3, # speed loss is a third the strength of the accelerator
     boosted_speed_loss = PURPLE_COMET_ACCELERATION * 6,
     centri = 30, # 50% of current speed applied as centrifugal force
-    jump_duration_multiplier = 2 / 0.05, # jump should last 2 seconds if machine at max speed
+    jump_duration_multiplier = 2 / PURPLE_COMET_MAX_SPEED, # jump should last 2 seconds if machine at max speed
     boost_duration = 2,
     max_energy = STD_MAX_ENERGY,
     boost_cost = 19,

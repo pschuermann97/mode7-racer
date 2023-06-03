@@ -236,8 +236,11 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         sin_a = numpy.sin(self.angle)
         cos_a = numpy.cos(self.angle)
 
-        # Store the scaled versions of those two values for convenience.
-        speed_sin, speed_cos = self.current_speed * sin_a, self.current_speed * cos_a # speed
+        # Store the scaled versions of the speed and centrifugal forces directions for convenience.
+        # Scale the directions with the speed 
+        # and the current delta (time between current and last frame).
+        # The latter scale factor must be applied to make the player speed independent of the games framerate
+        speed_sin, speed_cos = self.current_speed * delta * sin_a, self.current_speed * delta * cos_a # speed
         cf_sin, cf_cos = self.machine.centri * speed_sin * -1 * delta, self.machine.centri * speed_cos * -1 * delta # centrifugal forces
 
         # Compute player's position in the next frame including the moved collision rect.
@@ -269,6 +272,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
                 # Uses a constant factor (see settings module) to scale current speed to energy loss.
                 # Lastly, the individual body strength of the machine is taken into account.
                 lost_energy = (abs(self.current_speed) * HIT_COST_SPEED_FACTOR) * self.machine.hit_cost
+                print(lost_energy)
                 self.current_energy -= lost_energy
                 
                 # player machine is destroyed if it has taken more damage than it can sustain
