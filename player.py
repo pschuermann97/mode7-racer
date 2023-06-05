@@ -28,6 +28,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         # physics variables
         self.machine = machine # holds all relevant data on physical properties of the player machine
         self.current_speed = 0 # how fast the player moves in the current frame
+        self.centri = 0 # how strong the centrifugal force applied in the current frame is
 
         # current amount of energy that the machine has left
         self.current_energy = self.machine.max_energy
@@ -59,6 +60,8 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         self.shadow_sprite.rect.topleft = [NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y]
 
         # player status flags/variables
+        self.steering_left = False
+        self.steering_right = False
         self.jumping = False
         self.jumped_off_timestamp = None # timestamp when the player last jumped off a ramp
         # When jumping: this is the duration of the jump from start to landing.
@@ -181,6 +184,23 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
             self.current_energy -= self.machine.boost_cost # boosting costs a bit of energy
             self.boosted = True # status flag update
 
+        # Steering.
+        if keys[STD_LEFT_KEY] and not self.finished:
+            # update flags
+            self.steering_left = True
+            self.steering_right = False
+            
+            # rotate player
+            self.angle += self.machine.rotation_speed * delta
+            
+        if keys[STD_RIGHT_KEY] and not self.finished:
+            # update flags
+            self.steering_left = False
+            self.steering_right = True
+            
+            # rotate player
+            self.angle -= self.machine.rotation_speed * delta
+
         # ------------ updating player's speed ------------------
         
         # Increase speed when acceleration button pressed.
@@ -228,7 +248,52 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
                 if self.current_speed > 0:
                     self.current_speed = 0
 
-        # -------- end of updating player's speed -----------
+
+
+
+        # -------- end of updating player's speed -----------------------
+
+
+
+        # -------- computing centrifugal force strength -----------------
+
+
+
+        # If the player presses one of the turn buttons in the current frame,
+        # the centrifugal force increases (is capped at a certain limit)
+        # The increase in centrifugal forces is proportional to the player's current speed.
+        if keys[STD_LEFT_KEY] or keys[STD_RIGHT_KEY]:
+            self.centri += self.machine.centri_increase * self.current_speed * delta
+            if self.centri > self.machine.max_centri:
+                self.centri = self.machine.max_centri
+        # otherwise: the applied centrifugal force decreases
+        # (cannot fall below 0)
+        else:
+            self.centri -= self.machine.centri_decrease * delta 
+            if self.centri < 0:
+                self.centri = 0
+                
+                # When the centrifugal forces are done wearing off,
+                # the turn is finished and the flags can be reset.
+                self.steering_left = False
+                self.steering_right = False 
+
+        print("centrifugal force: " + str(self.centri))
+
+
+
+        # --------- end of computing centrifugal force strength ----------
+
+
+
+        # ---------- actual movement of the player ---------------
+
+
+
+        # Compute movement direction from player inputs 
+        # and speed + centrifugal force strength.
+
+
 
         # Compute sine and cosine of current angle 
         # to be able to update player position
@@ -241,7 +306,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         # and the current delta (time between current and last frame).
         # The latter scale factor must be applied to make the player speed independent of the games framerate
         speed_sin, speed_cos = self.current_speed * delta * sin_a, self.current_speed * delta * cos_a # speed
-        cf_sin, cf_cos = self.machine.centri * speed_sin * -1 * delta, self.machine.centri * speed_cos * -1 * delta # centrifugal forces
+        cf_sin, cf_cos = self.centri * speed_sin * -1 * delta, self.centri * speed_cos * -1 * delta # centrifugal forces
 
         # Compute player's position in the next frame including the moved collision rect.
         next_frame_position_x = self.position[0] + speed_cos
@@ -261,7 +326,9 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
             self.position[0] = next_frame_position_x
             self.position[1] = next_frame_position_y
         else:
-            if not COLLISION_DETECTION_OFF:
+            # If guard rails are active:
+            # Player loses some energy and bounces back
+            if self.current_race.guard_rails_active():
                 # Player bounces back since their move speed is flipped.
                 # Player does not retain all of its speed.
                 # There is a minimal force that is always applied 
@@ -269,30 +336,70 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
                 self.current_speed = -(self.current_speed * OBSTACLE_HIT_SPEED_RETENTION + MIN_BOUNCE_BACK_FORCE)
 
                 # Player loses energy.
-                # Uses a constant factor (see settings module) to scale current speed to energy loss.
-                # Lastly, the individual body strength of the machine is taken into account.
-                lost_energy = (abs(self.current_speed) * HIT_COST_SPEED_FACTOR) * self.machine.hit_cost
-                print(lost_energy)
-                self.current_energy -= lost_energy
+                self.lose_energy(self.current_speed)
                 
                 # player machine is destroyed if it has taken more damage than it can sustain
                 if self.current_energy < 0:
-                    self.destroyed = True
-                    print("player machine destroyed!")
+                    self.destroy()
+            # If no guard rails are active:
+            # player machine is destroyed
+            else:
+                self.destroy()
 
-        # Steering.
-        if keys[STD_LEFT_KEY] and not self.finished:
-            # rotate player
-            self.angle += self.machine.rotation_speed * delta
+        
 
-            # apply centrifugal force
-            self.position[0] += -cf_sin
-            self.position[1] += cf_cos
-        if keys[STD_RIGHT_KEY] and not self.finished:
-            self.angle -= self.machine.rotation_speed * delta
+        # ----------------- application of centrifugal forces
 
-            self.position[0] += cf_sin
-            self.position[1] += -cf_cos
+
+
+        # compute player position in next frame
+        if self.steering_left:
+            next_frame_position_x = self.position[0] - cf_sin
+            next_frame_position_y = self.position[1] + cf_cos
+        if self.steering_right:
+            next_frame_position_x = self.position[0] + cf_sin
+            next_frame_position_y = self.position[1] - cf_cos
+
+        # -------------- determining whether centrifugal forces should be applied -------------------
+        
+        
+
+        # compute position of player in next frame
+        frame_lookahead_collision_rect = CollisionRect(
+            pos = numpy.array([next_frame_position_x, next_frame_position_y]),
+            w = PLAYER_COLLISION_RECT_WIDTH,
+            h = PLAYER_COLLISION_RECT_HEIGHT
+        )
+
+        # Check if the player would stay on the track when moved as above.
+        # If so (or the player is jumping or the collision detection is turned off in debug mode), move them.
+        # Else, make the player lose some energy or destroy the player machine
+        # (depending on whether the track has active guard rails).
+        if self.current_race.is_on_track(frame_lookahead_collision_rect) or self.jumping or COLLISION_DETECTION_OFF:
+            self.position[0] = next_frame_position_x
+            self.position[1] = next_frame_position_y
+        else:
+            if self.current_race.guard_rails_active():
+                # centrifugal force is reset
+                self.centri = 0
+
+                # player gets damaged proportional to force currently applied
+                self.lose_energy(self.centri)
+
+                # player machine destroyed if out of energy
+                if self.current_energy < 0:
+                    self.destroy()
+            else: 
+                # player machine immediately destroyed if track has no guard rails active
+                self.destroy()
+
+
+
+        # ------------------ end of application of centrifugal forces ------------ 
+
+
+
+        # ------ end of actual movement of the player -----------------------
     
     # Updates player status flags and moves the player
     # to its current screen Y position
@@ -307,7 +414,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
             NORMAL_ON_SCREEN_PLAYER_POSITION_Y - HEIGHT_DURING_JUMP(elapsed_time, self.current_jump_duration)
         ]
 
-        # End jump (reset status flap) if jump duration reached
+        # End jump (reset status flag) if jump duration reached
         # To prevent any visual artifacts, the player rect is reset to its normal y position on screen.
         if elapsed_time >= self.current_jump_duration:
             self.jumping = False
@@ -323,8 +430,8 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
                 PLAYER_COLLISION_RECT_HEIGHT
             )
             if not self.current_race.is_on_track(current_collision_rect):
-                self.current_energy = -1 # leads to destruction of player machine in next frame since energy < 0
                 print("player out of bounds!")
+                self.destroy()
 
     # Called once per frame if the player currently has a booster active.
     # Checks whether the booster should end since its duration has exceeded.
@@ -353,6 +460,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
 
         # reset forces
         self.current_speed = 0
+        self.centri = 0
 
         # reset energy to max
         self.current_energy = self.machine.max_energy
@@ -363,6 +471,8 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         self.destroyed = False
         self.boosted = False
         self.has_boost_power = False
+        self.steering_left = False
+        self.steering_right = False
 
         # reset screen position
         self.rect.topleft = [
@@ -374,3 +484,18 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
     def reinitialize_position_angle(self):
         self.position = numpy.array([self.current_race.init_player_pos_x, self.current_race.init_player_pos_y])
         self.angle = self.current_race.init_player_angle
+
+    # Destroys the player machine by updating a status flag
+    # and playing the explosion animation.
+    def destroy(self):
+        self.destroyed = True
+        print("player machine destroyed!")
+
+    # Makes the player machine lose energy proportional to the passed force.
+    # Examples for forces are the machines current speed, the currently applied centrifugal force, ...
+    def lose_energy(self, force):
+        # Uses a constant factor (see settings module) to scale current speed to energy loss.
+        # Lastly, the individual body strength of the machine is taken into account.
+        lost_energy = (abs(force) * HIT_COST_SPEED_FACTOR) * self.machine.hit_cost
+        
+        self.current_energy -= lost_energy

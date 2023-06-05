@@ -3,7 +3,7 @@
 # and graphics
 class Machine:
     def __init__(self, max_speed, boosted_max_speed, acceleration, boosted_acceleration, brake, speed_loss, 
-            boosted_speed_loss, centri, jump_duration_multiplier, boost_duration, max_energy, 
+            boosted_speed_loss, max_centri, centri_increase, centri_decrease, jump_duration_multiplier, boost_duration, max_energy, 
             boost_cost, hit_cost, recover_speed,
             rotation_speed, idle_anim, driving_anim, shadow_image_path):
         # ----------- physics variables initialization ----------------------
@@ -31,11 +31,23 @@ class Machine:
         self.speed_loss = speed_loss
         self.boosted_speed_loss = boosted_speed_loss # speed loss is different when having a boost active
 
+        # -------------------- centrifugal forces variables ------------------------------------------
+
         # centrifugal force:
         # Determines how hard the machine is pushed towards the outside when steering.
-        # More precisely, this is the percentage of the machine's maximum speed 
+        # More precisely, the centrifugal forces varibales quantify the percentage of the machine's maximum speed 
         # that is applied as centrifugal force.
-        self.centri = centri
+
+        # how much the centrifugal force increases in each frame the machine is turning
+        self.centri_increase = centri_increase 
+
+        # the limit for the maximum centrifugal force to be applied in a single frame
+        self.max_centri = max_centri
+
+        # how much the centrifugal force decreases in each frame the machine is not turning
+        self.centri_decrease = centri_decrease
+
+        # ---------------------- end of centrifugal forces variables -----------------------------------
 
         # in seconds,
         # multiplied with the current speed in order to determine duration of a jump

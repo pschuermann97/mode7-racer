@@ -15,13 +15,13 @@ TARGET_FPS = 100
 # Whether the debug menu for choosing a machine appears before starting the game.
 # If set to False, the default machine is used.
 DEBUG_CHOOSE_MACHINE = False
-DEFAULT_MACHINE = MACHINES[0]
+DEFAULT_MACHINE = MACHINES[2]
 
 # Whether the debug menu for choosing a game mode appears before starting the game.
 # If set to False, the default game mode is loaded.
 DEBUG_CHOOSE_GAME_MODE = False
 DEFAULT_GAME_MODE = 1
-DEFAULT_SINGLE_RACE_CHOICE = 5
+DEFAULT_SINGLE_RACE_CHOICE = 3
 
 # whether it should be possible to restart the current race with the R key
 DEBUG_RESTART_RACE_ON_R = True

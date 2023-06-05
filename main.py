@@ -351,7 +351,6 @@ class App:
             # render frame
             self.draw()
 
-
     # Logs various game state information to the console when key P is pressed. 
     def debug_logs(self):
         keys = pygame.key.get_pressed()

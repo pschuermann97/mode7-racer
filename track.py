@@ -41,40 +41,28 @@ class Track:
     # Parameters:
     # other (CollisionRect)
     def is_on_track(self, other):
-        for rect_coll in self.track_surface_rects:
-            if rect_coll.overlap(other):
-                return True
-        return False
+        return collides_with_list(self.track_surface_rects, other)
 
     # Determines whether the passed rectangular collider hits a dash plate on the track or not.
     #
     # Parameters:
     # other (CollisionRect)
     def is_on_dash_plate(self, other):
-        for rect_coll in self.dash_plate_rects:
-            if rect_coll.overlap(other):
-                return True
-        return False
+        return collides_with_list(self.dash_plate_rects, other)
 
     # Determines whether the passed rectangular collider hits a recovery zone on the track.
     #
     # Parameters:
     # other (CollisionRect)
     def is_on_recovery_zone(self, other):
-        for rect_coll in self.recovery_zone_rects:
-            if rect_coll.overlap(other):
-                return True
-        return False
+        return collides_with_list(self.recovery_zone_rects, other)
 
     # Determines whether the passed rectangular collider is on a ramp or not.
     #
     # Parameters:
     # other (CollisionRect)
     def is_on_ramp(self, other):
-        for rect_coll in self.ramp_rects:
-            if rect_coll.overlap(other):
-                return True
-        return False
+        return collides_with_list(self.ramp_rects, other)
 
     # Determines whether the passed rectangular collider is on the finish line or not.
     #
@@ -142,5 +130,15 @@ class KeyCheckpoint:
         self.collider = collider
         self.passed = False
 
-
+# Checks whether the passed rectangular collider
+# collides with any of the colliders in the passed list.
+#
+# Parameters:
+# list      - list of CollisionRect
+# other     - CollisionRect
+def collides_with_list(coll_list, other):
+    for rect_coll in coll_list:
+        if rect_coll.overlap(other):
+            return True
+    return False
 
