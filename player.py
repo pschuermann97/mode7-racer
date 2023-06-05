@@ -259,10 +259,11 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
 
 
 
-        # if the player presses one of the turn buttons in the current frame,
+        # If the player presses one of the turn buttons in the current frame,
         # the centrifugal force increases (is capped at a certain limit)
+        # The increase in centrifugal forces is proportional to the player's current speed.
         if keys[STD_LEFT_KEY] or keys[STD_RIGHT_KEY]:
-            self.centri += self.machine.centri_increase * delta
+            self.centri += self.machine.centri_increase * self.current_speed * delta
             if self.centri > self.machine.max_centri:
                 self.centri = self.machine.max_centri
         # otherwise: the applied centrifugal force decreases
@@ -335,11 +336,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
                 self.current_speed = -(self.current_speed * OBSTACLE_HIT_SPEED_RETENTION + MIN_BOUNCE_BACK_FORCE)
 
                 # Player loses energy.
-                # Uses a constant factor (see settings module) to scale current speed to energy loss.
-                # Lastly, the individual body strength of the machine is taken into account.
-                lost_energy = (abs(self.current_speed) * HIT_COST_SPEED_FACTOR) * self.machine.hit_cost
-                print(lost_energy)
-                self.current_energy -= lost_energy
+                self.lose_energy()
                 
                 # player machine is destroyed if it has taken more damage than it can sustain
                 if self.current_energy < 0:
@@ -363,16 +360,11 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
             next_frame_position_x = self.position[0] + cf_sin
             next_frame_position_y = self.position[1] - cf_cos
 
-        # check if player stays on track
-        # if so, move them
-        frame_lookahead_collision_rect = CollisionRect(
-            pos = numpy.array([next_frame_position_x, next_frame_position_y]),
-            w = PLAYER_COLLISION_RECT_WIDTH,
-            h = PLAYER_COLLISION_RECT_HEIGHT
-        )
-        if self.current_race.is_on_track(frame_lookahead_collision_rect):
-            self.position[0] = next_frame_position_x
-            self.position[1] = next_frame_position_y
+        # -------------- determining whether centrifugal forces should be applied -------------------
+        
+        
+
+        # do this like you did it for the speed application
 
 
 
@@ -471,3 +463,11 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
     def destroy(self):
         self.destroyed = True
         print("player machine destroyed!")
+
+    # Makes the player machine lose energy proportional to its current speed.
+    def lose_energy(self):
+        # Uses a constant factor (see settings module) to scale current speed to energy loss.
+        # Lastly, the individual body strength of the machine is taken into account.
+        lost_energy = (abs(self.current_speed) * HIT_COST_SPEED_FACTOR) * self.machine.hit_cost
+        
+        self.current_energy -= lost_energy
