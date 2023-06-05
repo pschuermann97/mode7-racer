@@ -28,6 +28,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         # physics variables
         self.machine = machine # holds all relevant data on physical properties of the player machine
         self.current_speed = 0 # how fast the player moves in the current frame
+        self.centri = 0 # how strong the centrifugal force applied in the current frame is
 
         # current amount of energy that the machine has left
         self.current_energy = self.machine.max_energy
@@ -228,7 +229,46 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
                 if self.current_speed > 0:
                     self.current_speed = 0
 
-        # -------- end of updating player's speed -----------
+
+
+
+        # -------- end of updating player's speed -----------------------
+
+
+
+        # -------- computing centrifugal force strength -----------------
+
+
+
+        # if the player presses one of the turn buttons in the current frame,
+        # the centrifugal force increases (is capped at a certain limit)
+        if keys[STD_LEFT_KEY] or keys[STD_RIGHT_KEY]:
+            self.centri += self.machine.centri_increase * delta
+            if self.centri > self.machine.max_centri:
+                self.centri = self.machine.max_centri
+        # otherwise: the applied centrifugal force decreases
+        # (cannot fall below 0)
+        else:
+            self.centri -= self.machine.centri_decrease * delta 
+            if self.centri < 0:
+                self.centri = 0
+
+        print("centrifugal force: " + str(self.centri))
+
+
+
+        # --------- end of computing centrifugal force strength ----------
+
+
+
+        # ---------- actual movement of the player ---------------
+
+
+
+        # Compute movement direction from player inputs 
+        # and speed + centrifugal force strength.
+
+
 
         # Compute sine and cosine of current angle 
         # to be able to update player position
@@ -241,7 +281,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         # and the current delta (time between current and last frame).
         # The latter scale factor must be applied to make the player speed independent of the games framerate
         speed_sin, speed_cos = self.current_speed * delta * sin_a, self.current_speed * delta * cos_a # speed
-        cf_sin, cf_cos = self.machine.centri * speed_sin * -1 * delta, self.machine.centri * speed_cos * -1 * delta # centrifugal forces
+        cf_sin, cf_cos = self.centri * speed_sin * -1 * delta, self.centri * speed_cos * -1 * delta # centrifugal forces
 
         # Compute player's position in the next frame including the moved collision rect.
         next_frame_position_x = self.position[0] + speed_cos
@@ -299,6 +339,10 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
 
             self.position[0] += cf_sin
             self.position[1] += -cf_cos
+
+
+
+        # ------ end of actual movement of the player -----------------------
     
     # Updates player status flags and moves the player
     # to its current screen Y position
