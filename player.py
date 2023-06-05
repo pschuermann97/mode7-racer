@@ -261,7 +261,9 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
             self.position[0] = next_frame_position_x
             self.position[1] = next_frame_position_y
         else:
-            if not COLLISION_DETECTION_OFF:
+            # If guard rails are active:
+            # Player loses some energy and bounces back
+            if self.current_race.guard_rails_active():
                 # Player bounces back since their move speed is flipped.
                 # Player does not retain all of its speed.
                 # There is a minimal force that is always applied 
@@ -277,8 +279,12 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
                 
                 # player machine is destroyed if it has taken more damage than it can sustain
                 if self.current_energy < 0:
-                    self.destroyed = True
-                    print("player machine destroyed!")
+                    self.destroy()
+            # If no guard rails are active:
+            # player machine is destroyed
+            else:
+                self.destroy()
+                
 
         # Steering.
         if keys[STD_LEFT_KEY] and not self.finished:
@@ -323,8 +329,8 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
                 PLAYER_COLLISION_RECT_HEIGHT
             )
             if not self.current_race.is_on_track(current_collision_rect):
-                self.current_energy = -1 # leads to destruction of player machine in next frame since energy < 0
                 print("player out of bounds!")
+                self.destroy()
 
     # Called once per frame if the player currently has a booster active.
     # Checks whether the booster should end since its duration has exceeded.
@@ -374,3 +380,9 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
     def reinitialize_position_angle(self):
         self.position = numpy.array([self.current_race.init_player_pos_x, self.current_race.init_player_pos_y])
         self.angle = self.current_race.init_player_angle
+
+    # Destroys the player machine by updating a status flag
+    # and playing the explosion animation.
+    def destroy(self):
+        self.destroyed = True
+        print("player machine destroyed!")

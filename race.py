@@ -78,7 +78,7 @@ class Race:
     def is_on_ramp(self, other):
         return self.race_track.is_on_ramp(other)
 
-    def guard_rails_active(self, other):
+    def guard_rails_active(self):
         return self.race_track.guard_rails_active()
 
     # ------------- end of exposure of RaceTrack API --------------
