@@ -336,7 +336,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
                 self.current_speed = -(self.current_speed * OBSTACLE_HIT_SPEED_RETENTION + MIN_BOUNCE_BACK_FORCE)
 
                 # Player loses energy.
-                self.lose_energy()
+                self.lose_energy(self.current_speed)
                 
                 # player machine is destroyed if it has taken more damage than it can sustain
                 if self.current_energy < 0:
@@ -364,7 +364,34 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         
         
 
-        # do this like you did it for the speed application
+        # compute position of player in next frame
+        frame_lookahead_collision_rect = CollisionRect(
+            pos = numpy.array([next_frame_position_x, next_frame_position_y]),
+            w = PLAYER_COLLISION_RECT_WIDTH,
+            h = PLAYER_COLLISION_RECT_HEIGHT
+        )
+
+        # Check if the player would stay on the track when moved as above.
+        # If so (or the player is jumping or the collision detection is turned off in debug mode), move them.
+        # Else, make the player lose some energy or destroy the player machine
+        # (depending on whether the track has active guard rails).
+        if self.current_race.is_on_track(frame_lookahead_collision_rect) or self.jumping or COLLISION_DETECTION_OFF:
+            self.position[0] = next_frame_position_x
+            self.position[1] = next_frame_position_y
+        else:
+            if self.current_race.guard_rails_active():
+                # centrifugal force is reset
+                self.centri = 0
+
+                # player gets damaged proportional to force currently applied
+                self.lose_energy(self.centri)
+
+                # player machine destroyed if out of energy
+                if self.current_energy < 0:
+                    self.destroy()
+            else: 
+                # player machine immediately destroyed if track has no guard rails active
+                self.destroy()
 
 
 
@@ -464,10 +491,11 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         self.destroyed = True
         print("player machine destroyed!")
 
-    # Makes the player machine lose energy proportional to its current speed.
-    def lose_energy(self):
+    # Makes the player machine lose energy proportional to the passed force.
+    # Examples for forces are the machines current speed, the currently applied centrifugal force, ...
+    def lose_energy(self, force):
         # Uses a constant factor (see settings module) to scale current speed to energy loss.
         # Lastly, the individual body strength of the machine is taken into account.
-        lost_energy = (abs(self.current_speed) * HIT_COST_SPEED_FACTOR) * self.machine.hit_cost
+        lost_energy = (abs(force) * HIT_COST_SPEED_FACTOR) * self.machine.hit_cost
         
         self.current_energy -= lost_energy
