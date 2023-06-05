@@ -60,6 +60,8 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         self.shadow_sprite.rect.topleft = [NORMAL_ON_SCREEN_PLAYER_POSITION_X, NORMAL_ON_SCREEN_PLAYER_POSITION_Y]
 
         # player status flags/variables
+        self.steering_left = False
+        self.steering_right = False
         self.jumping = False
         self.jumped_off_timestamp = None # timestamp when the player last jumped off a ramp
         # When jumping: this is the duration of the jump from start to landing.
@@ -182,6 +184,23 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
             self.current_energy -= self.machine.boost_cost # boosting costs a bit of energy
             self.boosted = True # status flag update
 
+        # Steering.
+        if keys[STD_LEFT_KEY] and not self.finished:
+            # update flags
+            self.steering_left = True
+            self.steering_right = False
+            
+            # rotate player
+            self.angle += self.machine.rotation_speed * delta
+            
+        if keys[STD_RIGHT_KEY] and not self.finished:
+            # update flags
+            self.steering_left = False
+            self.steering_right = True
+            
+            # rotate player
+            self.angle -= self.machine.rotation_speed * delta
+
         # ------------ updating player's speed ------------------
         
         # Increase speed when acceleration button pressed.
@@ -252,6 +271,11 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
             self.centri -= self.machine.centri_decrease * delta 
             if self.centri < 0:
                 self.centri = 0
+                
+                # When the centrifugal forces are done wearing off,
+                # the turn is finished and the flags can be reset.
+                self.steering_left = False
+                self.steering_right = False 
 
         print("centrifugal force: " + str(self.centri))
 
@@ -324,21 +348,35 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
             # player machine is destroyed
             else:
                 self.destroy()
-                
 
-        # Steering.
-        if keys[STD_LEFT_KEY] and not self.finished:
-            # rotate player
-            self.angle += self.machine.rotation_speed * delta
+        
 
-            # apply centrifugal force
-            self.position[0] += -cf_sin
-            self.position[1] += cf_cos
-        if keys[STD_RIGHT_KEY] and not self.finished:
-            self.angle -= self.machine.rotation_speed * delta
+        # ----------------- application of centrifugal forces
 
-            self.position[0] += cf_sin
-            self.position[1] += -cf_cos
+
+
+        # compute player position in next frame
+        if self.steering_left:
+            next_frame_position_x = self.position[0] - cf_sin
+            next_frame_position_y = self.position[1] + cf_cos
+        if self.steering_right:
+            next_frame_position_x = self.position[0] + cf_sin
+            next_frame_position_y = self.position[1] - cf_cos
+
+        # check if player stays on track
+        # if so, move them
+        frame_lookahead_collision_rect = CollisionRect(
+            pos = numpy.array([next_frame_position_x, next_frame_position_y]),
+            w = PLAYER_COLLISION_RECT_WIDTH,
+            h = PLAYER_COLLISION_RECT_HEIGHT
+        )
+        if self.current_race.is_on_track(frame_lookahead_collision_rect):
+            self.position[0] = next_frame_position_x
+            self.position[1] = next_frame_position_y
+
+
+
+        # ------------------ end of application of centrifugal forces ------------ 
 
 
 
@@ -403,6 +441,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
 
         # reset forces
         self.current_speed = 0
+        self.centri = 0
 
         # reset energy to max
         self.current_energy = self.machine.max_energy
@@ -413,6 +452,8 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         self.destroyed = False
         self.boosted = False
         self.has_boost_power = False
+        self.steering_left = False
+        self.steering_right = False
 
         # reset screen position
         self.rect.topleft = [
