@@ -414,7 +414,7 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
             NORMAL_ON_SCREEN_PLAYER_POSITION_Y - HEIGHT_DURING_JUMP(elapsed_time, self.current_jump_duration)
         ]
 
-        # End jump (reset status flap) if jump duration reached
+        # End jump (reset status flag) if jump duration reached
         # To prevent any visual artifacts, the player rect is reset to its normal y position on screen.
         if elapsed_time >= self.current_jump_duration:
             self.jumping = False
