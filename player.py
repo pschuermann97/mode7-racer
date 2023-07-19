@@ -278,8 +278,6 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
                 self.steering_left = False
                 self.steering_right = False 
 
-        print("centrifugal force: " + str(self.centri))
-
 
 
         # --------- end of computing centrifugal force strength ----------

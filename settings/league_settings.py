@@ -99,7 +99,7 @@ LEAGUE_1_RACES = [
     Race( # 8: space hangar track
         race_track_creator = TrackCreator.create_monochrome_track,
         floor_tex_path = "gfx/space_hangar_track1.png",
-        bg_tex_path = "gfx/black_hole_track_bg.png",
+        bg_tex_path = "gfx/space_hangar_bg_no_deco.png",
         required_laps = STD_REQUIRED_LAPS,
         race_mode = "time_attack",
         init_player_pos_x = 25.55,

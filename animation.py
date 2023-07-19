@@ -79,6 +79,7 @@ class AnimatedObject:
 
 # A class handling the animations for the machines that are controllable in the game.
 class AnimatedMachine(AnimatedObject):
+    # Constructor that sets up animation automaton for machine. 
     def __init__(self, driving_anim, idle_anim):
         super().__init__({ "idle": idle_anim, "driving": driving_anim })
 
