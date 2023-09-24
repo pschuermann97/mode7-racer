@@ -207,12 +207,20 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         # Acceleration input should be ignored when the speed currently is above the machine's current max speed.
         current_max_speed = self.machine.boosted_max_speed if self.boosted else self.machine.max_speed
         if keys[STD_ACCEL_KEY] and not self.finished and not self.current_speed > current_max_speed:
+            # switch to driving animation
+            self.switch_to_driving_animation()
+
+            # Increase speed
             self.current_speed += (
                 self.machine.boosted_acceleration if self.boosted else self.machine.acceleration
             ) * delta
         # Decrease speed heavily when brake button pressed.
         # The player cannot brake when mid-air.
         elif keys[STD_BRAKE_KEY] and not self.finished and not self.jumping:
+            # no matter whether player moves forwards or backwards:
+            # transition to idle animation when player brakes
+            self.switch_to_idle_animation()
+
             # case 1: player currently moves forwards
             if self.current_speed > 0:
                 self.current_speed -= self.machine.brake * delta 
@@ -231,22 +239,26 @@ class Player(pygame.sprite.Sprite, AnimatedMachine):
         # Decreasing hereby means approaching zero
         # (otherwise the player would move backwards at increasing speed
         # if no button is pressed).
-        #
-        # In this game, the player does not lose speed while jumping.
-        elif not self.jumping:
-            current_speed_loss = (self.machine.boosted_speed_loss 
-                if self.boosted or self.current_speed > self.machine.max_speed # stronger speed loss when machine is above its regular top speed
-                else self.machine.speed_loss) * delta
-            if self.current_speed > 0:
-                self.current_speed -= current_speed_loss
-                # Clamp speed to zero (from below) to prevent jitter.
-                if self.current_speed < 0:
-                    self.current_speed = 0
-            elif self.current_speed < 0:
-                self.current_speed += current_speed_loss
-                # Clamp speed to zero (from above) to prevent jitter.
+        else: 
+            # switch to idle animation
+            self.switch_to_idle_animation()
+
+            # In this game, the player does not lose speed while jumping.
+            if not self.jumping:
+                # Compute and apply speed loss
+                current_speed_loss = (self.machine.boosted_speed_loss 
+                    if self.boosted or self.current_speed > self.machine.max_speed # stronger speed loss when machine is above its regular top speed
+                    else self.machine.speed_loss) * delta
                 if self.current_speed > 0:
-                    self.current_speed = 0
+                    self.current_speed -= current_speed_loss
+                    # Clamp speed to zero (from below) to prevent jitter.
+                    if self.current_speed < 0:
+                        self.current_speed = 0
+                elif self.current_speed < 0:
+                    self.current_speed += current_speed_loss
+                    # Clamp speed to zero (from above) to prevent jitter.
+                    if self.current_speed > 0:
+                        self.current_speed = 0
 
 
 

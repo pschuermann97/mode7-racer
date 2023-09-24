@@ -4,9 +4,10 @@
 # - the function that creates the collision map for the track that is played in this race
 # - the number of laps required to win the race
 # - the mode of the race (grand-prix, time-attack, ...)
+# - the file path of the music track that should play during the race
 class Race:
     def __init__(self, race_track_creator, floor_tex_path, bg_tex_path, required_laps, 
-            init_player_pos_x, init_player_pos_y, init_player_angle, is_foggy, race_mode):
+            init_player_pos_x, init_player_pos_y, init_player_angle, is_foggy, race_mode, music_track_path):
         # create collision map for played track using the passed function
         self.race_track = race_track_creator()
         
@@ -27,6 +28,8 @@ class Race:
         self.is_foggy = is_foggy
         
         self.race_mode = race_mode
+
+        self.music_track_path = music_track_path
 
     # Returns True if and only if the registered player 
     # has finished the race on this track 

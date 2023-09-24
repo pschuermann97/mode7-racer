@@ -9,7 +9,7 @@
 #
 # Also keeps track of the frame of the animation that is currently displayed.
 # 
-# To allow for variying animation speeds, 
+# To allow for varying animation speeds, 
 # the frame position is a floating point number (instead of an integer, as one might expect).
 # The current frame number is the integer portion of the frame_position variable,
 # while the fractional part of it quantifies the percentage of the duration of the current frame that has already elapsed
@@ -71,7 +71,7 @@ class AnimatedObject:
     # Makes the current animation advance by an amount that is proportional to the passed delta.
     # 
     # Parameters:
-    # delta -  time since the last rendered game frame and the current one
+    # delta -  time between the last rendered game frame and the current one
     def advance_current_animation(self, delta):
         self.current_anim.advance(delta)
 

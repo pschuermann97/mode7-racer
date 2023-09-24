@@ -1,5 +1,6 @@
 # foreign module imports
 import pygame, time
+from pygame import mixer # module for playing sound
 import sys
 
 # import of the game settings
@@ -10,6 +11,7 @@ from settings.track_settings import *
 from settings.ui_settings import *
 from settings.key_settings import STD_CONFIRM_KEY, STD_DEBUG_RESTART_KEY
 from settings.league_settings import *
+from settings.music_settings import *
 
 # other imports from this project
 from mode7 import Mode7
@@ -47,6 +49,10 @@ class App:
 
         # Creates a group of sprites for all sprites in the UI.
         self.ui_sprites = pygame.sprite.Group()
+
+        # initializes the module responsible for playing sounds
+        mixer.init()
+        mixer.music.set_volume(MUSIC_VOLUME)
 
         # ------------- end of general initialization -------------
 
@@ -287,6 +293,10 @@ class App:
 
         # reset timer
         self.race_start_timestamp = self.time
+
+        # restart music
+        mixer.music.load(race.music_track_path)
+        mixer.music.play()
 
         # reset flag
         self.should_load_next_race = False
