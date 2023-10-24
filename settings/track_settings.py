@@ -8,8 +8,8 @@ from track import Track, KeyCheckpoint
 STD_REQUIRED_LAPS = 3 # number of laps normally required to finish a race
 
 # obstacle sizes for "prefab" obstacles
-DASH_PLATE_HEIGHT = 2
-DASH_PLATE_WIDTH = 2
+DASH_PLATE_HEIGHT = 1.5
+DASH_PLATE_WIDTH = 1.5
 
 # A class that capsulates the creation of the objects representing the race tracks in memory
 # to avoid crowding the main module.
