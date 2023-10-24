@@ -13,26 +13,12 @@ class CollisionRect:
 
     # Determines whether this rectangle collider overlaps with the passed other one.
     def overlap(self, other):
-        # case 1: other rectangle's center is located to the left of this rectangle
-        if other.position[0] <= self.position[0]:
-            # check whether the horizontal coordinates allow for an overlap
-            if self.position[0] - self.width / 2 <= other.position[0] + other.width / 2:
-                # case 1.1: located to the lower left of this rectangle
-                if other.position[1] <= self.position[1]:
-                    return self.position[1] - self.height / 2 <= other.position[1] + other.height / 2
-                # case 1.2: located to the upper left of this rectangle
-                else:
-                    return self.position[1] + self.height / 2 >= other.position[1] - other.height / 2
-        # case 2: other rectangle's center is located to the right of this rectangle
-        else:
-            # check whether the horizontal coordinates allow for an overlap
-            if self.position[0] + self.width / 2 >= other.position[0] - other.width / 2:
-                # case 2.1: located to the lower right of this rectangle
-                if other.position[1] <= self.position[1]:
-                    return self.position[1] - self.height / 2 <= other.position[1] + other.height / 2
-                # case 2.2: located to the upper right of this rectangle
-                else:
-                    return self.position[1] + self.height / 2 >= other.position[1] - other.height / 2
+        return (
+            # x position close enough?
+            abs(self.position[0] - other.position[0]) <= self.width / 2 + other.width / 2 and
+            # y positions close enough?
+            abs(self.position[1] - other.position[1]) <= self.height / 2 + other.height / 2
+        )
 
 
     def __str__(self):
